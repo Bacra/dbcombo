@@ -1,4 +1,4 @@
-var ClientKey = require('./dbfile_client.js');
+var ClientKey = require('./clientkey.js');
 
 var Module = seajs.Module;
 var FETCHING = Module.STATUS.FETCHING;

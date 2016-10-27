@@ -1,11 +1,9 @@
-// require('debug').enable('*');
-
 var assert		= require('assert');
-var ClientKey	= require('../src/dbfile_client');
+var ClientKey	= require('../');
 
-describe('clientkey', function()
+describe('#clientkey', function()
 {
-	it('base', function()
+	it('#base', function()
 	{
 		assert.equal(ClientKey.key([0]), 'Y1');
 		assert.equal(ClientKey.key([1]), 'Y2');
@@ -19,7 +17,7 @@ describe('clientkey', function()
 	});
 
 
-	it('clientkey#long', function()
+	it('#long', function()
 	{
 		var i = ClientKey.MAX_GROUP_URI * 3;
 		var arr = [];
@@ -33,7 +31,7 @@ describe('clientkey', function()
 	});
 
 
-	it('clientkey#long2', function()
+	it('#long2', function()
 	{
 		var i = ClientKey.MAX_GROUP_URI * 2;
 		var arr = [];

@@ -13,3 +13,5 @@ test
 coverage
 
 webpack.config.js
+sauce_connect.log
+

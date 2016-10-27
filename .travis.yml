@@ -12,7 +12,7 @@ before_install:
 
 script:
   - npm run-script test-travis
-  - npm run-script test-sauce
+  #- npm run-script test-sauce
 
 after_script:
   - npm install coveralls@2 && cat ./coverage/lcov.info | coveralls

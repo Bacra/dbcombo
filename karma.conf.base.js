@@ -15,7 +15,7 @@ module.exports = {
 	// list of files / patterns to load in the browser
 	files:
 	[
-		'test/test_clientkey.js'
+		'test/test_*.js'
 	],
 
 
@@ -27,7 +27,7 @@ module.exports = {
 	// available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
 	preprocessors:
 	{
-		'test/test_clientkey.js': ['webpack']
+		'test/test_*.js': ['webpack']
 	},
 
 

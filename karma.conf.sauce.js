@@ -81,10 +81,15 @@ module.exports = function(config)
 
 	config.set(extend(baseConfig,
 	{
-		port: 4443,
+		port			: 4443,
+		browsers		: Object.keys(customLaunchers),
+		singleRun		: true,
+		// Increase timeout in case connection in CI is slow
+		captureTimeout	: 120000,
+		customLaunchers	: customLaunchers,
 		sauceLabs:
 		{
-			'public'			: 'public',
+			public				: 'public',
 			testName			: pkg.name,
 			recordScreenshots	: false,
 			connectOptions:
@@ -92,12 +97,6 @@ module.exports = function(config)
 				port	: 5757,
 				logfile	: 'sauce_connect.log'
 			},
-		},
-
-		// Increase timeout in case connection in CI is slow
-		captureTimeout	: 120000,
-		customLaunchers	: customLaunchers,
-		browsers		: Object.keys(customLaunchers),
-		singleRun		: true
+		}
 	}));
 };

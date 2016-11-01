@@ -14,4 +14,4 @@ coverage
 
 webpack.config.js
 sauce_connect.log
-
+karma.conf.js

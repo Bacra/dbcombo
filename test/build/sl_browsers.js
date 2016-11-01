@@ -1,10 +1,6 @@
-var baseConfig	= require('./karma.conf.base.js');
-var extend		= require('extend');
-var pkg			= require('./package.json');
-
 // Browsers to run on Sauce Labs
 // Check out https://saucelabs.com/platforms for all browser/OS combos
-var customLaunchers =
+var browsers =
 {
 	sl_chrome:
 	{
@@ -96,7 +92,8 @@ var customLaunchers =
 };
 
 
-var browserGroups =
+
+var groups =
 {
 	ie: [
 		'sl_ie6',
@@ -119,62 +116,8 @@ var browserGroups =
 	],
 };
 
-
-module.exports = function(config)
+module.exports =
 {
-	if (!process.env.SAUCE_USERNAME || !process.env.SAUCE_ACCESS_KEY)
-	{
-		console.log('Make sure the SAUCE_USERNAME and SAUCE_ACCESS_KEY environment variables are set.');
-		process.exit(1);
-	}
-
-	var browserGroup = process.argv[4] || 'pc';
-	var browsers = browserGroups[browserGroup];
-	if (!browsers || !browsers.length)
-	{
-		var browserKey = 'sl_'+browserGroup;
-		if (customLaunchers[browserKey])
-		{
-			browsers = [browserKey];
-		}
-		else
-		{
-			console.log('undefined browser group, %s', browserGroup);
-			process.exit(1);
-		}
-	}
-
-	var timeout = browserGroup == 'mobile' ? 300000 : 120000;
-	var buildId = process.env.TRAVIS_JOB_NUMBER || process.env.SAUCE_BUILD_ID || Date.now();
-
-	var customConfig = extend(baseConfig,
-	{
-		// port			: 4445,
-		browsers		: browsers,
-		singleRun		: true,
-		retryLimit		: 1,
-		customLaunchers	: customLaunchers,
-		// Increase timeout in case connection in CI is slow
-		captureTimeout	: timeout,
-		browserNoActivityTimeout: timeout,
-		reporters: process.env.CI
-			? ['dots', 'saucelabs'] // avoid spamming CI output
-			: ['progress', 'saucelabs'],
-
-		sauceLabs:
-		{
-			build				: browserGroup+'_'+buildId,
-			public				: 'public',
-			testName			: pkg.name,
-			recordScreenshots	: false,
-			connectOptions:
-			{
-				port	: 5757,
-				logfile	: 'sauce_connect.log'
-			},
-		}
-	});
-
-	// delete customConfig.port;
-	config.set(customConfig);
+	browsers: browsers,
+	groups: groups,
 };

@@ -1,6 +1,6 @@
 {
   "name": "dbcombo-client",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "dbcombo browser client",
   "main": "src/clientkey.js",
   "scripts": {
@@ -8,8 +8,7 @@
     "prepublish": "npm ls & webpack",
     "test-cov": "istanbul cover ./node_modules/.bin/_mocha -- test/test_* --reporter dot",
     "test-e2e": "karma start",
-    "sauce": "karma start karma.conf.sauce.js",
-    "test-sauce": "npm run sauce -- ie && npm run sauce -- pc && npm run sauce -- mac && npm run sauce -- mobile",
+    "test-sauce": "karma start -- ie && karma start -- pc && karma start -- mac && karma start -- mobile",
     "test-travis": "istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- test/test_* --reporter dot"
   },
   "keywords": [

@@ -1,44 +1,14 @@
 // Karma configuration
-// Generated on Wed Oct 26 2016 20:41:55 GMT+0800 (中国标准时间)
-
-var os = require('os');
-var baseConfig = require('./karma.conf.base.js');
 var extend = require('extend');
+var baseConfig = require('./test/build/karma.base.conf.js');
+var osConfig = require('./test/build/karma.os.conf.js');
+var sauceConfig = require('./test/build/karma.sauce.conf.js');
 
 module.exports = function(config)
 {
-	var browsers = ['Chrome', 'Firefox'];
-	var platform = os.platform();
+	var key = process.argv[4];
+	var base = baseConfig(config);
+	var custom = key ? sauceConfig(config) : osConfig(config);
 
-	if (platform == 'win32')
-		browsers.push('IE');
-	else if (platform == 'darwin')
-		browsers.push('Safari');
-
-
-	config.set(extend(baseConfig,
-	{
-		// level of logging
-		// possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-		logLevel: config.LOG_INFO,
-
-
-		// enable / disable watching file and executing tests whenever any file changes
-		autoWatch: false,
-
-
-		// start these browsers
-		// available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-		// browsers: ['Chrome'],
-		browsers: browsers,
-
-
-		// Continuous Integration mode
-		// if true, Karma captures browsers, runs the tests and exits
-		singleRun: true,
-
-		// Concurrency level
-		// how many browser should be started simultaneous
-		concurrency: Infinity
-	}));
+	config.set(extend({}, base, custom));
 };

@@ -99,9 +99,9 @@ var customLaunchers =
 var browserGroups =
 {
 	ie: [
-		// 'sl_ie6',
-		// 'sl_ie7',
-		// 'sl_ie8',
+		'sl_ie6',
+		'sl_ie7',
+		'sl_ie8',
 		'sl_ie9',
 		'sl_ie11'
 	],
@@ -144,7 +144,7 @@ module.exports = function(config)
 		}
 	}
 
-	var timeout = browserGroup == 'mobile' ? 120000 : 300000;
+	var timeout = browserGroup == 'mobile' ? 300000 : 120000;
 	var buildId = process.env.TRAVIS_JOB_NUMBER || process.env.SAUCE_BUILD_ID || Date.now();
 
 	var customConfig = extend(baseConfig,

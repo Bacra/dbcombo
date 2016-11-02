@@ -17,18 +17,41 @@ npm install dbcombo-client --save
 
 # Useage
 
-NodeJS
+### In NodeJS
+
 ```
 var DBComboClient = require('dbcombo-client');
-console.log(DBComboClient.stringify([0, 31, 92, 93, 94]));
-// print Y31000000Y1Y1
+console.log(DBComboClient.stringify([0, 31, 93, 92, 94]));
+console.log(DBComboClient.parse('Y31000000Y1Y1'));
+
+// Y31000000Y1Y1
+// [0, 31, 92, 93, 94]
 ```
 
-Browser for Seajs
+### Browser for Seajs
+
 ```
 <script src="node_modules/dbcombo-client/dist/seajs-plugin.js"></script>
 ```
 
+Seajs Config
+
+```
+seajs.config(
+{
+	DBComboFileIndex: {},		// uri => index
+	DBComboFile: 'http://www.example.com/db.js',		// dbfile uri
+	DBComboExcludes: function(uri){return false}		// RegExp / Function
+});
+```
+
+Combo Uri Exapmle
+
+```
+http://www.example.com/db.js/Yg0W21X/W35X/W35X/W35X/W35X.js
+```
+
+Url parse server power by [DBCombo](https://github.com/Bacra/node-dbcombo)
 
 
 [npm-image]: http://img.shields.io/npm/v/dbcombo-client.svg

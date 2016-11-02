@@ -1,8 +1,8 @@
 var assert		= require('assert');
-var stringify	= require('../lib/stringify');
+var stringify	= require('../').stringify;
 var DEF			= require('../lib/def');
 
-describe('#clientkey', function()
+describe('#stringify', function()
 {
 	it('#base', function()
 	{
@@ -11,10 +11,13 @@ describe('#clientkey', function()
 		assert.equal(stringify([0,1]), 'Y3');
 		assert.equal(stringify([0, 30]), '1000001');
 		assert.equal(stringify([0, 31]), 'Y1Y1');
+		assert.equal(stringify([0, 31, 31]), 'Y1Y1');
 		assert.equal(stringify([0, 31, 92, 93, 94]), 'Y31000000Y1Y1');
+		assert.equal(stringify([0, 93, 92, 31, 94]), 'Y31000000Y1Y1');
 		assert.equal(stringify([1000]), 'Y80W32X');
 		assert.equal(stringify([2000]), 'Y2000W29X/W35X');
 		assert.equal(stringify([5000]), 'Yg0W21X/W35X/W35X/W35X/W35X');
+		assert.equal(stringify([4000, 34]), 'Y2W24X/W35X/W35X/W33XY8Z');
 	});
 
 

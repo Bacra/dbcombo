@@ -1,6 +1,6 @@
 var Benchmark = require('benchmark');
 var suite = new Benchmark.Suite;
-var ClientKey = require('../');
+var stringify = require('../lib/stringify');
 var seajsCombo = require('./seajs-combo-sethash');
 
 var list21 = [12, 33];
@@ -14,13 +14,13 @@ function runHandler(copy, showMsg)
 		list22 = list22.concat(list22);
 	}
 
-	ClientKey.key(list21);
+	stringify(list21);
 	seajsCombo(list22);
 
 	// 添加测试
-	suite.add('clientkey', function()
+	suite.add('stringify', function()
 		{
-			ClientKey.key(list21);
+			stringify(list21);
 		})
 		.add('seajscombo', function()
 		{

@@ -1,4 +1,4 @@
-var ClientKey = require('./clientkey.js');
+var stringify = require('../lib/stringify.js');
 
 var Module = seajs.Module;
 var FETCHING = Module.STATUS.FETCHING;
@@ -11,7 +11,7 @@ seajs.on('load', setComboHash);
 seajs.on('fetch', setRequestUri);
 seajs.on('config', setConfig);
 
-seajs.DBComboKey = ClientKey.key;
+seajs.DBComboKey = stringify;
 
 
 var urlClearReg = /\?.*$/;
@@ -175,4 +175,3 @@ function isComboUri(uri)
 	var s1 = data.DBComboFile;
 	return s1 && uri.substr(0, s1.length+1) == s1+'/';
 }
-

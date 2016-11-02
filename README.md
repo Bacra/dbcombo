@@ -20,14 +20,13 @@ npm install dbcombo-client --save
 NodeJS
 ```
 var DBComboClient = require('dbcombo-client');
-console.log(DBComboClient([0, 31, 92, 93, 94]));
-
+console.log(DBComboClient.stringify([0, 31, 92, 93, 94]));
 // print Y31000000Y1Y1
 ```
 
 Browser for Seajs
 ```
-<script src="node_modules/dbcombo-client/dist/seajs-dbcombo.js"></script>
+<script src="node_modules/dbcombo-client/dist/seajs-plugin.js"></script>
 ```
 
 

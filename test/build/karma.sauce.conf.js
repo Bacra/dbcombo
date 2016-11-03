@@ -3,11 +3,18 @@ var browsers = require('./sl_browsers.js');
 
 module.exports = function(config)
 {
+	if (process.env.TRAVIS_BRANCH && process.env.TRAVIS_BRANCH != 'master')
+	{
+		console.log('Run sauce only master branch.');
+		process.exit();
+	}
+
 	if (!process.env.SAUCE_USERNAME || !process.env.SAUCE_ACCESS_KEY)
 	{
 		console.log('Make sure the SAUCE_USERNAME and SAUCE_ACCESS_KEY environment variables are set.');
 		process.exit(1);
 	}
+
 
 	var browserGroup = process.argv[4];
 	var browserArr = browsers.groups[browserGroup];

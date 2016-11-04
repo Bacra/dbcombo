@@ -5,6 +5,8 @@ module.exports =
 		modulesDirectories: [__dirname+'/node_modules']
 	},
 	entry: {
+		// 'test_stringify': './test/test_stringify.js',
+		// 'test_parse': './test/test_parse.js',
 		'seajs-plugin': './src/seajs-plugin.js',
 		'benchmark4browser': './benchmark/benchmark.js'
 	},

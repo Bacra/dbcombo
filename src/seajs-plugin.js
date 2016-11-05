@@ -6,6 +6,7 @@ var FETCHING = Module.STATUS.FETCHING;
 var data = seajs.data;
 var DBComboIndexData = data.DBComboIndexData = {};
 var DBComboIndexHandler;
+var DBComboFile;
 
 seajs.on('load', setComboHash);
 seajs.on('fetch', setRequestUri);
@@ -24,12 +25,16 @@ function DBComboIndexHandlerDefault(uri)
 function setConfig(options)
 {
 	if (typeof options.DBComboFileIndex == 'function')
-	{
 		DBComboIndexHandler = options.DBComboFileIndex;
-	}
 	else if (options.DBComboFileIndex)
-	{
 		DBComboIndexHandler = DBComboIndexHandlerDefault;
+
+	if ('DBComboFile' in options)
+	{
+		if (options.DBComboFile)
+			DBComboFile = seajs.resolve(options.DBComboFile);
+		else
+			DBComboFile = null;
 	}
 }
 
@@ -37,7 +42,7 @@ function setConfig(options)
 function setComboHash(uris)
 {
 	var len = uris.length;
-	var needComboUris = []
+	var needComboUris = [];
 
 	for (var i = 0; i < len; i++)
 	{
@@ -53,49 +58,42 @@ function setComboHash(uris)
 		}
 	}
 
-	if (needComboUris.length > 1)
-	{
-		paths2hash(needComboUris);
-	}
+	if (needComboUris.length) paths2hash(needComboUris);
 }
 
 
-function setRequestUri(data2)
+function setRequestUri(emitDate)
 {
-	if (data.DBComboFile)
+	if (DBComboFile)
 	{
-		var info = DBComboIndexData[data2.uri];
+		var info = DBComboIndexData[emitDate.uri];
 		if (info && info.indexs)
 		{
 			// 下发index，其他fetch的可能也要用
-			data2.DBComboFileInfo = info;
-			if (info.indexs.length > 1)
-			{
-				data2.requestUri = info.requestUri || data.DBComboFile+'/'+info.indexStr+info.type;
-				return;
-			}
-		}
-
-		if (data.DBComboExcludeUriHandler)
-		{
-			data2.requestUri = data.DBComboExcludeUriHandler(data2.uri);
+			emitDate.DBComboFileInfo = info;
+			emitDate.requestUri = info.requestUri
+				|| DBComboFile+'/'+seajs.DBComboKey.groups2str(info.groups) + info.type;
 		}
 	}
 }
 
 function paths2hash(files)
 {
-	var group = files2group(files)
-	for (var i = group.length; i--;)
+	var group = files2group(files);
+	for (var type in group)
 	{
-		setHash(group[i]);
+		if (group.hasOwnProperty(type))
+		{
+			setHash(group[type], type);
+		}
 	}
 }
 
-function setHash(files)
+function setHash(files, type)
 {
 	var indexs = [];
 	var inList = [];
+
 	for (var i = files.length; i--;)
 	{
 		var fileIndex = DBComboIndexHandler(files[i]);
@@ -112,7 +110,13 @@ function setHash(files)
 
 	if (inList.length)
 	{
-		var result = {indexs: indexs, indexStr: seajs.DBComboKey(indexs), type: getExt(inList[0])};
+		var result =
+		{
+			indexs	: indexs,
+			groups	: seajs.DBComboKey.indexs2groups(indexs),
+			type	: type
+		};
+
 		for (var i = inList.length; i--;)
 		{
 			DBComboIndexData[inList[i]] = result;
@@ -123,13 +127,12 @@ function setHash(files)
 //
 //  ["a.js", "c/d.js", "c/e.js", "a.css", "b.css", "z"]
 // ==>
-//  [ ["a.js", "c/d.js", "c/e.js"], ["a.css", "b.css"] ]
+//  {js: ["a.js", "c/d.js", "c/e.js"], css: ["a.css", "b.css"] }
 //
 
 function files2group(files)
 {
-	var group = []
-	var hash = {}
+	var group = {};
 
 	for (var i = 0, len = files.length; i < len; i++)
 	{
@@ -137,19 +140,11 @@ function files2group(files)
 		var ext = getExt(file)
 		if (ext)
 		{
-			(hash[ext] || (hash[ext] = [])).push(file)
+			(group[ext] || (group[ext] = [])).push(file)
 		}
 	}
 
-	for (var k in hash)
-	{
-		if (hash.hasOwnProperty(k))
-		{
-			group.push(hash[k])
-		}
-	}
-
-	return group
+	return group;
 }
 
 function getExt(file)
@@ -160,7 +155,7 @@ function getExt(file)
 
 function isExcluded(uri)
 {
-	if (!data.DBComboFile) return true;
+	if (!DBComboFile) return true;
 
 	if (data.DBComboExcludes)
 	{
@@ -172,6 +167,5 @@ function isExcluded(uri)
 
 function isComboUri(uri)
 {
-	var s1 = data.DBComboFile;
-	return s1 && uri.substr(0, s1.length+1) == s1+'/';
+	return DBComboFile && uri.substr(0, DBComboFile.length+1) == DBComboFile+'/';
 }

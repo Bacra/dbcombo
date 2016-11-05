@@ -1,16 +1,20 @@
-var seajs = require('seajs/dist/sea-debug.js');
 var expect = require('expect.js');
-
-window.seajs = seajs.seajs;
-window.define = seajs.define;
-
-seajs = seajs.seajs;
 
 describe('#seajs-plugin', function()
 {
-	it('#require-seajs', function()
+	it('#single', function(done)
 	{
-		expect(seajs).to.be.an('object');
-		expect(seajs.use).to.be.a('function');
+		seajs.use('c.js', function(obj)
+		{
+			debugger;
+			try {
+				expect(obj).to.be.eql({c: true});
+				done();
+			}
+			catch(err)
+			{
+				done(err);
+			}
+		});
 	});
 });

@@ -19,8 +19,9 @@ module.exports = function(config)
 		files:
 		[
 			'test_*.js',
+			'browser/init-seajs.js',
+			'browser/test_*.js',
 			{pattern: 'browser/source/**/*', included: false, served: true},
-			'browser/test_*.js'
 		],
 
 
@@ -32,7 +33,8 @@ module.exports = function(config)
 		// available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
 		preprocessors:
 		{
-			'**/test_*.js': ['webpack']
+			'**/test_*.js': ['webpack'],
+			'browser/init-seajs.js': ['webpack'],
 		},
 
 

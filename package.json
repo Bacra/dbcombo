@@ -30,6 +30,7 @@
   "license": "MIT",
   "devDependencies": {
     "benchmark": "^2.1.1",
+    "bluebird": "^3.4.6",
     "expect.js": "^0.3.1",
     "extend": "^3.0.0",
     "istanbul": "^0.4.5",

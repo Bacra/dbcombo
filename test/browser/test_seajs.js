@@ -1,10 +1,5 @@
 var expect = require('expect.js');
-require('../../src/seajs-plugin');
-
-seajs.config(
-{
-	base: '/base/browser/source/',
-});
+var loadUtils = require('./seajs-load-utils');
 
 describe('#seajs', function()
 {
@@ -14,18 +9,12 @@ describe('#seajs', function()
 		expect(seajs.use).to.be.a('function');
 	});
 
-	it('#require', function(done)
+	it('#require', function()
 	{
-		seajs.use('seajs-plugin-src/outside.js', function(obj)
-		{
-			try {
-				expect(obj).to.be.eql({outside: true});
-				done();
-			}
-			catch(err)
+		loadUtils.clearSeajsModuleCache();
+		return loadUtils.assertSeajsUse('outside.js', function(obj)
 			{
-				done(err);
-			}
-		});
+				expect(obj).to.be.eql({outside: true});
+			});
 	});
 });

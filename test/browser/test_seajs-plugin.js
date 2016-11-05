@@ -1,20 +1,14 @@
 var expect = require('expect.js');
+var loadUtils = require('./seajs-load-utils');
 
 describe('#seajs-plugin', function()
 {
-	it('#single', function(done)
+	it('#single', function()
 	{
-		seajs.use('c.js', function(obj)
-		{
-			debugger;
-			try {
-				expect(obj).to.be.eql({c: true});
-				done();
-			}
-			catch(err)
+		loadUtils.clearSeajsModuleCache();
+		return loadUtils.assertSeajsUse('c.js', function(obj)
 			{
-				done(err);
-			}
-		});
+				expect(obj).to.be.eql({c: true});
+			});
 	});
 });

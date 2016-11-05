@@ -48,4 +48,19 @@ describe('#stringify', function()
 
 		expect(key).to.be('Y40Y20/Y10YgY8Y4Y2Y1Z1000000Yg00000Y800000Y400000Y200000Y100000Yg0000Y80000Y40000Y20000Y10000Yg000Y8000Y4000Y2000Y1000Yg00Y800Y400Y200Y100Yg0Y80Y40Y20Y10YgY8/Y4Y2Y1Z1000000Yg00000Y800000Y400000Y200000Y100000Yg0000Y80000Y40000Y20000Y10000Yg000Y8000Y4000Y2000Y1000Yg00Y800Y400Y200Y100Yg0Y80Y40Y20Y10YgY8Y4Y2Y1');
 	});
+
+	it('#indexs2groups', function()
+	{
+		expect(stringify.indexs2groups([0])).to.eql([1]);
+		expect(stringify.indexs2groups([0, 3, 93, 94])).to.eql([9, , , 3]);
+	});
+
+	it('#mergerGroups', function()
+	{
+		expect(stringify.mergerGroups([])).to.eql([]);
+		expect(stringify.mergerGroups()).to.eql([]);
+		expect(stringify.mergerGroups([1])).to.eql([1]);
+		expect(stringify.mergerGroups([1, 3], [3, , 8])).to.eql([3, 3, 8]);
+		expect(stringify.mergerGroups([1, 3], [3, , 8], [4])).to.eql([7, 3, 8]);
+	});
 });

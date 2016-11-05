@@ -21210,15 +21210,7 @@
 		})();
 
 
-	module.exports = stringify;
-
-	// 生成urlkey，高位→低位
-	// 除了32位的字符，转换后有如下特殊字符
-	// Z  分组无任何数据，占位使用
-	// Y  分组转成字符串之后，长度不足MAX_GROUP_KEY_LENGTH，补位
-	// /  数据可能超过文件名长度限制，用来分割
-	// W...X  当有很多Z的时候，为了美化，进行repeat处理; ...表示重复的次数
-	function stringify(indexs)
+	function indexs2groups(indexs)
 	{
 		var groups = [];
 		for(var i = indexs.length; i--;)
@@ -21232,6 +21224,24 @@
 			groups[groupIndex] = (groups[groupIndex] || 0) | indexVal;
 		}
 
+		return groups;
+	}
+
+
+	// 生成urlkey，高位→低位
+	// 除了32位的字符，转换后有如下特殊字符
+	// Z  分组无任何数据，占位使用
+	// Y  分组转成字符串之后，长度不足MAX_GROUP_KEY_LENGTH，补位
+	// /  数据可能超过文件名长度限制，用来分割
+	// W...X  当有很多Z的时候，为了美化，进行repeat处理; ...表示重复的次数
+	function stringify(indexs)
+	{
+		return groups2str(indexs2groups(indexs));
+	}
+
+
+	function groups2str(groups)
+	{
 		var str = '';
 		var continuousEmptyGroups = 0;
 
@@ -21247,6 +21257,7 @@
 				continuousEmptyGroups = 0;
 			}
 		}
+
 		for(var i = groups.length; i--;)
 		{
 			if (groups[i])
@@ -21268,12 +21279,51 @@
 			}
 		}
 
-		ZXHandler();
 
+		ZXHandler();
 		// console.log('groups len:%d, %o, url:%s', groups.length, groups, str);
 
 		return str;
 	}
+
+
+
+	function mergerGroups()
+	{
+		var args = arguments;
+		var argsLength = args.length;
+		var newGroups = [];
+		var lengths = [];
+		var maxLength = 0;
+
+		// group的最大长度
+		for(var i = argsLength, item; i--;)
+		{
+			item = args[i].length;
+			if (item > maxLength) maxLength = item;
+		}
+
+		for(var index = 0; index < maxLength; index++)
+		{
+			var groupResult = 0;
+
+			for(var i = argsLength, item; i--;)
+			{
+				item = args[i][index];
+				if (item) groupResult |= item;
+			}
+
+			newGroups[index] = groupResult;
+		}
+
+		return newGroups;
+	}
+
+
+	exports = module.exports = stringify;
+	exports.indexs2groups = indexs2groups;
+	exports.groups2str = groups2str;
+	exports.mergerGroups = mergerGroups;
 
 
 /***/ },

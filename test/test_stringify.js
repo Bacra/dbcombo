@@ -55,12 +55,12 @@ describe('#stringify', function()
 		expect(stringify.indexs2groups([0, 3, 93, 94])).to.eql([9, , , 3]);
 	});
 
-	it('#mergerGroups', function()
+	it('#mergeGroups', function()
 	{
-		expect(stringify.mergerGroups([])).to.eql([]);
-		expect(stringify.mergerGroups()).to.eql([]);
-		expect(stringify.mergerGroups([1])).to.eql([1]);
-		expect(stringify.mergerGroups([1, 3], [3, , 8])).to.eql([3, 3, 8]);
-		expect(stringify.mergerGroups([1, 3], [3, , 8], [4])).to.eql([7, 3, 8]);
+		expect(stringify.mergeGroups([])).to.eql([]);
+		expect(stringify.mergeGroups()).to.eql([]);
+		expect(stringify.mergeGroups([1])).to.eql([1]);
+		expect(stringify.mergeGroups([1, 3], [3, , 8])).to.eql([3, 3, 8]);
+		expect(stringify.mergeGroups([1, 3], [3, , 8], [4])).to.eql([7, 3, 8]);
 	});
 });

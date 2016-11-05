@@ -4,7 +4,8 @@ var Module = seajs.Module;
 var FETCHING = Module.STATUS.FETCHING;
 
 var data = seajs.data;
-var DBComboIndexData = data.DBComboIndexData = {};
+var DBComboUriGroupsData = data.DBComboUriGroupsData = {};
+var DBComboFileGroupsData = data.DBComboFileGroupsData = {};
 var DBComboIndexHandler;
 var DBComboFile;
 
@@ -47,7 +48,7 @@ function setComboHash(uris)
 	for (var i = 0; i < len; i++)
 	{
 		var uri = uris[i]
-		if (DBComboIndexData[uri]) continue;
+		if (DBComboUriGroupsData[uri]) continue;
 
 		var mod = Module.get(uri);
 
@@ -66,8 +67,8 @@ function setRequestUri(emitDate)
 {
 	if (DBComboFile)
 	{
-		var info = DBComboIndexData[emitDate.uri];
-		if (info && info.indexs)
+		var info = DBComboUriGroupsData[emitDate.uri];
+		if (info && info.groups)
 		{
 			// 下发index，其他fetch的可能也要用
 			emitDate.DBComboFileInfo = info;
@@ -79,51 +80,93 @@ function setRequestUri(emitDate)
 
 function paths2hash(files)
 {
-	var group = files2group(files);
-	for (var type in group)
+	var types = typeGroup(files);
+	for (var type in types)
 	{
-		if (group.hasOwnProperty(type))
+		if (types.hasOwnProperty(type))
 		{
-			setHash(group[type], type);
+			setHash(types[type], type);
 		}
 	}
 }
 
 function setHash(files, type)
 {
+	var info = files2groups(files);
+
+	if (info && info.files.length)
+	{
+		var files = info.files;
+		var result =
+		{
+			groups	: info.groups,
+			type	: type
+		};
+
+		for (var i = files.length; i--;)
+		{
+			DBComboUriGroupsData[files[i]] = result;
+		}
+
+		return result;
+	}
+}
+
+
+function files2groups(files)
+{
 	var indexs = [];
 	var inList = [];
+	var groups = [];
 
 	for (var i = files.length; i--;)
 	{
-		var info = DBComboIndexHandler(files[i]);
-		if (info)
+		var file = files[i];
+		if (DBComboFileGroupsData[file])
 		{
-			var fileIndex = info.index;
-			inList.push(files[i]);
-			indexs.push(fileIndex);
+			groups.push(DBComboFileGroupsData[file].groups);
+			inList.push(file);
 		}
-		else if (data.debug)
+		else
 		{
-			console.log('no file index:'+files[i]);
+			var info = DBComboIndexHandler(file);
+			if (info)
+			{
+				inList.push(file);
+				indexs.push(info.index);
+				if (info.deps && info.deps.length)
+				{
+					var depsGroups = files2groups(info.deps);
+					if (depsGroups)
+					{
+						groups.push(depsGroups.groups);
+						DBComboFileGroupsData[file]
+							= DBComboFileGroupsData[info.index]
+							= {
+								index: info.index,
+								groups: depsGroups.groups
+							};
+					}
+				}
+			}
+			else if (data.debug)
+			{
+				console.log('no file index:'+files[i]);
+			}
 		}
 	}
 
 	if (inList.length)
 	{
-		var result =
-		{
-			indexs	: indexs,
-			groups	: seajs.DBComboKey.indexs2groups(indexs),
-			type	: type
-		};
+		groups.push(seajs.DBComboKey.indexs2groups(indexs));
 
-		for (var i = inList.length; i--;)
-		{
-			DBComboIndexData[inList[i]] = result;
-		}
+		return {
+			groups: seajs.DBComboKey.mergeGroups.apply(null, groups),
+			files: inList
+		};
 	}
 }
+
 
 //
 //  ["a.js", "c/d.js", "c/e.js", "a.css", "b.css", "z"]
@@ -131,9 +174,9 @@ function setHash(files, type)
 //  {js: ["a.js", "c/d.js", "c/e.js"], css: ["a.css", "b.css"] }
 //
 
-function files2group(files)
+function typeGroup(files)
 {
-	var group = {};
+	var types = {};
 
 	for (var i = 0, len = files.length; i < len; i++)
 	{
@@ -141,11 +184,11 @@ function files2group(files)
 		var ext = getExt(file)
 		if (ext)
 		{
-			(group[ext] || (group[ext] = [])).push(file)
+			(types[ext] || (types[ext] = [])).push(file)
 		}
 	}
 
-	return group;
+	return types;
 }
 
 var extReg = /\.[^\.\s]+$/;

@@ -7,6 +7,7 @@ var fileArr = exports.arr = [];
 
 for (var i = depsArr.length; i--;)
 {
-	var item = {deps: depsArr[i], index: i, file: 'a'+i+'.js'};
-	fileArr[item.index] = fileMap[item.file] = item;
+	var item = {deps: depsArr[i], index: i};
+	var file = 'a'+i+'.js';
+	fileArr[item.index] = fileMap[file] = item;
 }

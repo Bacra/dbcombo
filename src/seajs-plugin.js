@@ -147,10 +147,11 @@ function files2group(files)
 	return group;
 }
 
+var extReg = /\.[^\.\s]+$/;
 function getExt(file)
 {
-	var p = file.lastIndexOf(".");
-	return p >= 0 ? file.substring(p) : "";
+	var m = file.match(extReg);
+	return (m && m[0]) || "";
 }
 
 function isExcluded(uri)

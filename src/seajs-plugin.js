@@ -96,9 +96,10 @@ function setHash(files, type)
 
 	for (var i = files.length; i--;)
 	{
-		var fileIndex = DBComboIndexHandler(files[i]);
-		if (fileIndex || fileIndex === 0)
+		var info = DBComboIndexHandler(files[i]);
+		if (info)
 		{
+			var fileIndex = info.index;
 			inList.push(files[i]);
 			indexs.push(fileIndex);
 		}

@@ -6,9 +6,10 @@ describe('#seajs-plugin', function()
 	it('#single', function()
 	{
 		loadUtils.clearSeajsModuleCache();
-		return loadUtils.assertSeajsUse('c.js', function(obj)
+		return loadUtils.assertSeajsUse('a2.js', function(obj)
 			{
-				expect(obj).to.be.eql({c: true});
+				expect(obj).to.be.eql({a2: true});
 			});
 	});
+
 });

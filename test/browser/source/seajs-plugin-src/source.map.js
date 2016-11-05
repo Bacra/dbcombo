@@ -1,8 +1,12 @@
-module.exports =
+var depsArr = [
+	[2, 3], [3], null, [4], [2]
+];
+
+var fileMap = exports.map = {};
+var fileArr = exports.arr = [];
+
+for (var i = depsArr.length; i--;)
 {
-	'a.js': {index: 0, deps: [2, 3]},
-	'b.js': {index: 1, deps: [3]},
-	'c.js': {index: 2},
-	'd.js': {index: 3, deps: [4]},
-	'e.js': {index: 4, deps: [2]}
-};
+	var item = {deps: depsArr[i], index: i, file: 'a'+i+'.js'};
+	fileArr[item.index] = fileMap[item.file] = item;
+}

@@ -10,6 +10,7 @@ npm-debug.log
 appveyor.yml
 
 test
+dist/test
 coverage
 
 webpack.config.js

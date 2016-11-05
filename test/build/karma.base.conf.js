@@ -19,6 +19,7 @@ module.exports = function(config)
 		files:
 		[
 			'test_*.js',
+			{pattern: 'browser/source/**/*', included: false, served: true},
 			'browser/test_*.js'
 		],
 
@@ -31,8 +32,7 @@ module.exports = function(config)
 		// available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
 		preprocessors:
 		{
-			'test_*.js': ['webpack'],
-			'browser/test_*.js': ['webpack']
+			'**/test_*.js': ['webpack']
 		},
 
 
@@ -47,6 +47,10 @@ module.exports = function(config)
 
 
 		// enable / disable colors in the output (reporters and logs)
-		colors: true
+		colors: true,
+
+		// Concurrency level
+		// how many browser should be started simultaneous
+		concurrency: Infinity
 	};
 };

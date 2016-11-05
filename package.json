@@ -8,7 +8,7 @@
     "prepublish": "npm ls & webpack",
     "test-cov": "istanbul cover ./node_modules/.bin/_mocha -- test/test_* --reporter dot",
     "test-e2e": "karma start",
-    "test-e2e-dev": "karma start --auto-watch --no-single-run",
+    "test-e2e-dev": "karma start -- dev",
     "test-sauce": "karma start -- ie && karma start -- pc && karma start -- mac && karma start -- mobile",
     "test-travis": "istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- test/test_* --reporter dot"
   },

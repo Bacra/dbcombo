@@ -8,7 +8,11 @@ module.exports =
 		'test/test_stringify': './test/test_stringify.js',
 		'test/test_parse': './test/test_parse.js',
 		'test/test_seajs-plugin': './test/browser/test_seajs-plugin.js',
-		'seajs-plugin': './src/seajs-plugin.js',
+		'test/test_seajs': './test/browser/test_seajs.js',
+		// webpack bugs
+		// https://github.com/webpack/webpack/issues/300
+		// 必须设置成数组，否则，require entry中定义的入口，是会跑错的
+		'seajs-plugin': ['./src/seajs-plugin.js'],
 		'benchmark4browser': './benchmark/benchmark.js'
 	},
 	// 忽略 benchmark里面的microtime require， (找不到这个包，需要独立安装)

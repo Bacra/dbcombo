@@ -1,4 +1,1 @@
-define('a2', [], function(require, exports, module)
-{
-	exports.a2 = true;
-});
+define('a2', [], function(require, exports){exports.a2 = true});

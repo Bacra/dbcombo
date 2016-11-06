@@ -21210,9 +21210,10 @@
 		})();
 
 
-	function indexs2groups(indexs)
+	function indexs2groups(indexs, groups)
 	{
-		var groups = [];
+		groups || (groups = []);
+
 		for(var i = indexs.length; i--;)
 		{
 			var index = indexs[i];
@@ -21288,7 +21289,7 @@
 
 
 
-	function mergerGroups()
+	function mergeGroups()
 	{
 		var args = arguments;
 		var argsLength = args.length;
@@ -21323,7 +21324,7 @@
 	exports = module.exports = stringify;
 	exports.indexs2groups = indexs2groups;
 	exports.groups2str = groups2str;
-	exports.mergerGroups = mergerGroups;
+	exports.mergeGroups = mergeGroups;
 
 
 /***/ },

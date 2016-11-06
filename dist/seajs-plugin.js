@@ -40,193 +40,26 @@
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 0:
+/******/ ([
+/* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var stringify = __webpack_require__(12);
-
-	var Module = seajs.Module;
-	var FETCHING = Module.STATUS.FETCHING;
-
-	var data = seajs.data;
-	var DBComboIndexData = data.DBComboIndexData = {};
-	var DBComboIndexHandler;
-
-	seajs.on('load', setComboHash);
-	seajs.on('fetch', setRequestUri);
-	seajs.on('config', setConfig);
-
-	seajs.DBComboKey = stringify;
-
-
-	var urlClearReg = /\?.*$/;
-	function DBComboIndexHandlerDefault(uri)
-	{
-		if (!data.DBComboFileIndex) return;
-		return data.DBComboFileIndex[uri.replace(urlClearReg, '')];
-	}
-
-	function setConfig(options)
-	{
-		if (typeof options.DBComboFileIndex == 'function')
-		{
-			DBComboIndexHandler = options.DBComboFileIndex;
-		}
-		else if (options.DBComboFileIndex)
-		{
-			DBComboIndexHandler = DBComboIndexHandlerDefault;
-		}
-	}
-
-
-	function setComboHash(uris)
-	{
-		var len = uris.length;
-		var needComboUris = []
-
-		for (var i = 0; i < len; i++)
-		{
-			var uri = uris[i]
-			if (DBComboIndexData[uri]) continue;
-
-			var mod = Module.get(uri);
-
-			// Remove fetching and fetched uris, excluded uris, combo uris
-			if (mod.status < FETCHING && !isExcluded(uri) && !isComboUri(uri))
-			{
-				needComboUris.push(uri);
-			}
-		}
-
-		if (needComboUris.length > 1)
-		{
-			paths2hash(needComboUris);
-		}
-	}
-
-
-	function setRequestUri(data2)
-	{
-		if (data.DBComboFile)
-		{
-			var info = DBComboIndexData[data2.uri];
-			if (info && info.indexs)
-			{
-				// 下发index，其他fetch的可能也要用
-				data2.DBComboFileInfo = info;
-				if (info.indexs.length > 1)
-				{
-					data2.requestUri = info.requestUri || data.DBComboFile+'/'+info.indexStr+info.type;
-					return;
-				}
-			}
-
-			if (data.DBComboExcludeUriHandler)
-			{
-				data2.requestUri = data.DBComboExcludeUriHandler(data2.uri);
-			}
-		}
-	}
-
-	function paths2hash(files)
-	{
-		var group = files2group(files)
-		for (var i = group.length; i--;)
-		{
-			setHash(group[i]);
-		}
-	}
-
-	function setHash(files)
-	{
-		var indexs = [];
-		var inList = [];
-		for (var i = files.length; i--;)
-		{
-			var fileIndex = DBComboIndexHandler(files[i]);
-			if (fileIndex || fileIndex === 0)
-			{
-				inList.push(files[i]);
-				indexs.push(fileIndex);
-			}
-			else if (data.debug)
-			{
-				console.log('no file index:'+files[i]);
-			}
-		}
-
-		if (inList.length)
-		{
-			var result = {indexs: indexs, indexStr: seajs.DBComboKey(indexs), type: getExt(inList[0])};
-			for (var i = inList.length; i--;)
-			{
-				DBComboIndexData[inList[i]] = result;
-			}
-		}
-	}
-
-	//
-	//  ["a.js", "c/d.js", "c/e.js", "a.css", "b.css", "z"]
-	// ==>
-	//  [ ["a.js", "c/d.js", "c/e.js"], ["a.css", "b.css"] ]
-	//
-
-	function files2group(files)
-	{
-		var group = []
-		var hash = {}
-
-		for (var i = 0, len = files.length; i < len; i++)
-		{
-			var file = files[i]
-			var ext = getExt(file)
-			if (ext)
-			{
-				(hash[ext] || (hash[ext] = [])).push(file)
-			}
-		}
-
-		for (var k in hash)
-		{
-			if (hash.hasOwnProperty(k))
-			{
-				group.push(hash[k])
-			}
-		}
-
-		return group
-	}
-
-	function getExt(file)
-	{
-		var p = file.lastIndexOf(".");
-		return p >= 0 ? file.substring(p) : "";
-	}
-
-	function isExcluded(uri)
-	{
-		if (!data.DBComboFile) return true;
-
-		if (data.DBComboExcludes)
-		{
-			return data.DBComboExcludes.test ?
-				data.DBComboExcludes.test(uri) :
-				data.DBComboExcludes(uri);
-		}
-	}
-
-	function isComboUri(uri)
-	{
-		var s1 = data.DBComboFile;
-		return s1 && uri.substr(0, s1.length+1) == s1+'/';
-	}
+	module.exports = __webpack_require__(15);
 
 
 /***/ },
-
-/***/ 12:
+/* 1 */,
+/* 2 */,
+/* 3 */,
+/* 4 */,
+/* 5 */,
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */,
+/* 10 */,
+/* 11 */,
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var DEF = __webpack_require__(13);
@@ -263,9 +96,10 @@
 		})();
 
 
-	function indexs2groups(indexs)
+	function indexs2groups(indexs, groups)
 	{
-		var groups = [];
+		groups || (groups = []);
+
 		for(var i = indexs.length; i--;)
 		{
 			var index = indexs[i];
@@ -341,7 +175,7 @@
 
 
 
-	function mergerGroups()
+	function mergeGroups()
 	{
 		var args = arguments;
 		var argsLength = args.length;
@@ -376,12 +210,11 @@
 	exports = module.exports = stringify;
 	exports.indexs2groups = indexs2groups;
 	exports.groups2str = groups2str;
-	exports.mergerGroups = mergerGroups;
+	exports.mergeGroups = mergeGroups;
 
 
 /***/ },
-
-/***/ 13:
+/* 13 */
 /***/ function(module, exports) {
 
 	var EACH_GROUP_FILE_NUM = exports.EACH_GROUP_FILE_NUM = 31;
@@ -391,6 +224,529 @@
 	exports.MAX_GROUP_URI = 250/MAX_GROUP_KEY_LENGTH | 0;
 
 
-/***/ }
+/***/ },
+/* 14 */,
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
 
-/******/ });
+	var DBComboClient = __webpack_require__(16);
+
+	var Module = seajs.Module;
+	var STATUS = Module.STATUS;
+
+	var data = seajs.data;
+	var DBComboRequestUriMap = data.DBComboRequestUriMap = {};
+	// var DBComboFileGroupsData = data.DBComboFileGroupsData = {};
+	var DBComboIndex2uriData = data.DBComboIndex2uriData = {};
+	var DBComboIndexHandler;
+	var DBComboFile;
+	var push = Array.prototype.push;
+
+	seajs.on('load', setComboHash);
+	seajs.on('fetch', setRequestUri);
+	seajs.on('config', setConfig);
+	// 拓展resolve，支持index转uri，方便index的数据转化
+	seajs.on('resolve', index2uri);
+
+	var urlClearReg = /\?.*$/;
+	function DBComboIndexHandlerDefault(uri)
+	{
+		if (!data.DBComboFileIndex) return;
+		return data.DBComboFileIndex[uri.replace(urlClearReg, '')];
+	}
+
+	function setConfig(options)
+	{
+		if (typeof options.DBComboFileIndex == 'function')
+			DBComboIndexHandler = options.DBComboFileIndex;
+		else if (options.DBComboFileIndex)
+			DBComboIndexHandler = DBComboIndexHandlerDefault;
+
+		if ('DBComboFile' in options)
+		{
+			if (options.DBComboFile)
+				DBComboFile = seajs.resolve(options.DBComboFile);
+			else
+				DBComboFile = null;
+		}
+	}
+
+
+	function index2uri(emitDate)
+	{
+		if (!emitDate.uri && typeof emitDate.id == 'number')
+		{
+			var uri = DBComboIndex2uriData[emitDate.id];
+			if (!uri)
+			{
+				var info = DBComboIndexHandler(emitDate.id);
+				if (info && info.file)
+				{
+					uri = Module.resolve(''+info.file);
+					if (uri) DBComboIndex2uriData[emitDate.id] = uri;
+
+					// 在这里进行deps的注入，忽略了uri不是number的情况
+					// 移动到hook load进行注入
+					// if (info.deps)
+					// {
+					// 	var mod = Module.get(uri);
+					// 	push.apply(mod.dependencies, info.deps);
+					// }
+				}
+			}
+			if (uri) emitDate.uri = uri;
+		}
+	}
+
+	function setComboHash(uris)
+	{
+		var len = uris.length;
+		var needComboUris = [];
+
+		for (var i = 0; i < len; i++)
+		{
+			var uri = uris[i]
+			if (DBComboRequestUriMap[uri]) continue;
+
+			var mod = Module.get(uri);
+
+			// Remove fetching and fetched uris, excluded uris, combo uris
+			if (mod.status < STATUS.FETCHING && !isExcluded(uri) && !isComboUri(uri))
+			{
+				needComboUris.push(uri);
+			}
+		}
+
+		if (needComboUris.length) paths2hash(needComboUris);
+	}
+
+
+	function setRequestUri(emitDate)
+	{
+		if (DBComboFile)
+		{
+			var info = DBComboRequestUriMap[emitDate.uri];
+			if (info && info.groups)
+			{
+				// 下发index，其他fetch的可能也要用
+				emitDate.DBComboFileInfo = info;
+				emitDate.requestUri = info.requestUri
+					|| DBComboFile+'/'+DBComboClient.stringify.groups2str(info.groups) + info.type;
+			}
+		}
+	}
+
+	function paths2hash(files)
+	{
+		var types = typeGroup(files);
+		for (var type in types)
+		{
+			if (types.hasOwnProperty(type))
+			{
+				setHash(types[type], type);
+			}
+		}
+	}
+
+	// function setHash(files, type)
+	// {
+	// 	var info = files2groups(files);
+	//
+	// 	if (info && info.files.length)
+	// 	{
+	// 		var files = info.files;
+	// 		var result =
+	// 		{
+	// 			groups	: info.groups,
+	// 			type	: type
+	// 		};
+	//
+	// 		for (var i = files.length; i--;)
+	// 		{
+	// 			DBComboRequestUriMap[files[i]] = result;
+	// 		}
+	//
+	// 		return result;
+	// 	}
+	// }
+
+	// function files2groups(files)
+	// {
+	// 	var indexs = [];
+	// 	var inList = [];
+	//
+	// 	for (var i = files.length; i--;)
+	// 	{
+	// 		var file = files[i];
+	// 		var info = DBComboIndexHandler(file);
+	// 		if (info)
+	// 		{
+	// 			inList.push(file);
+	// 			indexs.push(info.index);
+	// 		}
+	// 		else if (data.debug)
+	// 		{
+	// 			console.log('no file index:'+files[i]);
+	// 		}
+	// 	}
+	//
+	// 	if (indexs.length)
+	// 	{
+	// 		return {
+	// 			groups: DBComboClient.stringify.indexs2groups(indexs),
+	// 			files: inList
+	// 		};
+	// 	}
+	// }
+
+	function setHash(files, type)
+	{
+		var groups = files2groups(files, []);
+
+		if (groups.length)
+		{
+			var result =
+			{
+				groups	: groups,
+				type	: type
+			};
+
+			// 建立request uri映射关系
+			var indexs = DBComboClient.parse.groups2indexs(groups);
+			for (var i = indexs.length; i--;)
+			{
+				DBComboRequestUriMap[Module.resolve(indexs[i])] = result;
+			}
+
+			return result;
+		}
+	}
+
+	function files2groups(arr, groups)
+	{
+		var indexs = [];
+
+		for(var i = arr.length; i--;)
+		{
+			var info = DBComboIndexHandler(arr[i]);
+			if (info)
+			{
+				var mod = Module.get(Module.resolve(info.index), info.deps);
+				if (mod.status < STATUS.FETCHING)
+				{
+					indexs.push(info.index);
+				}
+
+				if (info.deps)
+				{
+					files2groups(info.deps, groups);
+				}
+			}
+			else if (data.debug)
+			{
+				console.log('no file index:%s', arr[i]);
+			}
+		}
+
+		DBComboClient.stringify.indexs2groups(indexs, groups);
+		return groups;
+	}
+
+
+	// function injectDeps(mod, deps)
+	// {
+	// 	if (mod._indexs) return;
+	//
+	// 	var groups = mod._deps_groups;
+	// 	if (!groups)
+	// 	{
+	// 		if (deps)
+	// 			groups = getAllDeps(deps);
+	// 		else
+	// 			groups = [];
+	// 	}
+	// 	mod._deps_groups = groups;
+	//
+	// 	var originalDeps = mod.dependencies;
+	// 	var originalDepsIndexs = [];
+	// 	var originalDepsNoIndexFiles = [];
+	//
+	// 	for(var i = originalDeps.length; i--;)
+	// 	{
+	// 		var info = DBComboIndexHandler(originalDeps[i]);
+	// 		if (info)
+	// 			originalDepsIndexs.push(info.index);
+	// 		else
+	// 			originalDepsNoIndexFiles.push(originalDeps[i]);
+	// 	}
+	//
+	// 	if (originalDepsIndexs.length)
+	// 	{
+	// 		groups = DBComboClient.stringify.mergeGroups(groups, getAllDeps(originalDepsIndexs));
+	// 		DBComboClient.stringify.indexs2groups(originalDepsIndexs, groups);
+	// 	}
+	//
+	// 	mod._indexs = DBComboClient.parse.groups2indexs(groups);
+	// 	mod.dependencies = mod._indexs.concat(originalDepsNoIndexFiles);
+	//
+	// 	if (data.debug)
+	// 	{
+	// 		console.log('injectDeps file:%s indexs:%o', mod.uri, mod._indexs);
+	// 	}
+	// }
+
+
+	// function getAllDeps(deps)
+	// {
+	// 	var groups = [];
+	//
+	// 	for (var i = deps.length; i--;)
+	// 	{
+	// 		var index = deps[i];
+	// 		var mod = Module.get(index);
+	// 		if (!mod._deps_groups)
+	// 		{
+	// 			var info = DBComboIndexHandler(index);
+	//
+	// 			if (info.deps && info.deps.length)
+	// 				mod._deps_groups = getAllDeps(info.deps);
+	// 			else
+	// 				mod._deps_groups = [];
+	// 		}
+	//
+	// 		groups.push(mod._deps_groups);
+	// 	}
+	// 	groups.push(DBComboClient.stringify.indexs2groups(deps));
+	//
+	// 	return DBComboClient.stringify.mergeGroups.apply(null, groups);
+	// }
+
+
+	// 在combo的时候，进行deps的合并，不合理，会导致已经加载的模块重新加载
+	// function files2groups(files)
+	// {
+	// 	var indexs = [];
+	// 	var inList = [];
+	// 	var groups = [];
+	//
+	// 	for (var i = files.length; i--;)
+	// 	{
+	// 		var file = files[i];
+	// 		if (DBComboFileGroupsData[file])
+	// 		{
+	// 			groups.push(DBComboFileGroupsData[file].groups);
+	// 			inList.push(file);
+	// 		}
+	// 		else
+	// 		{
+	// 			var info = DBComboIndexHandler(file);
+	// 			if (info)
+	// 			{
+	// 				inList.push(file);
+	// 				indexs.push(info.index);
+	// 				if (info.deps && info.deps.length)
+	// 				{
+	// 					var depsGroups = files2groups(info.deps);
+	// 					if (depsGroups)
+	// 					{
+	// 						groups.push(depsGroups.groups);
+	// 						DBComboFileGroupsData[file]
+	// 							= DBComboFileGroupsData[info.index]
+	// 							= {
+	// 								index: info.index,
+	// 								groups: depsGroups.groups
+	// 							};
+	// 					}
+	// 				}
+	// 			}
+	// 			else if (data.debug)
+	// 			{
+	// 				console.log('no file index:'+files[i]);
+	// 			}
+	// 		}
+	// 	}
+	//
+	// 	if (inList.length)
+	// 	{
+	// 		groups.push(DBComboClient.stringify.indexs2groups(indexs));
+	//
+	// 		return {
+	// 			groups: DBComboClient.stringify.mergeGroups.apply(null, groups),
+	// 			files: inList
+	// 		};
+	// 	}
+	// }
+
+
+	//
+	//  ["a.js", "c/d.js", "c/e.js", "a.css", "b.css", "z"]
+	// ==>
+	//  {js: ["a.js", "c/d.js", "c/e.js"], css: ["a.css", "b.css"] }
+	//
+
+	function typeGroup(files)
+	{
+		var types = {};
+
+		for (var i = 0, len = files.length; i < len; i++)
+		{
+			var file = files[i]
+			var ext = getExt(file)
+			if (ext)
+			{
+				(types[ext] || (types[ext] = [])).push(file)
+			}
+		}
+
+		return types;
+	}
+
+	var extReg = /\.[^\.\s]+$/;
+	function getExt(file)
+	{
+		var m = file.match(extReg);
+		return (m && m[0]) || "";
+	}
+
+	function isExcluded(uri)
+	{
+		if (!DBComboFile) return true;
+
+		if (data.DBComboExcludes)
+		{
+			return data.DBComboExcludes.test ?
+				data.DBComboExcludes.test(uri) :
+				data.DBComboExcludes(uri);
+		}
+	}
+
+	function isComboUri(uri)
+	{
+		return DBComboFile && uri.substr(0, DBComboFile.length+1) == DBComboFile+'/';
+	}
+
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = {
+		stringify: __webpack_require__(12),
+		parse: __webpack_require__(17)
+	};
+
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var DEF = __webpack_require__(13);
+	var EACH_GROUP_FILE_NUM = DEF.EACH_GROUP_FILE_NUM;
+	var MAX_GROUP_KEY_LENGTH = DEF.MAX_GROUP_KEY_LENGTH;
+	var MATH_LOGE2 = Math.log(2);
+	var push = Array.prototype.push;
+
+	function str2groups(str)
+	{
+		var arr = str.split('');
+		var groups = [];
+		var index = 0;
+		var groupval = '';
+
+		for(var i = arr.length, val; i--;)
+		{
+			val = arr[i];
+			// Z是跳过的31位，Y是不足7位时候的补位
+			if (val == 'Z' || val == 'Y' || val == 'X')
+			{
+				if (groupval) groups[index] = parseInt(groupval, 32);
+				groupval = '';
+
+				// 重复Repeat Z的优化写法
+				if (val == 'X')
+				{
+					var skipStr = '';
+					for(i--; i && arr[i] != 'W'; i--)
+					{
+						skipStr = arr[i]+skipStr;
+					}
+					var skipLen = Number(skipStr);
+					if (!skipLen) throw new Error('INVALID REPEAT MARK W/X,'+arr[i]+skipStr+'X');
+					index += skipLen;
+				}
+				else
+				{
+					index++;
+				}
+			}
+			else if (val == 'W')
+			{
+				throw new Error('INVALID REPEAT MARK W/X,W');
+			}
+			else if (val != '/')
+			{
+				groupval = val + groupval;
+				// 31位数字parse之后，长度最长为7
+				if (groupval.length >= MAX_GROUP_KEY_LENGTH)
+				{
+					if (groupval) groups[index] = parseInt(groupval, 32);
+					index++;
+					groupval = '';
+				}
+			}
+		}
+
+		if (groupval) groups[index] = parseInt(groupval, 32);
+
+		return groups;
+	}
+
+	function num2indexs(num, offset)
+	{
+		var indexs = [];
+		for(var index = 0; num; index++, num = num >>> 1)
+		{
+			if (num & 1)
+			{
+				indexs.push(offset+index);
+			}
+		}
+
+		return indexs;
+	}
+
+	function groups2indexs(groups)
+	{
+		var indexs = [];
+
+		for(var i = 0, len = groups.length, result; i < len; i++)
+		{
+			result = num2indexs(groups[i], i * EACH_GROUP_FILE_NUM);
+			push.apply(indexs, result);
+		}
+
+		return indexs;
+	}
+
+	function parse(str)
+	{
+		return groups2indexs(str2groups(str));
+	}
+
+
+	function maxIndexInGroup(groups)
+	{
+		var lastIndex = groups.length -1;
+		var lastItem = groups[lastIndex];
+		return lastIndex*EACH_GROUP_FILE_NUM+Math.log(lastItem)/MATH_LOGE2 | 0;
+	}
+
+	exports = module.exports = parse;
+	exports.str2groups = str2groups;
+	exports.num2indexs = num2indexs;
+	exports.groups2indexs = groups2indexs;
+	exports.maxIndexInGroup = maxIndexInGroup;
+
+
+/***/ }
+/******/ ]);

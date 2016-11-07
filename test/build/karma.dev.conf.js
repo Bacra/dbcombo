@@ -1,10 +1,11 @@
 module.exports = function(config)
 {
 	return {
-		autoWatch: true,
-		singleRun: false,
-		concurrency: Infinity,
-		logLevel: config.LOG_ERROR,
-		browsers: ['Chrome'],
+		autoWatch	: true,
+		singleRun	: false,
+		concurrency	: Infinity,
+		logLevel	: config.LOG_ERROR,
+		browsers	: ['Chrome'],
+		retryLimit	: 0,
 	};
 }

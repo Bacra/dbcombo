@@ -2,18 +2,11 @@ var DBComboClient = require('../');
 var ComboPlugin = require('./seajs-plugin-combo');
 var delayUriMap = {};
 
-seajs.on('fetch', function(emitData)
-{
-	if (emitData.DBComboRequestData
-		&& emitData.requestUri
-		&& !delayUriMap[emitData.requestUri])
-	{
-		delayRequest(emitData);
-	}
-});
+seajs.on('fetch', delayRequest);
+seajs.on('request', saveRequestData);
 
 
-seajs.on('request', function(emitData)
+function saveRequestData(emitData)
 {
 	var item = delayUriMap[emitData.requestUri];
 	if (item)
@@ -22,24 +15,31 @@ seajs.on('request', function(emitData)
 		item.onRequest		= emitData.onRequest;
 		item.charset		= emitData.charset;
 	}
-});
-
+}
 
 
 var delays = {};
 var delayWait;
-function delayRequest(info)
+function delayRequest(emitData)
 {
-	var type = info.DBComboRequestData.type;
+	if (!emitData.DBComboRequestData
+		|| !emitData.requestUri
+		|| delayUriMap[emitData.requestUri])
+	{
+		return;
+	}
+
+
+	var type = emitData.DBComboRequestData.type;
 	var list = delays[type] || (delays[type] = []);
 	var emitData =
 		{
-			requestUri: info.requestUri,
-			groups: info.DBComboRequestData.groups
+			requestUri: emitData.requestUri,
+			groups: emitData.DBComboRequestData.groups
 		};
 
 	list.push(emitData);
-	delayUriMap[info.requestUri] = emitData;
+	delayUriMap[emitData.requestUri] = emitData;
 
 	if (!delayWait) delayWait = setTimeout(requestAll);
 }

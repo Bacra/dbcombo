@@ -2,12 +2,18 @@ var Promise = require('bluebird');
 
 exports.clearSeajsModuleCache = function clearSeajsModuleCache()
 {
-	var cache = seajs.cache;
+	delCache(seajs.cache);
+	delCache(seajs.data.fetchedList);
+};
+
+function delCache(cache)
+{
+	if (!cache) return;
 	for(var i in cache)
 	{
 		if (cache.hasOwnProperty(i)) delete cache[i];
 	}
-};
+}
 
 exports.assertSeajsUse = function(uris, callback)
 {

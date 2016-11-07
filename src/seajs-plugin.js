@@ -89,12 +89,17 @@ function setRequestUri(emitDate)
 		if (info && info.groups)
 		{
 			// 下发index，其他fetch的可能也要用
-			emitDate.DBComboFileInfo = info;
-			emitDate.requestUri = info.requestUri
-				|| DBComboFile+'/'+DBComboClient.stringify.groups2str(info.groups) + info.type;
+			// emitDate.DBComboRequestData = info;
+			emitDate.requestUri = genRequestUri(info);
 		}
 	}
 }
+
+function genRequestUri(info)
+{
+	return DBComboFile+'/'+DBComboClient.stringify.groups2str(info.groups) + info.type;
+}
+
 
 function paths2hash(files)
 {
@@ -160,6 +165,9 @@ function files2groups(arr, groups)
 	DBComboClient.stringify.indexs2groups(indexs, groups);
 	return groups;
 }
+
+
+
 
 
 //

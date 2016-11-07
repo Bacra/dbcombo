@@ -65,7 +65,9 @@ function setComboHash(uris)
 
 	for (var i = 0; i < len; i++)
 	{
-		var uri = uris[i]
+		var uri = uris[i];
+		// 忽略已经存在的
+		// 注意：已经存在的不一定是插件生成的，也有可能是其他插件，如local_code添加的
 		if (DBComboRequestUriMap[uri]) continue;
 
 		var mod = Module.get(uri);
@@ -86,7 +88,7 @@ function setRequestUri(emitDate)
 	if (DBComboFile)
 	{
 		var info = DBComboRequestUriMap[emitDate.uri];
-		if (info && info.groups)
+		if (info && info.groups && info.groups.length)
 		{
 			// 下发index，其他fetch的可能也要用
 			// emitDate.DBComboRequestData = info;

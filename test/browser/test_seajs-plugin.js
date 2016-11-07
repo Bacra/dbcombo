@@ -59,4 +59,32 @@ describe('#seajs-plugin', function()
 				});
 		});
 	});
+
+
+	describe('#delay', function()
+	{
+		before(function()
+		{
+			loadUtils.clearSeajsModuleCache();
+		});
+
+		it('#delay', function()
+		{
+			return Promise.all(
+			[
+				loadUtils.assertSeajsUse('a11.js', function(obj)
+				{
+					expect(obj).to.be.eql({a11: true});
+				}),
+				loadUtils.assertSeajsUse('a12.js', function(obj)
+				{
+					expect(obj).to.be.eql({a12: true});
+				}),
+				loadUtils.assertSeajsUse('a13.js', function(obj)
+				{
+					expect(obj).to.be.eql({a13: true});
+				})
+			]);
+		});
+	});
 });

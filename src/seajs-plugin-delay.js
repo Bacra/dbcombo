@@ -73,7 +73,7 @@ function requestOneType(type, list)
 		if (item.onRequest)
 		{
 			charset || (charset = item.charset);
-			groups = DBComboClient.stringify.mergeGroups(groups, item.groups);
+			groups.push(item.groups);
 			callbacks.push(item.onRequest);
 			requestUris.push(item.requestUri);
 		}
@@ -89,7 +89,12 @@ function requestOneType(type, list)
 	}
 	else if (callbacks.length > 1)
 	{
-		var url = ComboPlugin.genRequestUri({type: type, groups: groups});
+		var url = ComboPlugin.genRequestUri(
+			{
+				type: type,
+				groups: DBComboClient.stringify.mergeGroups.apply(null, groups)
+			});
+
 		seajs.request(url, function()
 			{
 				for(var i = callbacks.length; i--;)

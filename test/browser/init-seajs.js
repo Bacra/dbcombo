@@ -12,6 +12,7 @@ seajs.config(
 	base: '/base/browser/source/seajs-plugin-src/',
 	cwd: '/base/browser/source/seajs-plugin-src/',
 	DBComboFile: 'db.js',
+	DBComboDelayRequest: true,
 	DBComboFileIndex: function(file)
 	{
 		if (isNaN(file))

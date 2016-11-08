@@ -1,6 +1,7 @@
 var DBComboClient = require('../');
 var ComboPlugin = require('./seajs-plugin-combo');
 var delayUriMap = {};
+var data = seajs.data;
 
 seajs.on('fetch', delayRequest);
 seajs.on('request', saveRequestData);
@@ -8,7 +9,7 @@ seajs.on('request', saveRequestData);
 
 function saveRequestData(emitData)
 {
-	var item = delayUriMap[emitData.requestUri];
+	var item = data.DBComboDelayRequest && delayUriMap[emitData.requestUri];
 	if (item)
 	{
 		emitData.requested	= true;
@@ -22,7 +23,8 @@ var delays = {};
 var delayWait;
 function delayRequest(emitData)
 {
-	if (!emitData.DBComboRequestData
+	if (!data.DBComboDelayRequest
+		|| !emitData.DBComboRequestData
 		|| !emitData.requestUri
 		|| delayUriMap[emitData.requestUri])
 	{

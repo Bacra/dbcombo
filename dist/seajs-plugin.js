@@ -229,65 +229,26 @@
 /* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var DBComboClient = __webpack_require__(16);
+	__webpack_require__(16);
+	__webpack_require__(20);
 
-	var Module = seajs.Module;
-	var STATUS = Module.STATUS;
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var DBComboClient = __webpack_require__(17);
+	var Config = __webpack_require__(19);
 
 	var data = seajs.data;
+	var Module = seajs.Module;
+	var STATUS = Module.STATUS;
 	var DBComboRequestUriMap = data.DBComboRequestUriMap = {};
-	var DBComboIndex2uriData = data.DBComboIndex2uriData = {};
-	var DBComboIndexHandler;
-	var DBComboFile;
 	var push = Array.prototype.push;
 
 	seajs.on('load', setComboHash);
 	seajs.on('fetch', setRequestUri);
-	seajs.on('config', setConfig);
-	// 拓展resolve，支持index转uri，方便index的数据转化
-	seajs.on('resolve', index2uri);
 
-	var urlClearReg = /\?.*$/;
-	function DBComboIndexHandlerDefault(uri)
-	{
-		if (!data.DBComboFileIndex) return;
-		return data.DBComboFileIndex[uri.replace(urlClearReg, '')];
-	}
-
-	function setConfig(options)
-	{
-		if (typeof options.DBComboFileIndex == 'function')
-			DBComboIndexHandler = options.DBComboFileIndex;
-		else if (options.DBComboFileIndex)
-			DBComboIndexHandler = DBComboIndexHandlerDefault;
-
-		if ('DBComboFile' in options)
-		{
-			if (options.DBComboFile)
-				DBComboFile = seajs.resolve(options.DBComboFile);
-			else
-				DBComboFile = null;
-		}
-	}
-
-
-	function index2uri(emitDate)
-	{
-		if (!emitDate.uri && typeof emitDate.id == 'number')
-		{
-			var uri = DBComboIndex2uriData[emitDate.id];
-			if (!uri)
-			{
-				var info = DBComboIndexHandler(emitDate.id);
-				if (info && info.file)
-				{
-					uri = Module.resolve(''+info.file);
-					if (uri) DBComboIndex2uriData[emitDate.id] = uri;
-				}
-			}
-			if (uri) emitDate.uri = uri;
-		}
-	}
 
 	function setComboHash(uris)
 	{
@@ -296,7 +257,9 @@
 
 		for (var i = 0; i < len; i++)
 		{
-			var uri = uris[i]
+			var uri = uris[i];
+			// 忽略已经存在的
+			// 注意：已经存在的不一定是插件生成的，也有可能是其他插件，如local_code添加的
 			if (DBComboRequestUriMap[uri]) continue;
 
 			var mod = Module.get(uri);
@@ -314,21 +277,22 @@
 
 	function setRequestUri(emitDate)
 	{
-		if (DBComboFile)
+		if (Config.DBComboFile)
 		{
 			var info = DBComboRequestUriMap[emitDate.uri];
-			if (info && info.groups)
+			if (info && info.groups && info.groups.length)
 			{
-				// 下发index，其他fetch的可能也要用
-				// emitDate.DBComboRequestData = info;
+				// 下发info，其他fetch的可能也要用
+				emitDate.DBComboRequestData = info;
 				emitDate.requestUri = genRequestUri(info);
 			}
 		}
 	}
 
+	exports.genRequestUri = genRequestUri;
 	function genRequestUri(info)
 	{
-		return DBComboFile+'/'+DBComboClient.stringify.groups2str(info.groups) + info.type;
+		return Config.DBComboFile + '/' + DBComboClient.stringify.groups2str(info.groups) + info.type;
 	}
 
 
@@ -373,7 +337,7 @@
 
 		for(var i = arr.length; i--;)
 		{
-			var info = DBComboIndexHandler(arr[i]);
+			var info = Config.DBComboIndexHandler(arr[i]);
 			if (info)
 			{
 				var mod = Module.get(Module.resolve(info.index), info.deps);
@@ -433,7 +397,7 @@
 
 	function isExcluded(uri)
 	{
-		if (!DBComboFile) return true;
+		if (!Config.DBComboFile) return true;
 
 		if (data.DBComboExcludes)
 		{
@@ -445,22 +409,22 @@
 
 	function isComboUri(uri)
 	{
-		return DBComboFile && uri.substr(0, DBComboFile.length+1) == DBComboFile+'/';
+		return Config.DBComboFile && uri.substr(0, Config.DBComboFile.length+1) == Config.DBComboFile+'/';
 	}
 
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = {
 		stringify: __webpack_require__(12),
-		parse: __webpack_require__(17)
+		parse: __webpack_require__(18)
 	};
 
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var DEF = __webpack_require__(13);
@@ -569,6 +533,173 @@
 	exports.num2indexs = num2indexs;
 	exports.groups2indexs = groups2indexs;
 	exports.maxIndexInGroup = maxIndexInGroup;
+
+
+/***/ },
+/* 19 */
+/***/ function(module, exports) {
+
+	var Module = seajs.Module;
+	var DBComboIndex2uriData = exports.DBComboIndex2uriData = seajs.data.DBComboIndex2uriData = {};
+	exports.DBComboIndexHandler = DBComboIndexHandlerDefault;
+	exports.DBComboFile = null;
+
+
+	seajs.on('config', setConfig);
+	// 拓展resolve，支持index转uri，方便index的数据转化
+	seajs.on('resolve', index2uri);
+
+	function index2uri(emitDate)
+	{
+		if (!emitDate.uri && typeof emitDate.id == 'number')
+		{
+			var uri = DBComboIndex2uriData[emitDate.id];
+			if (!uri)
+			{
+				var info = exports.DBComboIndexHandler(emitDate.id);
+				if (info && info.file)
+				{
+					uri = Module.resolve(''+info.file);
+					if (uri) DBComboIndex2uriData[emitDate.id] = uri;
+				}
+			}
+			if (uri) emitDate.uri = uri;
+		}
+	}
+
+
+
+	var urlClearReg = /\?.*$/;
+	function DBComboIndexHandlerDefault(uri)
+	{
+		if (!seajs.data.DBComboFileIndex) return;
+		return seajs.data.DBComboFileIndex[uri.replace(urlClearReg, '')];
+	}
+
+	function setConfig(options)
+	{
+		if (typeof options.DBComboFileIndex == 'function')
+			exports.DBComboIndexHandler = options.DBComboFileIndex;
+		else if (options.DBComboFileIndex)
+			exports.DBComboIndexHandler = DBComboIndexHandlerDefault;
+
+		if ('DBComboFile' in options)
+		{
+			if (options.DBComboFile)
+				exports.DBComboFile = Module.resolve(options.DBComboFile);
+			else
+				exports.DBComboFile = null;
+		}
+	}
+
+
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var DBComboClient = __webpack_require__(17);
+	var ComboPlugin = __webpack_require__(16);
+	var delayUriMap = {};
+	var data = seajs.data;
+
+	seajs.on('fetch', delayRequest);
+	seajs.on('request', saveRequestData);
+
+
+	function saveRequestData(emitData)
+	{
+		var item = data.DBComboDelayRequest && delayUriMap[emitData.requestUri];
+		if (item)
+		{
+			emitData.requested	= true;
+			item.onRequest		= emitData.onRequest;
+			item.charset		= emitData.charset;
+		}
+	}
+
+
+	var delays = {};
+	var delayWait;
+	function delayRequest(emitData)
+	{
+		if (!data.DBComboDelayRequest
+			|| !emitData.DBComboRequestData
+			|| !emitData.requestUri
+			|| delayUriMap[emitData.requestUri])
+		{
+			return;
+		}
+
+
+		var type = emitData.DBComboRequestData.type;
+		var list = delays[type] || (delays[type] = []);
+		var emitData =
+			{
+				requestUri: emitData.requestUri,
+				groups: emitData.DBComboRequestData.groups
+			};
+
+		list.push(emitData);
+		delayUriMap[emitData.requestUri] = emitData;
+
+		if (!delayWait) delayWait = setTimeout(requestAll);
+	}
+
+
+	function requestAll()
+	{
+		delayWait = null;
+
+		for(var type in delays)
+		{
+			requestOneType(type, delays[type]);
+		}
+
+		delays = {};
+		delayUriMap = {};
+	}
+
+	function requestOneType(type, list)
+	{
+		var groups = [];
+		var callbacks = [];
+		var requestUris = [];
+		var charset;
+
+		for(var i = list.length; i--;)
+		{
+			var item = list[i];
+			if (item.onRequest)
+			{
+				charset || (charset = item.charset);
+				groups = DBComboClient.stringify.mergeGroups(groups, item.groups);
+				callbacks.push(item.onRequest);
+				requestUris.push(item.requestUri);
+			}
+			else
+			{
+				console.error('no onRequest:%s', item.requestUri);
+			}
+		}
+
+		if (callbacks.length == 1)
+		{
+			seajs.request(requestUris[0], callbacks[0], charset);
+		}
+		else if (callbacks.length > 1)
+		{
+			var url = ComboPlugin.genRequestUri({type: type, groups: groups});
+			seajs.request(url, function()
+				{
+					for(var i = callbacks.length; i--;)
+					{
+						callbacks[i]();
+					}
+				},
+				charset);
+		}
+	}
 
 
 /***/ }

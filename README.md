@@ -39,9 +39,10 @@ Seajs Config
 ```
 seajs.config(
 {
-	DBComboFileIndex: {},		// uri => index
-	DBComboFile: 'http://www.example.com/db.js',		// dbfile uri
-	DBComboExcludes: function(uri){return false}		// RegExp / Function
+	DBComboFileIndex: {},								// uri => {index, deps, file}
+	DBComboFile: 'http://www.example.com/db.js',		// dbfile uri, append merge key width it
+	DBComboExcludes: function(uri){return false},		// RegExp / Function
+	DBComboDelayRequest: true							// delay request for merge more deps
 });
 ```
 

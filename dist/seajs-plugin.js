@@ -664,37 +664,37 @@
 	{
 		var groups = [];
 		var callbacks = [];
-		var requestUris = [];
 		var charset;
 
 		for(var i = list.length; i--;)
 		{
 			var item = list[i];
-			if (item.onRequest)
+			if (item.groups)
 			{
 				charset || (charset = item.charset);
-				groups = DBComboClient.stringify.mergeGroups(groups, item.groups);
+				groups.push(item.groups);
 				callbacks.push(item.onRequest);
-				requestUris.push(item.requestUri);
 			}
 			else
 			{
-				console.error('no onRequest:%s', item.requestUri);
+				seajs.request(item.requestUri, item.onRequest, item.charset);
 			}
 		}
 
-		if (callbacks.length == 1)
+		if (groups.length)
 		{
-			seajs.request(requestUris[0], callbacks[0], charset);
-		}
-		else if (callbacks.length > 1)
-		{
-			var url = ComboPlugin.genRequestUri({type: type, groups: groups});
+			var url = ComboPlugin.genRequestUri(
+				{
+					type: type,
+					groups: groups.length == 1 ? groups[0] : DBComboClient.stringify.mergeGroups.apply(null, groups)
+				});
+
+			seajs.emit('dbcombo:delay_merge', groups.length);
 			seajs.request(url, function()
 				{
 					for(var i = callbacks.length; i--;)
 					{
-						callbacks[i]();
+						callbacks[i] && callbacks[i]();
 					}
 				},
 				charset);

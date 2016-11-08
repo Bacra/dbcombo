@@ -12,7 +12,7 @@ before_install:
 
 script:
   - npm run-script test-travis
-  - npm run-script test-sauce
+  # - npm run-script test-sauce
 
 after_script:
   - npm install coveralls@2 && cat ./coverage/lcov.info | coveralls
@@ -23,5 +23,5 @@ env:
     - secure: DeNLZ9sOo6zIe+uhg+LqboEyvDZmsK3az7bSi9ErJX6HKnzPhKshCJ6c7ezEBiFrVGq3UM9UTwAI3iJp7UDDVLDh2co+HBpuFKaYHZ7YmwL4ObqPUlh1I1WIBKVH3oA8b5qAmtla61yReoFhu0rg8WwEyv++yY8SH1P5Zfk1tKUpiyoQP69gLhGwb8aLe/YqX/7oaIM8XCNQYavORXut4Kdqb++y/gT4SbvzAECZzHdAKujTipD3z7a5qx8YgASKgAoUSQb2Kmd7li9oGI9utvmbH30vRln5/+BtfCb97KzQ1us7HSAbAbkdN64H5CHj1J0yh1IinpdyxF4b8PBvJ2PidBb4+pAZiksDR1lGZYaQq3u2KKH0syI5V40tFIv+DjswpfGvBRj1v2xsYx0AP4OhzLlLow4vMiaEzyOfOVUdYrzuQS7DmGx6OjPLHg1jNuCFKxBGmKpI+2EC/Yp59TSetwc4HZw86LqsRz+zyRq7VsQUp3vN3gxtfECTHhvfsWAUxik5anBNDq4CRDi2pZAJu2GrxWJQZDaN8UgKnSusfhmu+RCLqSnqrO6qG5Y3KDAg6zfBLyWOyiNv7T+vE+9iTOitTg4DuzBwNKuK+gM9YBx5xgULEC4VcOp3If1tvDovFW2fb6v61OUwbIAQYKsC4mNx1aj9tPMQIM+2ddI=
     - secure: nx3Xx5VZtnI4DGOrO+SuIY9ikJCaw99uIutDbyQIcxWr+gNqsYRusQ2EMa7n+d+gh7l7q9jm6Pj+PzluUocYzvfPnPJL+cQ+rbOtdfEkEwHQqXT5ciTEF+cUGtadUPzIPZokKGmyTLOu0dx0etS/7wKJw3DpK/9r3hYv0C5UR1pJ0s3TD5muYdHG6yd4jY8TmdlI3UZGZbdgAXey7EspFDnxo86AoexMoVahDKSjASaD/BvLPwrxQrVK5vXdxfUvle95Rq4mGyr2gNEWPObpQ1sYJOtiZM7UAJ+ZblMCJ8nfTXdTZrElQfp79V2JG45OZCWEYpXtSose2ngh0rAktzZRgav38BXWyfueeqMXSTrsSFCAsFX1SnUlgFZwf9oCMDAtdxMWZoMfAHt2jZW1tFFJThyZ45ZOdFgdd5Keur+f88+v1lIHMR7ihqLkmLkEoG8LUjdS4wtmpVBXQZr7i+QOcVIpEilv/XCMlAUk5wslgGakDYE/zmCqT45DRIunUi/M+qqk9ZJIkYbOumG99pwr/UfYzvempPzKHzcNOCkIPVedOQLJrenltySfunWaTdPc5VzoreScKx2mElJTZa6t5lsEjXj5IOQx69WmsSVQZp4OGtHBBv6N2RDfKnSP6I9vaifyIv/AwY6ZHabIQIxfgI9IXlIyl2lBJDK6pa8=
 
-addons:
-    sauce_connect: true
+# addons:
+  # sauce_connect: true

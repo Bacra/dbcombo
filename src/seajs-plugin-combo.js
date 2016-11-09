@@ -53,7 +53,10 @@ function setRequestUri(emitDate)
 exports.genRequestUri = genRequestUri;
 function genRequestUri(info)
 {
-	return Config.DBComboFile + '/' + DBComboClient.stringify.groups2str(info.groups) + info.type;
+	return Config.DBComboFile
+		+ (data.DBComboFileExtname === false ? '' : data.DBComboFileExtname || '_db')
+		+ '/' + DBComboClient.stringify.groups2str(info.groups)
+		+ info.type;
 }
 
 

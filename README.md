@@ -40,7 +40,12 @@ Seajs Config
 seajs.config(
 {
 	DBComboFileIndex: {},								// uri => {index, deps, file}
-	DBComboFile: 'http://www.example.com/db.js',		// dbfile uri, append merge key width it
+	DBComboFile: 'http://www.example.com/db.js_db',		// dbfile uri, append merge key width it
+	DBComboFileExtname: '_db',							// ext dbfile uri, default "_db", set false to ignore 
+														//   Append extname for `db.js`.
+														//   Do not use `db.js` directly for combo uri.
+														//   A file can not be an folder and file simultaneously.
+
 	DBComboExcludes: function(uri){return false},		// RegExp / Function
 	DBComboDelayRequest: true							// delay request for merge more deps
 });
@@ -49,7 +54,7 @@ seajs.config(
 Combo Uri Exapmle
 
 ```
-http://www.example.com/db.js/Yg0W21X/W35X/W35X/W35X/W35X.js
+http://www.example.com/db.js_db/Yg0W21X/W35X/W35X/W35X/W35X.js
 ```
 
 Url parse server power by [DBCombo](https://github.com/Bacra/node-dbcombo)

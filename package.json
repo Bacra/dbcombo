@@ -1,6 +1,6 @@
 {
   "name": "dbcombo-client",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "dbcombo browser client",
   "main": "src/clientkey.js",
   "scripts": {

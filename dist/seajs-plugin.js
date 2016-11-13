@@ -274,7 +274,7 @@
 		if (needComboUris.length) paths2hash(needComboUris);
 	}
 
-
+	var isLoadInRequest = false;
 	function setRequestUri(emitDate)
 	{
 		if (Config.DBComboFile)
@@ -284,7 +284,19 @@
 			{
 				// 下发info，其他fetch的可能也要用
 				emitDate.DBComboRequestData = info;
-				emitDate.requestUri = genRequestUri(info);
+				if (!emitDate.requested)
+				{
+					emitDate.requestUri = info.requestUri;
+				}
+
+				if (!isLoadInRequest && info.indexs)
+				{
+					isLoadInRequest = true;
+					var depsGroups = files2groups(info.indexs, []);
+					var depsIndexs = DBComboClient.parse.groups2indexs(depsGroups);
+					seajs.use(depsIndexs);
+					isLoadInRequest = false;
+				}
 			}
 		}
 	}
@@ -313,19 +325,21 @@
 
 	function setHash(files, type)
 	{
-		var groups = files2groups(files, []);
+		var groups = files2groups(files);
 
 		if (groups.length)
 		{
 			var result =
 			{
+				type	: type,
 				groups	: groups,
-				type	: type
+				indexs	: DBComboClient.parse.groups2indexs(groups)
 			};
 
+			result.requestUri = genRequestUri(result);
+
 			// 建立request uri映射关系
-			var indexs = DBComboClient.parse.groups2indexs(groups);
-			for (var i = indexs.length; i--;)
+			for (var indexs = result.indexs, i = indexs.length; i--;)
 			{
 				DBComboRequestUriMap[Module.resolve(indexs[i])] = result;
 			}
@@ -334,6 +348,12 @@
 		}
 	}
 
+
+	/**
+	 * @param  {Array} arr     files/indexs
+	 * @param  {Array} groups  parent groups, 如果不指定，那么就不会扫描deps
+	 * @return {Array}         groups
+	 */
 	function files2groups(arr, groups)
 	{
 		var indexs = [];
@@ -349,7 +369,7 @@
 					indexs.push(info.index);
 				}
 
-				if (info.deps)
+				if (info.deps && groups)
 				{
 					files2groups(info.deps, groups);
 				}
@@ -360,8 +380,7 @@
 			}
 		}
 
-		DBComboClient.stringify.indexs2groups(indexs, groups);
-		return groups;
+		return DBComboClient.stringify.indexs2groups(indexs, groups);
 	}
 
 
@@ -612,7 +631,10 @@
 
 	function saveRequestData(emitData)
 	{
-		var item = data.DBComboDelayRequest && delayUriMap[emitData.requestUri];
+		var item = !emitData.requested
+				&& data.DBComboDelayRequest
+				&& delayUriMap[emitData.requestUri];
+
 		if (item)
 		{
 			emitData.requested	= true;

@@ -6,11 +6,11 @@ seajs.config({debug: true});
 // 增加combo插件
 require('../../src/seajs-plugin');
 
-var souceInfo = require('./source/seajs-plugin-src/source.map.js');
+var souceInfo = require('./source/source.map.js');
 seajs.config(
 {
-	base: '/base/browser/source/seajs-plugin-src/',
-	cwd: '/base/browser/source/seajs-plugin-src/',
+	base: '/base/browser/source/',
+	cwd: '/base/browser/source/',
 	DBComboFile: 'db.js',
 	DBComboDelayRequest: true,
 	DBComboFileIndex: function(file)

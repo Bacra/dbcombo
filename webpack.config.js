@@ -5,10 +5,6 @@ module.exports =
 		modulesDirectories: [__dirname+'/node_modules']
 	},
 	entry: {
-		'test/test_stringify': './test/test_stringify.js',
-		'test/test_parse': './test/test_parse.js',
-		'test/test_seajs-plugin': './test/browser/test_seajs-plugin.js',
-		'test/test_seajs': './test/browser/test_seajs.js',
 		// webpack bugs
 		// https://github.com/webpack/webpack/issues/300
 		// 必须设置成数组，否则，require entry中定义的入口，是会跑错的

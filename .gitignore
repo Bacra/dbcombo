@@ -1,8 +1,6 @@
 node_modules
 test/tmp
-dist/test
 coverage
 npm-debug.log
 sauce_connect.log
 .tags*
-

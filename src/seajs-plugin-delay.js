@@ -9,7 +9,10 @@ seajs.on('request', saveRequestData);
 
 function saveRequestData(emitData)
 {
-	var item = data.DBComboDelayRequest && delayUriMap[emitData.requestUri];
+	var item = !emitData.requested
+			&& data.DBComboDelayRequest
+			&& delayUriMap[emitData.requestUri];
+
 	if (item)
 	{
 		emitData.requested	= true;

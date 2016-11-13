@@ -70,9 +70,9 @@ describe('#seajs-plugin', function()
 		it('#nocache outside', function()
 		{
 			loadUtils.clearSeajsModuleCache();
-			return loadUtils.assertSeajsUse(['a2.js', 'outside.js'], function(obj)
+			return loadUtils.assertSeajsUse(['a1.js', 'outside.js'], function(obj)
 				{
-					expect(obj).to.be.eql({a2: true});
+					expect(obj).to.be.eql({a1: true});
 				});
 		});
 	});

@@ -294,11 +294,31 @@
 					isLoadInRequest = true;
 					var depsGroups = files2groups(info.indexs, []);
 					var depsIndexs = DBComboClient.parse.groups2indexs(depsGroups);
-					seajs.use(depsIndexs);
+					loadDeps(depsIndexs);
 					isLoadInRequest = false;
 				}
 			}
 		}
+	}
+
+
+	function loadDeps(deps)
+	{
+		var mod = Module.get(data.cwd + "_deps_use_" + data.cid(), deps)
+
+		mod._entry && mod._entry.push(mod);
+		mod.history = {};
+		mod.remain = 1;
+
+		mod.callback = function()
+		{
+			delete mod.callback;
+			delete mod.history;
+			delete mod.remain;
+			delete mod._entry;
+		};
+
+		mod.load();
 	}
 
 	exports.genRequestUri = genRequestUri;

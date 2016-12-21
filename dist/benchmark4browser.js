@@ -47,30 +47,62 @@
 	var Benchmark = __webpack_require__(1);
 	var suite = new Benchmark.Suite;
 	var stringify = __webpack_require__(12);
-	var seajsCombo = __webpack_require__(14);
+	var indexs2path = __webpack_require__(14);
+	var seajsCombo = __webpack_require__(15);
 
-	var list21 = [12, 33];
-	var list22 = ['js/mail/seajs/combo.js', 'js/mail/list/listhandler.js'];
+	var list51 = [12, 33, 200, 800, 10000];
+	var list52 = [
+		'js/mail/seajs/combo.js',
+		'js/mail/list/listhandler.js',
+		'js/mail/list.js',
+		'js/mail/list/listhandler2.js',
+		'js/mail/list/listhandler3.js'
+	];
+
+
+	function map(arr, handler)
+	{
+		var newArr = [];
+		for(var i = 0, len = arr.length; i < len; i++)
+		{
+			newArr.push(handler(arr[i], i));
+		}
+		return newArr;
+	}
 
 	function runHandler(copy, showMsg)
 	{
 		while(copy--)
 		{
-			list21 = list21.concat(list21);
-			list22 = list22.concat(list22);
+			list51 = list51.concat(map(list51, function(item, index)
+				{
+					return item += (index+1)*(copy+1+index);
+				}));
+			list52 = list52.concat(map(list52, function(item)
+				{
+					return item.split('.')[0]+'_'+copy+'.js';
+				}));
 		}
 
-		stringify(list21);
-		seajsCombo(list22);
+		stringify(list51);
+		indexs2path(list51);
+		seajsCombo(list52);
+
+		var key = '#'+list52.length;
+
 
 		// 添加测试
-		suite.add('stringify', function()
+		suite.add('stringify'+key, function()
 			{
-				stringify(list21);
+				stringify(list51);
 			})
-			.add('seajscombo', function()
+			.add('indexs2path'+key, function()
 			{
-				seajsCombo(list22);
+				indexs2path(list51);
+			})
+			.add('seajscombo'+key, function()
+			{
+				seajsCombo(list52);
 			})
 			.on('cycle', function(event)
 			{
@@ -86,13 +118,9 @@
 
 	// in node
 	if (typeof window == 'undefined')
-	{
-		runHandler(10, console.log);
-	}
+		runHandler(4, console.log);
 	else
-	{
 		window.runBenchmarkHandler = runHandler;
-	}
 
 
 /***/ },
@@ -21340,6 +21368,45 @@
 
 /***/ },
 /* 14 */
+/***/ function(module, exports) {
+
+	module.exports = function(indexs)
+	{
+	  return indexs2hash(indexs);
+	}
+
+	function indexs2hash(indexs)
+	{
+	  var result = [];
+	  var str = [];
+	  var len = 0;
+
+	  for(var i = indexs.length; i--;)
+	  {
+	    var newStr = ''+indexs[i];
+	    len+=newStr.length+1;
+	    if (len > 250)
+	    {
+	      len = newStr.length;
+	      result.push(str.join(','));
+	      str = [];
+	    }
+
+	    str.push(newStr);
+	  }
+
+	  if (str.length)
+	  {
+	    result.push(str.join(','));
+	  }
+
+	  return result.join('/');
+	}
+
+
+
+/***/ },
+/* 15 */
 /***/ function(module, exports) {
 
 	module.exports = function(needComboUris)

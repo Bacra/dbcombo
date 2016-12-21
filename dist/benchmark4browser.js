@@ -45,10 +45,10 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var Benchmark = __webpack_require__(1);
-	var suite = new Benchmark.Suite;
 	var stringify = __webpack_require__(12);
 	var indexs2path = __webpack_require__(14);
 	var seajsCombo = __webpack_require__(15);
+	var uniqdeps = __webpack_require__(16);
 
 	var list51 = [12, 33, 200, 800, 10000];
 	var list52 = [
@@ -84,35 +84,73 @@
 				}));
 		}
 
-		stringify(list51);
-		indexs2path(list51);
-		seajsCombo(list52);
-
 		var key = '#'+list52.length;
 
+		// 添加url序列测试
+		function urlStringifyBenchmark(callback)
+		{
+			stringify(list51);
+			indexs2path(list51);
+			seajsCombo(list52);
 
-		// 添加测试
-		suite.add('stringify'+key, function()
-			{
-				stringify(list51);
-			})
-			.add('indexs2path'+key, function()
-			{
-				indexs2path(list51);
-			})
-			.add('seajscombo'+key, function()
-			{
-				seajsCombo(list52);
-			})
-			.on('cycle', function(event)
-			{
-				showMsg(String(event.target));
-			})
-			.on('complete', function()
-			{
-				showMsg('Fastest is ' + this.filter('fastest').map('name'));
-			})
-			.run({ 'async': true });
+			var suite = new Benchmark.Suite;
+			suite.add('stringify'+key, function()
+				{
+					stringify(list51);
+				})
+				.add('indexs2path'+key, function()
+				{
+					indexs2path(list51);
+				})
+				.add('seajscombo'+key, function()
+				{
+					seajsCombo(list52);
+				})
+				.on('cycle', function(event)
+				{
+					showMsg(String(event.target));
+				})
+				.on('complete', function()
+				{
+					showMsg('Fastest is ' + this.filter('fastest').map('name'));
+
+					callback && callback();
+				})
+				.run({'async': true});
+
+		}
+
+
+		function uniqdepsBenchmark(callback)
+		{
+			stringify.indexs2groups(list51);
+			uniqdeps(list52);
+
+			var suite = new Benchmark.Suite;
+			suite.add('indexs2groups'+key, function()
+				{
+					stringify.indexs2groups(list51);
+				})
+				.add('uniqdeps'+key, function()
+				{
+					uniqdeps(list52);
+				})
+				.on('cycle', function(event)
+				{
+					showMsg(String(event.target));
+				})
+				.on('complete', function()
+				{
+					showMsg('Fastest is ' + this.filter('fastest').map('name'));
+
+					callback && callback();
+				})
+				.run({'async': true});
+		}
+
+		// urlStringifyBenchmark();
+		// uniqdepsBenchmark();
+		urlStringifyBenchmark(uniqdepsBenchmark);
 	}
 
 
@@ -21370,10 +21408,7 @@
 /* 14 */
 /***/ function(module, exports) {
 
-	module.exports = function(indexs)
-	{
-	  return indexs2hash(indexs);
-	}
+	module.exports = indexs2hash;
 
 	function indexs2hash(indexs)
 	{
@@ -21667,6 +21702,30 @@
 	//   var p = file.lastIndexOf(".")
 	//   return p >= 0 ? file.substring(p) : ""
 	// }
+
+/***/ },
+/* 16 */
+/***/ function(module, exports) {
+
+	module.exports = uniqdeps;
+
+	function uniqdeps(arr)
+	{
+		var map = {};
+		var newArr = [];
+
+		for(var i = arr.length; i--;)
+		{
+			if (!map[arr[i]])
+			{
+				map[arr[i]] = true;
+				newArr.push(arr[i]);
+			}
+		}
+
+		return newArr;
+	}
+
 
 /***/ }
 /******/ ]);

@@ -1,7 +1,4 @@
-module.exports = function(indexs)
-{
-  return indexs2hash(indexs);
-}
+module.exports = indexs2hash;
 
 function indexs2hash(indexs)
 {

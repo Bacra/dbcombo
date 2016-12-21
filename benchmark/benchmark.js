@@ -41,14 +41,14 @@ function runHandler(copy, showMsg)
 	var key = '#'+list52.length;
 
 	// 添加url序列测试
-	function urlStringifyBenchmark(callback)
+	function urlStringifyBenchmark()
 	{
 		stringify(list51);
 		indexs2path(list51);
 		seajsCombo(list52);
 
 		var suite = new Benchmark.Suite;
-		suite.add('stringify'+key, function()
+		return suite.add('stringify'+key, function()
 			{
 				stringify(list51);
 			})
@@ -67,21 +67,17 @@ function runHandler(copy, showMsg)
 			.on('complete', function()
 			{
 				showMsg('Fastest is ' + this.filter('fastest').map('name'));
-
-				callback && callback();
-			})
-			.run({'async': true});
-
+			});
 	}
 
 
-	function uniqdepsBenchmark(callback)
+	function uniqdepsBenchmark()
 	{
 		stringify.indexs2groups(list51);
 		uniqdeps(list52);
 
 		var suite = new Benchmark.Suite;
-		suite.add('indexs2groups'+key, function()
+		return suite.add('indexs2groups'+key, function()
 			{
 				stringify.indexs2groups(list51);
 			})
@@ -96,20 +92,72 @@ function runHandler(copy, showMsg)
 			.on('complete', function()
 			{
 				showMsg('Fastest is ' + this.filter('fastest').map('name'));
-
-				callback && callback();
-			})
-			.run({'async': true});
+			});
 	}
 
-	// urlStringifyBenchmark();
-	// uniqdepsBenchmark();
-	urlStringifyBenchmark(uniqdepsBenchmark);
+	return [
+		urlStringifyBenchmark(),
+		uniqdepsBenchmark()
+	];
+}
+
+
+
+function runSuites(arr, callback, index)
+{
+	index || (index = 0);
+
+	var suite = arr[index];
+	if (suite)
+	{
+		suite.on('complete', function()
+			{
+				runSuites(arr, callback, ++index);
+			})
+			.run({async: true});
+	}
+	else
+	{
+		callback && callback();
+	}
 }
 
 
 // in node
 if (typeof window == 'undefined')
-	runHandler(4, console.log);
+{
+	runSuites(runHandler(4, console.log));
+}
 else
-	window.runBenchmarkHandler = runHandler;
+{
+	// fix benchmark
+	window.define = {amd: {}};
+
+	if (window.__karma__)
+	{
+		// 使用karma-benchmark就要改写代码风格
+		// 不舒服，所以可以兼容一下，然后使用他的runner和reporter
+		if (window.__karma_benchmark_suites__)
+		{
+			window.__karma_benchmark_suites__ = runHandler(4, console.log);
+		}
+		// 如果不使用那个framework，就自己重写一下apator
+		else
+		{
+			window.__karma__.start = function()
+			{
+				runSuites(runHandler(4, console.log), function()
+					{
+						window.__karma__.complete(
+						{
+							coverage: global.__coverage__
+						});
+					});
+			};
+		}
+	}
+	else
+	{
+		runSuites(runHandler(4, window.showBenchmarkHandler || (window.console && console.log)));
+	}
+}

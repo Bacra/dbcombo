@@ -1,7 +1,7 @@
 var pkg = require('../../package.json');
 var browsers = require('./sl_browsers.js');
 
-module.exports = function(config)
+module.exports = function(config, browserGroup)
 {
 	if (process.env.TRAVIS_BRANCH && process.env.TRAVIS_BRANCH != 'master')
 	{
@@ -16,7 +16,6 @@ module.exports = function(config)
 	}
 
 
-	var browserGroup = process.argv[4];
 	var browserArr = browsers.groups[browserGroup];
 	if (!browserArr || !browserArr.length)
 	{

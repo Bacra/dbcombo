@@ -8,15 +8,12 @@
 <div>Result: </div>
 <div id="msg"></div>
 </body>
-<script src='../dist/benchmark4browser.js'></script>
 <script>
 var msgNode = document.getElementById('msg');
-// fix benchmark
-var define = {amd: {}};
-
-runBenchmarkHandler(4, function(msg)
+function showBenchmarkHandler(msg)
 {
 	msgNode.innerHTML +=  '<br />' + msg;
-});
+}
 </script>
+<script src='../dist/benchmark4browser.js'></script>
 </html>

@@ -15,9 +15,25 @@ module.exports = function(config)
 	if (key == 'dev')
 		custom = devConfig(config);
 	else if (browsers.groups[key])
-		custom = sauceConfig(config);
+		custom = sauceConfig(config, key);
 	else
 		custom = osConfig(config);
 
-	config.set(extend({}, base, custom));
+	custom = extend({}, base, custom);
+
+	if (process.argv[5] == 'benchmark')
+	{
+		custom.basePath = 'benchmark/';
+		custom.files = ['benchmark.js'];
+		custom.frameworks = [];
+		// custom.frameworks = ['benchmark'];
+		// custom.reporters = ['benchmark'];
+		custom.webpack = require('./test/build/webpack.base.conf.js');
+		custom.preprocessors =
+		{
+			'benchmark.js': ['webpack']
+		};
+	}
+
+	config.set(custom);
 };

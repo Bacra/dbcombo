@@ -12,7 +12,7 @@ seajs.config(
 	base: '/base/browser/source/',
 	cwd: '/base/browser/source/',
 	DBComboFile: 'combo_dist/default',
-	DBComboDelayRequest: true,
+	DBComboDelayRequest: false,
 	DBComboFileIndex: function(file)
 	{
 		if (isNaN(file))

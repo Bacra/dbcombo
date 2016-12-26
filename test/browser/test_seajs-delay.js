@@ -9,6 +9,7 @@ describe('#delay', function()
 	before(function()
 	{
 		loadUtils.initAndClearSeajsModuleCache(suite.title);
+		seajs.config({DBComboDelayRequest: true});
 	});
 
 	it('#first', function()
@@ -77,6 +78,7 @@ describe('#delay', function()
 	it('#nocache outside', function()
 	{
 		loadUtils.initAndClearSeajsModuleCache(suite.title, this.test.title);
+		seajs.config({DBComboDelayRequest: true});
 
 		return Promise.all(
 		[

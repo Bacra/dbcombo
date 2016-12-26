@@ -21,7 +21,8 @@ exports.initAndClearSeajsModuleCache = function initAndClearSeajsModuleCache(nam
 
 	seajs.config(
 	{
-		DBComboFile: 'combo_dist/'+dirname
+		DBComboFile: 'combo_dist/'+dirname,
+		DBComboDelayRequest: false
 	});
 };
 

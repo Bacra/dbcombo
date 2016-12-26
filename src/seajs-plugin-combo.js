@@ -1,6 +1,6 @@
 /**
  * 整个过程中，不需要保存单个mod的groups
- * 单个mod不可能重复计算，有DBComboRequestUriMap和DBComboIgnoreExtDepsIndexs做保护
+ * 单个mod不可能重复计算，有DBComboRequestUriMap和_DBComboIgnoreExtDepsIndexs做保护
  */
 
 
@@ -11,7 +11,7 @@ var data = seajs.data;
 var Module = seajs.Module;
 var STATUS = Module.STATUS;
 var DBComboRequestUriMap = data.DBComboRequestUriMap = {};
-var DBComboIgnoreExtDepsIndexs = data.DBComboIgnoreExtDepsIndexs = [];
+var _DBComboIgnoreExtDepsIndexs = seajs._DBComboIgnoreExtDepsIndexs = [];
 var push = Array.prototype.push;
 var isLoadInRequest = false;
 
@@ -182,9 +182,9 @@ function files2groups(arr, isDeps, groups)
 				indexs.push(info.index);
 			}
 
-			if (isDeps && info.deps && !DBComboIgnoreExtDepsIndexs[info.index])
+			if (isDeps && info.deps && !_DBComboIgnoreExtDepsIndexs[info.index])
 			{
-				DBComboIgnoreExtDepsIndexs[info.index] = true;
+				_DBComboIgnoreExtDepsIndexs[info.index] = true;
 				files2groups(info.deps, isDeps, groups);
 			}
 		}

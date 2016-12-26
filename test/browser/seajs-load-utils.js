@@ -4,6 +4,7 @@ exports.clearSeajsModuleCache = function clearSeajsModuleCache()
 {
 	delCache(seajs.cache);
 	delCache(seajs.data.fetchedList);
+	seajs.data.DBComboIgnoreExtDepsIndexs = [];
 };
 
 function delCache(cache)

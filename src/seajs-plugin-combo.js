@@ -185,7 +185,7 @@ function files2groups(arr, isDeps, groups)
 			if (isDeps && info.deps && !DBComboIgnoreExtDepsIndexs[info.index])
 			{
 				DBComboIgnoreExtDepsIndexs[info.index] = true;
-				files2groups(info.deps, groups);
+				files2groups(info.deps, isDeps, groups);
 			}
 		}
 		else if (data.debug)

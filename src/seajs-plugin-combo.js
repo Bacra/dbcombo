@@ -1,9 +1,3 @@
-/**
- * 整个过程中，不需要保存单个mod的groups
- * 单个mod不可能重复计算，有DBComboRequestUriMap和_DBComboIgnoreExtDepsIndexs做保护
- */
-
-
 var DBComboClient = require('../');
 var Config = require('./seajs-plugin-base');
 
@@ -12,7 +6,6 @@ var Module = seajs.Module;
 var STATUS = Module.STATUS;
 var DBComboRequestUriMap = data.DBComboRequestUriMap = {};
 // var DBComboIgnoreExtDepsUri = data.DBComboIgnoreExtDepsUri = {};
-var _DBComboIgnoreExtDepsIndexs = seajs._DBComboIgnoreExtDepsIndexs = [];
 var push = Array.prototype.push;
 var isLoadInRequest = false;
 
@@ -180,12 +173,12 @@ function setHash(files, type)
 
 
 /**
- * @param  {Array} arr       files/indexs
- * @param  {Boolean} isDeps  is sacn deps
- * @param  {Array} groups    groups for merge
- * @return {Array}           groups
+ * @param  {Array} arr             files/indexs
+ * @param  {Boolean} scanDepsOnce  sacn deps, and one module only once
+ * @param  {Array} groups          groups for merge
+ * @return {Array}                 groups
  */
-function files2groups(arr, isDeps, groups)
+function files2groups(arr, scanDepsOnce, groups)
 {
 	var indexs = [];
 	groups || (groups = []);
@@ -201,10 +194,13 @@ function files2groups(arr, isDeps, groups)
 				indexs.push(info.index);
 			}
 
-			if (isDeps && info.deps && !_DBComboIgnoreExtDepsIndexs[info.index])
+			// 计算过一次，就不计算了
+			// 如果上一次没有用，业务自行清理这个标志位
+			// 避免递归重复计算
+			if (scanDepsOnce && info.deps && !mod._dbcombo_depsed)
 			{
-				_DBComboIgnoreExtDepsIndexs[info.index] = true;
-				files2groups(info.deps, isDeps, groups);
+				mod._dbcombo_depsed = true;
+				files2groups(info.deps, scanDepsOnce, groups);
 			}
 		}
 		else if (data.debug)

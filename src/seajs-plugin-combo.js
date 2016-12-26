@@ -154,7 +154,7 @@ function files2groups(arr, isDeps, groups)
 
 			if (info.deps && isDeps)
 			{
-				files2groups(info.deps, groups);
+				files2groups(info.deps, isDeps, groups);
 			}
 		}
 		else if (data.debug)

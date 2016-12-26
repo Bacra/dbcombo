@@ -11,7 +11,7 @@ describe('#seajs', function()
 
 	it('#require', function()
 	{
-		loadUtils.clearSeajsModuleCache();
+		loadUtils.initAndClearSeajsModuleCache();
 		return loadUtils.assertSeajsUse('outside.js', function(obj)
 			{
 				expect(obj).to.be.eql({outside: true});

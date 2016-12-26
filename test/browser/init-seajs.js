@@ -11,7 +11,7 @@ seajs.config(
 {
 	base: '/base/browser/source/',
 	cwd: '/base/browser/source/',
-	DBComboFile: 'db.js',
+	DBComboFile: 'combo_dist/default',
 	DBComboDelayRequest: true,
 	DBComboFileIndex: function(file)
 	{

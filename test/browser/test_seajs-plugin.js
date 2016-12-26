@@ -6,9 +6,10 @@ describe('#seajs-plugin', function()
 {
 	describe('#single', function()
 	{
+		var suite = this;
 		before(function()
 		{
-			loadUtils.clearSeajsModuleCache();
+			loadUtils.initAndClearSeajsModuleCache(suite.title);
 		});
 
 		it('#first', function()
@@ -31,9 +32,10 @@ describe('#seajs-plugin', function()
 
 	describe('#deps', function()
 	{
+		var suite = this;
 		before(function()
 		{
-			loadUtils.clearSeajsModuleCache();
+			loadUtils.initAndClearSeajsModuleCache(suite.title);
 		});
 
 		it('#first', function()
@@ -70,7 +72,7 @@ describe('#seajs-plugin', function()
 
 		it('#nocache outside', function()
 		{
-			loadUtils.clearSeajsModuleCache();
+			loadUtils.initAndClearSeajsModuleCache(suite.title, this.test.title);
 			return loadUtils.assertSeajsUse(['a1.js', 'outside.js'], function(obj)
 				{
 					expect(obj).to.be.eql({a1: true});
@@ -81,9 +83,10 @@ describe('#seajs-plugin', function()
 
 	describe('#delay', function()
 	{
+		var suite = this;
 		before(function()
 		{
-			loadUtils.clearSeajsModuleCache();
+			loadUtils.initAndClearSeajsModuleCache(suite.title);
 		});
 
 		it('#first', function()
@@ -150,7 +153,7 @@ describe('#seajs-plugin', function()
 
 		it('#nocache outside', function()
 		{
-			loadUtils.clearSeajsModuleCache();
+			loadUtils.initAndClearSeajsModuleCache(suite.title, this.test.title);
 
 			return Promise.all(
 			[

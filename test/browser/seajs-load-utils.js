@@ -1,10 +1,26 @@
 var Promise = require('bluebird');
 
-exports.clearSeajsModuleCache = function clearSeajsModuleCache()
+exports.initAndClearSeajsModuleCache = function initAndClearSeajsModuleCache(name, subtitle)
 {
 	delCache(seajs.cache);
 	delCache(seajs.data.fetchedList);
-	seajs.data.DBComboIgnoreExtDepsIndexs = [];
+	// 清理数据
+	seajs._DBComboIgnoreExtDepsIndexs.splice(0, seajs._DBComboIgnoreExtDepsIndexs.length);
+	
+	// 构建新的db目录
+	var dirname;
+	if (name)
+		dirname = name.replace(/[#\s]/g, '_');
+	else
+		dirname = 'default';
+
+	if (subtitle)
+		dirname += '_'+subtitle.replace(/[#\s]/g, '_');
+
+	seajs.config(
+	{
+		DBComboFile: 'combo_dist/'+dirname
+	});
 };
 
 function delCache(cache)

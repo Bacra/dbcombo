@@ -11,6 +11,7 @@ var data = seajs.data;
 var Module = seajs.Module;
 var STATUS = Module.STATUS;
 var DBComboRequestUriMap = data.DBComboRequestUriMap = {};
+// var DBComboIgnoreExtDepsUri = data.DBComboIgnoreExtDepsUri = {};
 var _DBComboIgnoreExtDepsIndexs = seajs._DBComboIgnoreExtDepsIndexs = [];
 var push = Array.prototype.push;
 var isLoadInRequest = false;
@@ -20,6 +21,8 @@ seajs.on('fetch', setRequestUri);
 
 function comboLoadhandler(uris)
 {
+	if (!Config.DBComboFile) return;
+
 	if (!isLoadInRequest)
 	{
 		isLoadInRequest = true;
@@ -37,14 +40,20 @@ function comboLoadhandler(uris)
 
 function loadExtDeps(uris)
 {
-	// 不需要过虑DBComboRequestUriMap
-	// local_code等添加的，一样要分析依赖是不是有处理过
 	var needExtDepsUris = uris;
 	// var needExtDepsUris = [];
-	// for (var i = 0, len = uris.length; i < len; i++)
+
+	// for (var i = uris.length; i--;)
 	// {
 	// 	var uri = uris[i];
-	// 	if (!DBComboRequestUriMap[uri]) needExtDepsUris.push(uri);
+	// 	// if (DBComboIgnoreExtDepsUri[uri]) continue;
+
+	// 	var info = Config.DBComboIndexHandler(uri);
+	// 	if (info)
+	// 	{
+	// 		needExtDepsUris.push(info.index);
+	// 		// DBComboIgnoreExtDepsUri[uri] = true;
+	// 	}
 	// }
 
 	var depsGroups = files2groups(needExtDepsUris, true);
@@ -79,16 +88,26 @@ function setRequestUri(emitDate)
 {
 	if (Config.DBComboFile)
 	{
-		var info = DBComboRequestUriMap[emitDate.uri];
-		if (info && info.groups && info.groups.length)
+		if (isLoadInRequest)
 		{
-			// 下发info，其他fetch的可能也要用
-			emitDate.DBComboRequestData = info;
-			if (!emitDate.requested)
+			var info = DBComboRequestUriMap[emitDate.uri];
+			if (info && info.groups && info.groups.length)
 			{
-				emitDate.requestUri = info.requestUri;
+				// 下发info，其他fetch的可能也要用
+				emitDate.DBComboRequestData = info;
+				if (!emitDate.requested)
+				{
+					emitDate.requestUri = info.requestUri;
+				}
 			}
 		}
+		// else
+		// {
+		// 	if (DBComboIgnoreExtDepsUri[emitDate.uri])
+		// 	{
+		// 		emitDate.requested = true;
+		// 	}
+		// }
 	}
 }
 

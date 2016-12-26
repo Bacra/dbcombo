@@ -5,7 +5,6 @@ var data = seajs.data;
 var Module = seajs.Module;
 var STATUS = Module.STATUS;
 var DBComboRequestUriMap = data.DBComboRequestUriMap = {};
-// var DBComboIgnoreExtDepsUri = data.DBComboIgnoreExtDepsUri = {};
 var push = Array.prototype.push;
 var isLoadInRequest = false;
 
@@ -33,23 +32,7 @@ function comboLoadhandler(uris)
 
 function loadExtDeps(uris)
 {
-	var needExtDepsUris = uris;
-	// var needExtDepsUris = [];
-
-	// for (var i = uris.length; i--;)
-	// {
-	// 	var uri = uris[i];
-	// 	// if (DBComboIgnoreExtDepsUri[uri]) continue;
-
-	// 	var info = Config.DBComboIndexHandler(uri);
-	// 	if (info)
-	// 	{
-	// 		needExtDepsUris.push(info.index);
-	// 		// DBComboIgnoreExtDepsUri[uri] = true;
-	// 	}
-	// }
-
-	var depsGroups = files2groups(needExtDepsUris, true);
+	var depsGroups = files2groups(uris, true);
 	var depsIndexs = DBComboClient.parse.groups2indexs(depsGroups);
 	loadDeps(depsIndexs);
 }
@@ -79,28 +62,18 @@ function setComboHash(uris)
 
 function setRequestUri(emitDate)
 {
-	if (Config.DBComboFile)
+	if (Config.DBComboFile && isLoadInRequest)
 	{
-		if (isLoadInRequest)
+		var info = DBComboRequestUriMap[emitDate.uri];
+		if (info && info.groups && info.groups.length)
 		{
-			var info = DBComboRequestUriMap[emitDate.uri];
-			if (info && info.groups && info.groups.length)
+			// 下发info，其他fetch的可能也要用
+			emitDate.DBComboRequestData = info;
+			if (!emitDate.requested)
 			{
-				// 下发info，其他fetch的可能也要用
-				emitDate.DBComboRequestData = info;
-				if (!emitDate.requested)
-				{
-					emitDate.requestUri = info.requestUri;
-				}
+				emitDate.requestUri = info.requestUri;
 			}
 		}
-		// else
-		// {
-		// 	if (DBComboIgnoreExtDepsUri[emitDate.uri])
-		// 	{
-		// 		emitDate.requested = true;
-		// 	}
-		// }
 	}
 }
 

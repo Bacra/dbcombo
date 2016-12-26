@@ -4,7 +4,7 @@ exports.initAndClearSeajsModuleCache = function initAndClearSeajsModuleCache(nam
 {
 	delCache(seajs.cache);
 	delCache(seajs.data.fetchedList);
-	// delCache(seajs.data.DBComboIgnoreExtDepsUri);
+	delCache(seajs.data.DBComboRequestUriMap);
 
 	// 清理数据
 	// seajs._DBComboIgnoreExtDepsIndexs.splice(0, seajs._DBComboIgnoreExtDepsIndexs.length);

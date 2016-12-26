@@ -247,17 +247,42 @@
 	var STATUS = Module.STATUS;
 	var DBComboRequestUriMap = data.DBComboRequestUriMap = {};
 	var push = Array.prototype.push;
+	var isLoadInRequest = false;
 
-	seajs.on('load', setComboHash);
+	seajs.on('load', comboLoadhandler);
 	seajs.on('fetch', setRequestUri);
 
+	function comboLoadhandler(uris)
+	{
+		if (!Config.DBComboFile) return;
+
+		if (!isLoadInRequest)
+		{
+			isLoadInRequest = true;
+			// 先分析有没有额外的依赖
+			// 额外的依赖，通过新的module进行加载
+			loadExtDeps(uris);
+			isLoadInRequest = false;
+		}
+		else
+		{
+			// 正真获取combo的url
+			setComboHash(uris);
+		}
+	}
+
+	function loadExtDeps(uris)
+	{
+		var depsGroups = files2groups(uris, true);
+		var depsIndexs = DBComboClient.parse.groups2indexs(depsGroups);
+		loadDeps(depsIndexs);
+	}
 
 	function setComboHash(uris)
 	{
-		var len = uris.length;
 		var needComboUris = [];
 
-		for (var i = 0; i < len; i++)
+		for (var i = 0, len = uris.length; i < len; i++)
 		{
 			var uri = uris[i];
 			// 忽略已经存在的
@@ -276,10 +301,9 @@
 		if (needComboUris.length) paths2hash(needComboUris);
 	}
 
-	var isLoadInRequest = false;
 	function setRequestUri(emitDate)
 	{
-		if (Config.DBComboFile)
+		if (Config.DBComboFile && isLoadInRequest)
 		{
 			var info = DBComboRequestUriMap[emitDate.uri];
 			if (info && info.groups && info.groups.length)
@@ -289,15 +313,6 @@
 				if (!emitDate.requested)
 				{
 					emitDate.requestUri = info.requestUri;
-				}
-
-				if (!isLoadInRequest && info.indexs)
-				{
-					isLoadInRequest = true;
-					var depsGroups = files2groups(info.indexs, []);
-					var depsIndexs = DBComboClient.parse.groups2indexs(depsGroups);
-					loadDeps(depsIndexs);
-					isLoadInRequest = false;
 				}
 			}
 		}
@@ -372,13 +387,15 @@
 
 
 	/**
-	 * @param  {Array} arr     files/indexs
-	 * @param  {Array} groups  parent groups, 如果不指定，那么就不会扫描deps
-	 * @return {Array}         groups
+	 * @param  {Array} arr             files/indexs
+	 * @param  {Boolean} scanDepsOnce  sacn deps, and one module only once
+	 * @param  {Array} groups          groups for merge
+	 * @return {Array}                 groups
 	 */
-	function files2groups(arr, groups)
+	function files2groups(arr, scanDepsOnce, groups)
 	{
 		var indexs = [];
+		groups || (groups = []);
 
 		for(var i = arr.length; i--;)
 		{
@@ -391,9 +408,13 @@
 					indexs.push(info.index);
 				}
 
-				if (info.deps && groups)
+				// 计算过一次，就不计算了
+				// 如果上一次没有用，业务自行清理这个标志位
+				// 避免递归重复计算
+				if (scanDepsOnce && info.deps && !mod._dbcombo_depsed)
 				{
-					files2groups(info.deps, groups);
+					mod._dbcombo_depsed = true;
+					files2groups(info.deps, scanDepsOnce, groups);
 				}
 			}
 			else if (data.debug)

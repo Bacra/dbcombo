@@ -53,7 +53,7 @@ function setRequestUri(emitDate)
 			if (!isLoadInRequest && info.indexs)
 			{
 				isLoadInRequest = true;
-				var depsGroups = files2groups(info.indexs, []);
+				var depsGroups = files2groups(info.indexs, true);
 				var depsIndexs = DBComboClient.parse.groups2indexs(depsGroups);
 				loadDeps(depsIndexs);
 				isLoadInRequest = false;
@@ -131,13 +131,15 @@ function setHash(files, type)
 
 
 /**
- * @param  {Array} arr     files/indexs
- * @param  {Array} groups  parent groups, 如果不指定，那么就不会扫描deps
- * @return {Array}         groups
+ * @param  {Array} arr       files/indexs
+ * @param  {Boolean} isDeps  is sacn deps
+ * @param  {Array} groups    groups for merge
+ * @return {Array}           groups
  */
-function files2groups(arr, groups)
+function files2groups(arr, isDeps, groups)
 {
 	var indexs = [];
+	groups || (groups = []);
 
 	for(var i = arr.length; i--;)
 	{
@@ -150,7 +152,7 @@ function files2groups(arr, groups)
 				indexs.push(info.index);
 			}
 
-			if (info.deps && groups)
+			if (info.deps && isDeps)
 			{
 				files2groups(info.deps, groups);
 			}

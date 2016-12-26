@@ -1,3 +1,9 @@
+/**
+ * 整个过程中，不需要保存单个mod的groups
+ * 单个mod不可能重复计算，有DBComboRequestUriMap和DBComboIgnoreExtDepsIndexs做保护
+ */
+
+
 var DBComboClient = require('../');
 var Config = require('./seajs-plugin-base');
 
@@ -5,18 +11,52 @@ var data = seajs.data;
 var Module = seajs.Module;
 var STATUS = Module.STATUS;
 var DBComboRequestUriMap = data.DBComboRequestUriMap = {};
+var DBComboIgnoreExtDepsIndexs = data.DBComboIgnoreExtDepsIndexs = [];
 var push = Array.prototype.push;
+var isLoadInRequest = false;
 
-seajs.on('load', setComboHash);
+seajs.on('load', comboLoadhandler);
 seajs.on('fetch', setRequestUri);
 
+function comboLoadhandler(uris)
+{
+	if (!isLoadInRequest)
+	{
+		isLoadInRequest = true;
+		// 先分析有没有额外的依赖
+		// 额外的依赖，通过新的module进行加载
+		loadExtDeps(uris);
+		isLoadInRequest = false;
+	}
+	else
+	{
+		// 正真获取combo的url
+		setComboHash(uris);
+	}
+}
+
+function loadExtDeps(uris)
+{
+	// 不需要过虑DBComboRequestUriMap
+	// local_code等添加的，一样要分析依赖是不是有处理过
+	var needExtDepsUris = uris;
+	// var needExtDepsUris = [];
+	// for (var i = 0, len = uris.length; i < len; i++)
+	// {
+	// 	var uri = uris[i];
+	// 	if (!DBComboRequestUriMap[uri]) needExtDepsUris.push(uri);
+	// }
+
+	var depsGroups = files2groups(needExtDepsUris, true);
+	var depsIndexs = DBComboClient.parse.groups2indexs(depsGroups);
+	loadDeps(depsIndexs);
+}
 
 function setComboHash(uris)
 {
-	var len = uris.length;
 	var needComboUris = [];
 
-	for (var i = 0; i < len; i++)
+	for (var i = 0, len = uris.length; i < len; i++)
 	{
 		var uri = uris[i];
 		// 忽略已经存在的
@@ -35,7 +75,6 @@ function setComboHash(uris)
 	if (needComboUris.length) paths2hash(needComboUris);
 }
 
-var isLoadInRequest = false;
 function setRequestUri(emitDate)
 {
 	if (Config.DBComboFile)
@@ -48,15 +87,6 @@ function setRequestUri(emitDate)
 			if (!emitDate.requested)
 			{
 				emitDate.requestUri = info.requestUri;
-			}
-
-			if (!isLoadInRequest && info.indexs)
-			{
-				isLoadInRequest = true;
-				var depsGroups = files2groups(info.indexs, true);
-				var depsIndexs = DBComboClient.parse.groups2indexs(depsGroups);
-				loadDeps(depsIndexs);
-				isLoadInRequest = false;
 			}
 		}
 	}
@@ -152,8 +182,9 @@ function files2groups(arr, isDeps, groups)
 				indexs.push(info.index);
 			}
 
-			if (info.deps && isDeps)
+			if (isDeps && info.deps && !DBComboIgnoreExtDepsIndexs[info.index])
 			{
+				DBComboIgnoreExtDepsIndexs[info.index] = true;
 				files2groups(info.deps, groups);
 			}
 		}

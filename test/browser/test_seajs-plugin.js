@@ -64,18 +64,20 @@ describe('#seajs-plugin', function()
 
 		it('#cache outside', function()
 		{
-			return loadUtils.assertSeajsUse(['a2.js', 'outside.js'], function(obj)
+			return loadUtils.assertSeajsUse(['a2.js', 'outside.js'], function(obj, obj2)
 				{
 					expect(obj).to.be.eql({a2: true});
+					expect(obj2).to.be.eql({outside: true});
 				});
 		});
 
 		it('#nocache outside', function()
 		{
 			loadUtils.initAndClearSeajsModuleCache(suite.title, this.test.title);
-			return loadUtils.assertSeajsUse(['a1.js', 'outside.js'], function(obj)
+			return loadUtils.assertSeajsUse(['a1.js', 'outside.js'], function(obj, obj2)
 				{
 					expect(obj).to.be.eql({a1: true});
+					expect(obj2).to.be.eql({outside: true});
 				});
 		});
 	});
@@ -145,9 +147,10 @@ describe('#seajs-plugin', function()
 
 		it('#cache outside', function()
 		{
-			return loadUtils.assertSeajsUse(['a11.js', 'outside.js'], function(obj)
+			return loadUtils.assertSeajsUse(['a11.js', 'outside.js'], function(obj, obj2)
 			{
 				expect(obj).to.be.eql({a11: true});
+				expect(obj2).to.be.eql({outside: true});
 			});
 		});
 

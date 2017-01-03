@@ -71,7 +71,11 @@ function setComboHash(uris)
 		}
 	}
 
-	if (needComboUris.length) paths2hash(needComboUris);
+	if (needComboUris.length)
+	{
+		seajs.emit('dbcombo:combo_length', needComboUris.length);
+		paths2hash(needComboUris);
+	}
 }
 
 function setRequestUri(emitDate)

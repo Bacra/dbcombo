@@ -20,7 +20,9 @@ function comboLoadhandler(uris)
 		isLoadInRequest = true;
 		// 先分析有没有额外的依赖
 		// 额外的依赖，通过新的module进行加载
+		var startTime = +new Date;
 		loadExtDeps(uris);
+		seajs.emit('dbcombo:load_ext_deps_time', +new Date - startTime);
 		isLoadInRequest = false;
 	}
 	else

@@ -16,8 +16,7 @@ function saveRequestData(emitData)
 	if (item)
 	{
 		emitData.requested	= true;
-		item.onRequest		= emitData.onRequest;
-		item.charset		= emitData.charset;
+		item.emitData		= emitData;
 	}
 }
 
@@ -74,13 +73,13 @@ function requestOneType(type, list)
 		var item = list[i];
 		if (item.groups)
 		{
-			charset || (charset = item.charset);
+			charset || (charset = item.emitData.charset);
 			groups.push(item.groups);
-			callbacks.push(item.onRequest);
+			callbacks.push(item.emitData.onRequest);
 		}
 		else
 		{
-			seajs.request(item.requestUri, item.onRequest, item.charset);
+			seajs.request(item.requestUri, item.emitData.onRequest, item.emitData.charset);
 		}
 	}
 

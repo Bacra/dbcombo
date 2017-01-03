@@ -254,7 +254,7 @@
 
 	function comboLoadhandler(uris)
 	{
-		if (!Config.DBComboFile) return;
+		if (!Config.DBComboFile || !uris.length) return;
 
 		if (!isLoadInRequest)
 		{
@@ -273,7 +273,21 @@
 
 	function loadExtDeps(uris)
 	{
-		var depsGroups = files2groups(uris, true);
+		var startTime = +new Date;
+		var runtime = {depth: 1};
+		var depsGroups = files2groups(uris, true, runtime);
+
+		// @todo 如何避免子模块onload的之后，触发加载他的依赖的递归计算
+		// 虽然已经屏蔽了递归，但感觉弄到index分析，也很多余
+		if (runtime.depth > 1)
+		{
+			seajs.emit('dbcombo:load_ext_deps',
+				{
+					usage: +new Date - startTime,
+					depth: runtime.depth
+				});
+		}
+
 		var depsIndexs = DBComboClient.parse.groups2indexs(depsGroups);
 		loadDeps(depsIndexs);
 	}
@@ -298,7 +312,11 @@
 			}
 		}
 
-		if (needComboUris.length) paths2hash(needComboUris);
+		if (needComboUris.length)
+		{
+			seajs.emit('dbcombo:combo_length', needComboUris.length);
+			paths2hash(needComboUris);
+		}
 	}
 
 	function setRequestUri(emitDate)
@@ -389,10 +407,11 @@
 	/**
 	 * @param  {Array} arr             files/indexs
 	 * @param  {Boolean} scanDepsOnce  sacn deps, and one module only once
+	 * @param  {Object} runtime        runtime info. eq: depth
 	 * @param  {Array} groups          groups for merge
 	 * @return {Array}                 groups
 	 */
-	function files2groups(arr, scanDepsOnce, groups)
+	function files2groups(arr, scanDepsOnce, runtime, groups)
 	{
 		var indexs = [];
 		groups || (groups = []);
@@ -414,7 +433,8 @@
 				if (scanDepsOnce && info.deps && !mod._dbcombo_depsed)
 				{
 					mod._dbcombo_depsed = true;
-					files2groups(info.deps, scanDepsOnce, groups);
+					if (runtime && runtime.depth) runtime.depth++;
+					files2groups(info.deps, scanDepsOnce, runtime, groups);
 				}
 			}
 			else if (data.debug)
@@ -681,8 +701,7 @@
 		if (item)
 		{
 			emitData.requested	= true;
-			item.onRequest		= emitData.onRequest;
-			item.charset		= emitData.charset;
+			item.emitData		= emitData;
 		}
 	}
 
@@ -739,13 +758,13 @@
 			var item = list[i];
 			if (item.groups)
 			{
-				charset || (charset = item.charset);
+				charset || (charset = item.emitData.charset);
 				groups.push(item.groups);
-				callbacks.push(item.onRequest);
+				callbacks.push(item.emitData.onRequest);
 			}
 			else
 			{
-				seajs.request(item.requestUri, item.onRequest, item.charset);
+				seajs.request(item.requestUri, item.emitData.onRequest, item.emitData.charset);
 			}
 		}
 

@@ -18,11 +18,17 @@ function comboLoadhandler(uris)
 	if (!isLoadInRequest)
 	{
 		isLoadInRequest = true;
+
 		// 先分析有没有额外的依赖
 		// 额外的依赖，通过新的module进行加载
 		var startTime = +new Date;
-		loadExtDeps(uris);
-		seajs.emit('dbcombo:load_ext_deps_time', +new Date - startTime);
+		var depth = loadExtDeps(uris);
+		seajs.emit('dbcombo:load_ext_deps',
+			{
+				usage: +new Date - startTime,
+				depth: depth
+			});
+
 		isLoadInRequest = false;
 	}
 	else
@@ -34,9 +40,12 @@ function comboLoadhandler(uris)
 
 function loadExtDeps(uris)
 {
-	var depsGroups = files2groups(uris, true);
+	var runtime = {depth: 1};
+	var depsGroups = files2groups(uris, true, runtime);
 	var depsIndexs = DBComboClient.parse.groups2indexs(depsGroups);
 	loadDeps(depsIndexs);
+
+	return runtime.depth;
 }
 
 function setComboHash(uris)
@@ -150,10 +159,11 @@ function setHash(files, type)
 /**
  * @param  {Array} arr             files/indexs
  * @param  {Boolean} scanDepsOnce  sacn deps, and one module only once
+ * @param  {Object} runtime        runtime info. eq: depth
  * @param  {Array} groups          groups for merge
  * @return {Array}                 groups
  */
-function files2groups(arr, scanDepsOnce, groups)
+function files2groups(arr, scanDepsOnce, runtime, groups)
 {
 	var indexs = [];
 	groups || (groups = []);
@@ -175,7 +185,8 @@ function files2groups(arr, scanDepsOnce, groups)
 			if (scanDepsOnce && info.deps && !mod._dbcombo_depsed)
 			{
 				mod._dbcombo_depsed = true;
-				files2groups(info.deps, scanDepsOnce, groups);
+				if (runtime && runtime.depth) runtime.depth++;
+				files2groups(info.deps, scanDepsOnce, runtime, groups);
 			}
 		}
 		else if (data.debug)

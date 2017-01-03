@@ -13,22 +13,14 @@ seajs.on('fetch', setRequestUri);
 
 function comboLoadhandler(uris)
 {
-	if (!Config.DBComboFile) return;
+	if (!Config.DBComboFile || !uris.length) return;
 
 	if (!isLoadInRequest)
 	{
 		isLoadInRequest = true;
-
 		// 先分析有没有额外的依赖
 		// 额外的依赖，通过新的module进行加载
-		var startTime = +new Date;
-		var depth = loadExtDeps(uris);
-		seajs.emit('dbcombo:load_ext_deps',
-			{
-				usage: +new Date - startTime,
-				depth: depth
-			});
-
+		loadExtDeps(uris);
 		isLoadInRequest = false;
 	}
 	else
@@ -40,12 +32,23 @@ function comboLoadhandler(uris)
 
 function loadExtDeps(uris)
 {
+	var startTime = +new Date;
 	var runtime = {depth: 1};
 	var depsGroups = files2groups(uris, true, runtime);
+
+	// @todo 如何避免子模块onload的之后，触发加载他的依赖的递归计算
+	// 虽然已经屏蔽了递归，但感觉弄到index分析，也很多余
+	if (runtime.depth > 1)
+	{
+		seajs.emit('dbcombo:load_ext_deps',
+			{
+				usage: +new Date - startTime,
+				depth: runtime.depth
+			});
+	}
+
 	var depsIndexs = DBComboClient.parse.groups2indexs(depsGroups);
 	loadDeps(depsIndexs);
-
-	return runtime.depth;
 }
 
 function setComboHash(uris)

@@ -56,7 +56,8 @@ function runHandler(copy, showMsg)
 		return suite.add('direct', function()
 			{
 				var init = 12;
-				for(var i = DEF.EACH_GROUP_FILE_NUM; i--;)
+				var EACH_GROUP_FILE_NUM = DEF.EACH_GROUP_FILE_NUM;
+				for(var i = EACH_GROUP_FILE_NUM; i--;)
 				{
 					init = init | (1 << i);
 				}
@@ -64,17 +65,21 @@ function runHandler(copy, showMsg)
 			.add('map', function()
 			{
 				var init = 12;
-				for(var i = DEF.EACH_GROUP_FILE_NUM; i--;)
+				var map = indexMap;
+				var EACH_GROUP_FILE_NUM = DEF.EACH_GROUP_FILE_NUM;
+				for(var i = EACH_GROUP_FILE_NUM; i--;)
 				{
-					init = init | indexMap[i];
+					init = init | map[i];
 				}
 			})
 			.add('arr', function()
 			{
 				var init = 12;
-				for(var i = DEF.EACH_GROUP_FILE_NUM; i--;)
+				var map = indexArr;
+				var EACH_GROUP_FILE_NUM = DEF.EACH_GROUP_FILE_NUM;
+				for(var i = EACH_GROUP_FILE_NUM; i--;)
 				{
-					init = init | indexArr[i];
+					init = init | map[i];
 				}
 			})
 			.on('cycle', function(event)

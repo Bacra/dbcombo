@@ -3,6 +3,7 @@ var stringify = require('../lib/stringify');
 var indexs2path = require('./indexs2path');
 var seajsCombo = require('./seajs-combo-sethash');
 var uniqdeps = require('./uniqdeps');
+var DEF = require('../lib/def');
 
 var list51 = [12, 33, 200, 800, 10000];
 var list52 = [
@@ -12,6 +13,14 @@ var list52 = [
 	'js/mail/list/listhandler2.js',
 	'js/mail/list/listhandler3.js'
 ];
+
+var indexMap = {};
+var indexArr = [];
+var i = 31;
+for(var i = DEF.EACH_GROUP_FILE_NUM; i--;)
+{
+	indexMap[i] = indexArr[i] = 1 << i;
+}
 
 
 function map(arr, handler)
@@ -40,7 +49,46 @@ function runHandler(copy, showMsg)
 
 	var key = '#'+list52.length;
 
-	// 添加url序列测试
+	// index 转二进制
+	function index2binaryBenchmark()
+	{
+		var suite = new Benchmark.Suite;
+		return suite.add('direct', function()
+			{
+				var init = 12;
+				for(var i = DEF.EACH_GROUP_FILE_NUM; i--;)
+				{
+					init = init | (1 << i);
+				}
+			})
+			.add('map', function()
+			{
+				var init = 12;
+				for(var i = DEF.EACH_GROUP_FILE_NUM; i--;)
+				{
+					init = init | indexMap[i];
+				}
+			})
+			.add('arr', function()
+			{
+				var init = 12;
+				for(var i = DEF.EACH_GROUP_FILE_NUM; i--;)
+				{
+					init = init | indexArr[i];
+				}
+			})
+			.on('cycle', function(event)
+			{
+				showMsg(String(event.target));
+			})
+			.on('complete', function()
+			{
+				showMsg('Fastest is ' + this.filter('fastest').map('name'));
+			});
+	}
+
+
+	// url序列测试
 	function urlStringifyBenchmark()
 	{
 		stringify(list51);
@@ -71,6 +119,7 @@ function runHandler(copy, showMsg)
 	}
 
 
+	// 排重
 	function uniqdepsBenchmark()
 	{
 		stringify.indexs2groups(list51);
@@ -96,6 +145,7 @@ function runHandler(copy, showMsg)
 	}
 
 	return [
+		index2binaryBenchmark(),
 		urlStringifyBenchmark(),
 		uniqdepsBenchmark()
 	];

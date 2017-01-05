@@ -182,8 +182,9 @@ else
 {
 	// fix benchmark
 	window.define = {amd: {}};
+	var tc = window.__karma__;
 
-	if (window.__karma__)
+	if (tc)
 	{
 		// 使用karma-benchmark就要改写代码风格
 		// 不舒服，所以可以兼容一下，然后使用他的runner和reporter
@@ -194,11 +195,28 @@ else
 		// 如果不使用那个framework，就自己重写一下apator
 		else
 		{
-			window.__karma__.start = function()
+			tc.start = function()
 			{
-				runSuites(runHandler(4, console.log), function()
+				var arr = runHandler(4, console.log);
+				var len = 0;
+				for(var i = arr.length; i-- && arr[i];)
+				{
+					len++;
+					arr[i].on('complete', function()
+						{
+							tc.result({success: true});
+						})
+						.on('error', function()
+						{
+							tc.result({success: false});
+						});
+				}
+
+				tc.info({total: len});
+
+				runSuites(arr, function()
 					{
-						window.__karma__.complete(
+						tc.complete(
 						{
 							coverage: global.__coverage__
 						});

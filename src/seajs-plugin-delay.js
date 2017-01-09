@@ -33,6 +33,12 @@ function delayRequest(emitData)
 		return;
 	}
 
+	var indexs = emitData.DBComboRequestData.indexs;
+	if (!indexs || (data.DBComboDelayRequestMaxUri && indexs.length > data.DBComboDelayRequestMaxUri))
+	{
+		return;
+	}
+
 
 	var type = emitData.DBComboRequestData.type;
 	var list = delays[type] || (delays[type] = []);

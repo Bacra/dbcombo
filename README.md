@@ -48,6 +48,7 @@ seajs.config(
 
 	DBComboExcludes: function(uri){return false},		// RegExp / Function
 	DBComboDelayRequest: true							// delay request for merge more deps
+	DBComboDelayRequestMaxUri: 30						// not merge when over max length
 });
 ```
 

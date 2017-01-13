@@ -7,7 +7,7 @@ exports.initAndClearSeajsModuleCache = function initAndClearSeajsModuleCache(nam
 	delCache(seajs.data.DBComboRequestUriMap);
 
 	// 清理数据
-	// seajs._DBComboIgnoreExtDepsIndexs.splice(0, seajs._DBComboIgnoreExtDepsIndexs.length);
+	seajs.DBComboIgnoreExtDepsIndexs.splice(0, seajs.DBComboIgnoreExtDepsIndexs.length);
 	
 	// 构建新的db目录
 	var dirname;

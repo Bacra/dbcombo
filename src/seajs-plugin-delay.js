@@ -2,6 +2,7 @@ var DBComboClient = require('../');
 var ComboPlugin = require('./seajs-plugin-combo');
 var delayUriMap = {};
 var data = seajs.data;
+var Module = seajs.Module;
 
 seajs.on('fetch', delayRequest);
 seajs.on('request', saveRequestData);
@@ -108,3 +109,25 @@ function requestOneType(type, list)
 			charset);
 	}
 }
+
+// 由于延迟加载，可能会导致require.async变成同步
+// 影响到模块的初始化顺序
+// 由于无法重写async方法，所以只能改写use...好伤
+
+var _orignalUseHandle = Module.use;
+Module.use = function(ids, callbacks, uri)
+{
+	var args = arguments;
+	var self = this;
+	if (uri && uri.indexOf('_async_') != -1)
+	{
+		setTimeout(function()
+		{
+			_orignalUseHandle.apply(self, args);
+		});
+	}
+	else
+	{
+		_orignalUseHandle.apply(self, args);
+	}
+};

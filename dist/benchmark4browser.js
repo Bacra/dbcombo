@@ -49,6 +49,7 @@
 	var indexs2path = __webpack_require__(14);
 	var seajsCombo = __webpack_require__(15);
 	var uniqdeps = __webpack_require__(16);
+	var DEF = __webpack_require__(13);
 
 	var list51 = [12, 33, 200, 800, 10000];
 	var list52 = [
@@ -58,6 +59,14 @@
 		'js/mail/list/listhandler2.js',
 		'js/mail/list/listhandler3.js'
 	];
+
+	var indexMap = {};
+	var indexArr = [];
+	var i = 31;
+	for(var i = DEF.EACH_GROUP_FILE_NUM; i--;)
+	{
+		indexMap[i] = indexArr[i] = 1 << i;
+	}
 
 
 	function map(arr, handler)
@@ -86,7 +95,51 @@
 
 		var key = '#'+list52.length;
 
-		// 添加url序列测试
+		// index 转二进制
+		function index2binaryBenchmark()
+		{
+			var suite = new Benchmark.Suite;
+			return suite.add('direct', function()
+				{
+					var init = 12;
+					var EACH_GROUP_FILE_NUM = DEF.EACH_GROUP_FILE_NUM;
+					for(var i = EACH_GROUP_FILE_NUM; i--;)
+					{
+						init = init | (1 << i);
+					}
+				})
+				.add('map', function()
+				{
+					var init = 12;
+					var map = indexMap;
+					var EACH_GROUP_FILE_NUM = DEF.EACH_GROUP_FILE_NUM;
+					for(var i = EACH_GROUP_FILE_NUM; i--;)
+					{
+						init = init | map[i];
+					}
+				})
+				.add('arr', function()
+				{
+					var init = 12;
+					var map = indexArr;
+					var EACH_GROUP_FILE_NUM = DEF.EACH_GROUP_FILE_NUM;
+					for(var i = EACH_GROUP_FILE_NUM; i--;)
+					{
+						init = init | map[i];
+					}
+				})
+				.on('cycle', function(event)
+				{
+					showMsg(String(event.target));
+				})
+				.on('complete', function()
+				{
+					showMsg('Fastest is ' + this.filter('fastest').map('name'));
+				});
+		}
+
+
+		// url序列测试
 		function urlStringifyBenchmark()
 		{
 			stringify(list51);
@@ -117,6 +170,7 @@
 		}
 
 
+		// 排重
 		function uniqdepsBenchmark()
 		{
 			stringify.indexs2groups(list51);
@@ -142,6 +196,7 @@
 		}
 
 		return [
+			index2binaryBenchmark(),
 			urlStringifyBenchmark(),
 			uniqdepsBenchmark()
 		];
@@ -178,8 +233,9 @@
 	{
 		// fix benchmark
 		window.define = {amd: {}};
+		var tc = window.__karma__;
 
-		if (window.__karma__)
+		if (tc)
 		{
 			// 使用karma-benchmark就要改写代码风格
 			// 不舒服，所以可以兼容一下，然后使用他的runner和reporter
@@ -190,11 +246,28 @@
 			// 如果不使用那个framework，就自己重写一下apator
 			else
 			{
-				window.__karma__.start = function()
+				tc.start = function()
 				{
-					runSuites(runHandler(4, console.log), function()
+					var arr = runHandler(4, console.log);
+					var len = 0;
+					for(var i = arr.length; i-- && arr[i];)
+					{
+						len++;
+						arr[i].on('complete', function()
+							{
+								tc.result({success: true});
+							})
+							.on('error', function()
+							{
+								tc.result({success: false});
+							});
+					}
+
+					tc.info({total: len});
+
+					runSuites(arr, function()
 						{
-							window.__karma__.complete(
+							tc.complete(
 							{
 								coverage: global.__coverage__
 							});

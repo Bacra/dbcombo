@@ -687,6 +687,7 @@
 	var ComboPlugin = __webpack_require__(18);
 	var delayUriMap = {};
 	var data = seajs.data;
+	var Module = seajs.Module;
 
 	seajs.on('fetch', delayRequest);
 	seajs.on('request', saveRequestData);
@@ -714,6 +715,12 @@
 			|| !emitData.DBComboRequestData
 			|| !emitData.requestUri
 			|| delayUriMap[emitData.requestUri])
+		{
+			return;
+		}
+
+		var indexs = emitData.DBComboRequestData.indexs;
+		if (!indexs || (data.DBComboDelayRequestMaxUri && indexs.length > data.DBComboDelayRequestMaxUri))
 		{
 			return;
 		}
@@ -787,6 +794,28 @@
 				charset);
 		}
 	}
+
+	// 由于延迟加载，可能会导致require.async变成同步
+	// 影响到模块的初始化顺序
+	// 由于无法重写async方法，所以只能改写use...好伤
+
+	var _orignalUseHandle = Module.use;
+	Module.use = function(ids, callbacks, uri)
+	{
+		var args = arguments;
+		var self = this;
+		if (uri && uri.indexOf('_async_') != -1)
+		{
+			setTimeout(function()
+			{
+				_orignalUseHandle.apply(self, args);
+			});
+		}
+		else
+		{
+			_orignalUseHandle.apply(self, args);
+		}
+	};
 
 
 /***/ }

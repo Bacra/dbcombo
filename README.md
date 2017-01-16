@@ -55,7 +55,7 @@ seajs.config(
 Combo Uri Exapmle
 
 ```
-http://www.example.com/db.js_db/Yg0W21X/W35X/W35X/W35X/W35X.js
+http://www.example.com/db.js_db/Yg0W21X/W35X/W35X/W35X/W35X/V.js
 ```
 
 Url parse server power by [DBCombo](https://github.com/Bacra/node-dbcombo)

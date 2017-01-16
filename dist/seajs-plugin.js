@@ -246,6 +246,7 @@
 	var Module = seajs.Module;
 	var STATUS = Module.STATUS;
 	var DBComboRequestUriMap = data.DBComboRequestUriMap = {};
+	var DBComboIgnoreExtDepsIndexs = seajs.DBComboIgnoreExtDepsIndexs = [];
 	var push = Array.prototype.push;
 	var isLoadInRequest = false;
 
@@ -275,7 +276,8 @@
 	{
 		var startTime = +new Date;
 		var runtime = {depth: 1};
-		var depsGroups = files2groups(uris, true, runtime);
+		var depsGroups = [];
+		files22groups(uris, depsGroups, runtime);
 
 		// @todo 如何避免子模块onload的之后，触发加载他的依赖的递归计算
 		// 虽然已经屏蔽了递归，但感觉弄到index分析，也很多余
@@ -362,7 +364,7 @@
 		return Config.DBComboFile
 			+ (data.DBComboFileExtname === false ? '' : data.DBComboFileExtname || '_db')
 			+ '/' + DBComboClient.stringify.groups2str(info.groups)
-			+ info.type;
+			+ '/V' + info.type;
 	}
 
 
@@ -403,39 +405,24 @@
 		}
 	}
 
-
 	/**
-	 * @param  {Array} arr             files/indexs
-	 * @param  {Boolean} scanDepsOnce  sacn deps, and one module only once
-	 * @param  {Object} runtime        runtime info. eq: depth
-	 * @param  {Array} groups          groups for merge
-	 * @return {Array}                 groups
+	 * @param  {Array} arr   files/indexs
+	 * @return {Array}       groups
 	 */
-	function files2groups(arr, scanDepsOnce, runtime, groups)
+	function files2groups(arr)
 	{
 		var indexs = [];
-		groups || (groups = []);
 
 		for(var i = arr.length; i--;)
 		{
 			var info = Config.DBComboIndexHandler(arr[i]);
 			if (info)
 			{
-				var mod = Module.get(Module.resolve(info.index), info.deps);
-				if (mod.status < STATUS.FETCHING)
-				{
+				// var mod = Module.get(Module.resolve(info.index), info.deps);
+				// if (mod.status < STATUS.FETCHING)
+				// {
 					indexs.push(info.index);
-				}
-
-				// 计算过一次，就不计算了
-				// 如果上一次没有用，业务自行清理这个标志位
-				// 避免递归重复计算
-				if (scanDepsOnce && info.deps && !mod._dbcombo_depsed)
-				{
-					mod._dbcombo_depsed = true;
-					if (runtime && runtime.depth) runtime.depth++;
-					files2groups(info.deps, scanDepsOnce, runtime, groups);
-				}
+				// }
 			}
 			else if (data.debug)
 			{
@@ -443,10 +430,39 @@
 			}
 		}
 
-		return DBComboClient.stringify.indexs2groups(indexs, groups);
+		return DBComboClient.stringify.indexs2groups(indexs);
 	}
 
 
+	/**
+	 * @param  {Array} arr       files/indexs
+	 * @param  {Array} groups    groups for merge
+	 * @param  {Object} runtime  runtime info. eq: depth
+	 */
+	function files22groups(arr, groups, runtime)
+	{
+		var indexs = [];
+		for(var i = arr.length; i--;)
+		{
+			var info = Config.DBComboIndexHandler(arr[i]);
+			// 计算过一次，就不计算了
+			// 如果上一次没有用，业务自行清理这个标志位
+			// 避免递归重复计算
+			if (info && !DBComboIgnoreExtDepsIndexs[info.index])
+			{
+				DBComboIgnoreExtDepsIndexs[info.index] = true;
+				indexs.push(info.index);
+
+				if (info.deps)
+				{
+					if (runtime && runtime.depth) runtime.depth++;
+					files22groups(info.deps, groups, runtime);
+				}
+			}
+		}
+
+		DBComboClient.stringify.indexs2groups(indexs, groups);
+	}
 
 
 

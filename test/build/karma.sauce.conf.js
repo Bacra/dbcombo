@@ -3,9 +3,9 @@ var browsers = require('./sl_browsers.js');
 
 module.exports = function(config, browserGroup)
 {
-	if (process.env.TRAVIS_BRANCH && process.env.TRAVIS_BRANCH != 'master')
+	if (process.env.TRAVIS_BRANCH && process.env.TRAVIS_BRANCH != 'sauce-runner')
 	{
-		console.log('Run sauce only master branch.');
+		console.log('Run sauce only sauce-runner branch.');
 		process.exit();
 	}
 
@@ -38,7 +38,8 @@ module.exports = function(config, browserGroup)
 		// port			: 4445,
 		browsers		: browserArr,
 		singleRun		: true,
-		retryLimit		: 1,
+		retryLimit		: 2,
+		concurrency		: 5,
 		customLaunchers	: browsers.browsers,
 		// Increase timeout in case connection in CI is slow
 		captureTimeout	: timeout,

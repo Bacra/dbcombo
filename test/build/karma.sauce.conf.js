@@ -31,7 +31,7 @@ module.exports = function(config, browserGroup)
 		}
 	}
 
-	var timeout = browserGroup == 'mobile' ? 300000 : 120000;
+	var timeout = browserGroup == 'mobile' || browserGroup == 'sauce' ? 300000 : 120000;
 	var buildId = process.env.TRAVIS_JOB_NUMBER || process.env.SAUCE_BUILD_ID || Date.now();
 
 	return {

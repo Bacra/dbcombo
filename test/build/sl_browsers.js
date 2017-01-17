@@ -114,6 +114,7 @@ var groups =
 		'sl_android42',
 		'sl_android51'
 	],
+	sauce: Object.keys(browsers)
 };
 
 module.exports =

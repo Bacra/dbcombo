@@ -33,6 +33,27 @@ function map(arr, handler)
 	return newArr;
 }
 
+
+function arrmapdeps(arr)
+{
+	var result = [];
+	for(var i = arr.length; i--;)
+	{
+		result[arr[i]] = true;
+	}
+
+	var result2 = [];
+	for(var i = result.length; i--;)
+	{
+		if (result[i])
+		{
+			result2.push(i);
+		}
+	}
+
+	// return stringify.indexs2groups(result2);
+}
+
 function runHandler(copy, showMsg)
 {
 	while(copy--)
@@ -128,12 +149,17 @@ function runHandler(copy, showMsg)
 	function uniqdepsBenchmark()
 	{
 		stringify.indexs2groups(list51);
+		arrmapdeps(list51);
 		uniqdeps(list52);
 
 		var suite = new Benchmark.Suite;
 		return suite.add('indexs2groups'+key, function()
 			{
 				stringify.indexs2groups(list51);
+			})
+			.add('arrmapdeps'+key, function()
+			{
+				arrmapdeps(list51);
 			})
 			.add('uniqdeps'+key, function()
 			{

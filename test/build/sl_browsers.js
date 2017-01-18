@@ -77,18 +77,10 @@ var browsers =
 		browserName	: 'iphone',
 		version		: '9.3'
 	},
-	sl_android42:
-	{
-		base		: 'SauceLabs',
-		browserName	: 'android',
-		platform	: 'linux',
-		version		: '4.2'
-	},
 	sl_android51:
 	{
 		base		: 'SauceLabs',
 		browserName	: 'android',
-		platform	: 'linux',
 		version		: '5.1'
 	}
 };
@@ -113,7 +105,6 @@ var groups =
 	mobile: [
 		'sl_ios_safari8',
 		'sl_ios_safari9',
-		'sl_android42',
 		'sl_android51'
 	],
 	sauce: Object.keys(browsers)

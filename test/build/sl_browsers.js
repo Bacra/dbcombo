@@ -81,12 +81,14 @@ var browsers =
 	{
 		base		: 'SauceLabs',
 		browserName	: 'android',
+		platform	: 'linux',
 		version		: '4.2'
 	},
 	sl_android51:
 	{
 		base		: 'SauceLabs',
 		browserName	: 'android',
+		platform	: 'linux',
 		version		: '5.1'
 	}
 };

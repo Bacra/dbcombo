@@ -2,7 +2,8 @@ var Benchmark = require('benchmark');
 var stringify = require('../lib/stringify');
 var indexs2path = require('./indexs2path');
 var seajsCombo = require('./seajs-combo-sethash');
-var uniqdeps = require('./uniqdeps');
+var uniq_objmap = require('./uniq_objmap');
+var uniq_arrmap = require('./uniq_arrmap');
 var DEF = require('../lib/def');
 
 var list51 = [12, 33, 200, 800, 10000];
@@ -33,26 +34,6 @@ function map(arr, handler)
 	return newArr;
 }
 
-
-function arrmapdeps(arr)
-{
-	var result = [];
-	for(var i = arr.length; i--;)
-	{
-		result[arr[i]] = true;
-	}
-
-	var result2 = [];
-	for(var i = result.length; i--;)
-	{
-		if (result[i])
-		{
-			result2.push(i);
-		}
-	}
-
-	// return stringify.indexs2groups(result2);
-}
 
 function runHandler(copy, showMsg)
 {
@@ -146,24 +127,24 @@ function runHandler(copy, showMsg)
 
 
 	// 排重
-	function uniqdepsBenchmark()
+	function uniqBenchmark()
 	{
 		stringify.indexs2groups(list51);
-		arrmapdeps(list51);
-		uniqdeps(list52);
+		uniq_arrmap(list51);
+		uniq_objmap(list52);
 
 		var suite = new Benchmark.Suite;
 		return suite.add('indexs2groups'+key, function()
 			{
 				stringify.indexs2groups(list51);
 			})
-			.add('arrmapdeps'+key, function()
+			.add('arrmap'+key, function()
 			{
-				arrmapdeps(list51);
+				uniq_arrmap(list51);
 			})
-			.add('uniqdeps'+key, function()
+			.add('objmap'+key, function()
 			{
-				uniqdeps(list52);
+				uniq_objmap(list52);
 			})
 			.on('cycle', function(event)
 			{
@@ -178,7 +159,7 @@ function runHandler(copy, showMsg)
 	return [
 		index2binaryBenchmark(),
 		urlStringifyBenchmark(),
-		uniqdepsBenchmark()
+		uniqBenchmark()
 	];
 }
 

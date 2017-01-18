@@ -1,6 +1,6 @@
-module.exports = uniqdeps;
+module.exports = uniq_objmap;
 
-function uniqdeps(arr)
+function uniq_objmap(arr)
 {
 	var map = {};
 	var newArr = [];

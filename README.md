@@ -71,5 +71,5 @@ Url parse server power by [DBCombo](https://github.com/Bacra/node-dbcombo)
 [coveralls-image]: https://img.shields.io/coveralls/Bacra/node-dbcombo-client.svg
 [coveralls-url]: https://coveralls.io/github/Bacra/node-dbcombo-client
 [license-image]: http://img.shields.io/npm/l/dbcombo-client.svg
-[saucelabs-url]: https://saucelabs.com/beta/builds/e390c7cd3d604bb1932520e096c41543
+[saucelabs-url]: https://saucelabs.com/u/Bacra
 [saucelabs-image]: https://saucelabs.com/buildstatus/Bacra

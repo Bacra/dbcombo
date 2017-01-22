@@ -44,7 +44,7 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(17);
+	module.exports = __webpack_require__(18);
 
 
 /***/ },
@@ -228,19 +228,20 @@
 /* 14 */,
 /* 15 */,
 /* 16 */,
-/* 17 */
-/***/ function(module, exports, __webpack_require__) {
-
-	__webpack_require__(18);
-	__webpack_require__(22);
-
-
-/***/ },
+/* 17 */,
 /* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var DBComboClient = __webpack_require__(19);
-	var Config = __webpack_require__(21);
+	__webpack_require__(19);
+	__webpack_require__(23);
+
+
+/***/ },
+/* 19 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var DBComboClient = __webpack_require__(20);
+	var Config = __webpack_require__(22);
 
 	var data = seajs.data;
 	var Module = seajs.Module;
@@ -515,17 +516,17 @@
 
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = {
 		stringify: __webpack_require__(12),
-		parse: __webpack_require__(20)
+		parse: __webpack_require__(21)
 	};
 
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var DEF = __webpack_require__(13);
@@ -637,7 +638,7 @@
 
 
 /***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports) {
 
 	var Module = seajs.Module;
@@ -696,11 +697,11 @@
 
 
 /***/ },
-/* 22 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var DBComboClient = __webpack_require__(19);
-	var ComboPlugin = __webpack_require__(18);
+	var DBComboClient = __webpack_require__(20);
+	var ComboPlugin = __webpack_require__(19);
 	var delayUriMap = {};
 	var data = seajs.data;
 	var Module = seajs.Module;

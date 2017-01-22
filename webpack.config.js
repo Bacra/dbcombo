@@ -22,4 +22,4 @@ var custom =
 	}
 };
 
-module.exports = extend(require('./test/build/webpack.base.conf.js'), custom);
+module.exports = extend(true, require('./test/build/webpack.base.conf.js'), custom);

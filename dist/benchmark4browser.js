@@ -45,12 +45,21 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {var Benchmark = __webpack_require__(1);
-	var stringify = __webpack_require__(12);
-	var indexs2path = __webpack_require__(14);
-	var seajsCombo = __webpack_require__(15);
-	var uniq_objmap = __webpack_require__(16);
-	var uniq_arrmap = __webpack_require__(17);
-	var DEF = __webpack_require__(13);
+	var stringify = __webpack_require__(2);
+	var indexs2path = __webpack_require__(4);
+	var seajsCombo = __webpack_require__(5);
+	var uniq_objmap = __webpack_require__(6);
+	var uniq_arrmap = __webpack_require__(7);
+	var DEF = __webpack_require__(3);
+
+	// Suppress warnings and errors logged by benchmark.js when bundled using webpack.
+	// https://github.com/bestiejs/benchmark.js/issues/106
+	Benchmark = Benchmark.runInContext(
+		{
+			'_': __webpack_require__(8),
+			'platform': __webpack_require__(10)
+		});
+
 
 	var list51 = [12, 33, 200, 800, 10000];
 	var list52 = [
@@ -292,9 +301,9 @@
 
 /***/ },
 /* 1 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	var require;var require;var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/*!
+	/*!
 	 * Benchmark.js <https://benchmarkjs.com/>
 	 * Copyright 2010-2016 Mathias Bynens <https://mths.be/>
 	 * Based on JSLitmus.js, copyright Robert Kieffer <http://broofa.com/>
@@ -317,7 +326,7 @@
 	  var root = (objectTypes[typeof window] && window) || this;
 
 	  /** Detect free variable `define`. */
-	  var freeDefine = __webpack_require__(3);
+	  var freeDefine = typeof define == 'function' && typeof define.amd == 'object' && define.amd && define;
 
 	  /** Detect free variable `exports`. */
 	  var freeExports = objectTypes[typeof exports] && exports && !exports.nodeType && exports;
@@ -420,7 +429,7 @@
 	   */
 	  function runInContext(context) {
 	    // Exit early if unable to acquire lodash.
-	    var _ = context && context._ || __webpack_require__(4) || root._;
+	    var _ = context && context._ || require('lodash') || root._;
 	    if (!_) {
 	      Benchmark.runInContext = runInContext;
 	      return Benchmark;
@@ -467,7 +476,7 @@
 	    var doc = isHostType(context, 'document') && context.document;
 
 	    /** Used to access Wade Simmons' Node.js `microtime` module. */
-	    var microtimeObject = __webpack_require__(5);
+	    var microtimeObject = req('microtime');
 
 	    /** Used to access Node.js's high resolution timer. */
 	    var processObject = isHostType(context, 'process') && context.process;
@@ -807,10 +816,10 @@
 	      // Lazy define.
 	      createFunction = function(args, body) {
 	        var result,
-	            anchor = __webpack_require__(3) ? __webpack_require__(6) : Benchmark,
+	            anchor = freeDefine ? freeDefine.amd : Benchmark,
 	            prop = uid + 'createFunction';
 
-	        runScript((__webpack_require__(3) ? 'define.amd.' : 'Benchmark.') + prop + '=function(' + args + '){' + body + '}');
+	        runScript((freeDefine ? 'define.amd.' : 'Benchmark.') + prop + '=function(' + args + '){' + body + '}');
 	        result = anchor[prop];
 	        delete anchor[prop];
 	        return result;
@@ -942,7 +951,7 @@
 	     */
 	    function require(id) {
 	      try {
-	        var result = freeExports && __webpack_require__(7)(id);
+	        var result = freeExports && freeRequire(id);
 	      } catch(e) {}
 	      return result || null;
 	    }
@@ -954,12 +963,12 @@
 	     * @param {string} code The code to run.
 	     */
 	    function runScript(code) {
-	      var anchor = __webpack_require__(3) ? __webpack_require__(6) : Benchmark,
+	      var anchor = freeDefine ? define.amd : Benchmark,
 	          script = doc.createElement('script'),
 	          sibling = doc.getElementsByTagName('script')[0],
 	          parent = sibling.parentNode,
 	          prop = uid + 'runScript',
-	          prefix = '(' + (__webpack_require__(3) ? 'define.amd.' : 'Benchmark.') + prop + '||function(){})();';
+	          prefix = '(' + (freeDefine ? 'define.amd.' : 'Benchmark.') + prop + '||function(){})();';
 
 	      // Firefox 2.0.0.2 cannot use script injection as intended because it executes
 	      // asynchronously, but that's OK because script injection is only used to avoid
@@ -3091,14 +3100,14 @@
 
 	  // Export Benchmark.
 	  // Some AMD build optimizers, like r.js, check for condition patterns like the following:
-	  if (true) {
+	  if (typeof define == 'function' && typeof define.amd == 'object' && define.amd) {
 	    // Define as an anonymous module so, through path mapping, it can be aliased.
-	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(4), __webpack_require__(11)], __WEBPACK_AMD_DEFINE_RESULT__ = function(_, platform) {
+	    define(['lodash', 'platform'], function(_, platform) {
 	      return runInContext({
 	        '_': _,
 	        'platform': platform
 	      });
-	    }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	    });
 	  }
 	  else {
 	    var Benchmark = runInContext();
@@ -3119,33 +3128,523 @@
 	  }
 	}.call(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module), (function() { return this; }())))
 
 /***/ },
 /* 2 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	module.exports = function(module) {
-		if(!module.webpackPolyfill) {
-			module.deprecate = function() {};
-			module.paths = [];
-			// module.parent = undefined by default
-			module.children = [];
-			module.webpackPolyfill = 1;
+	var DEF = __webpack_require__(3);
+	var EACH_GROUP_FILE_NUM = DEF.EACH_GROUP_FILE_NUM;
+	var MAX_GROUP_KEY_LENGTH = DEF.MAX_GROUP_KEY_LENGTH;
+	var MAX_GROUP_URI = DEF.MAX_GROUP_URI;
+	var MAX_NOT_REPEAT_GROUP_MARK = 4;
+
+	// console.log('DEFIND,%d,%d,%d,%d', EACH_GROUP_FILE_NUM, MAX_GROUP_KEY_LENGTH, MAX_GROUP_URI, MAX_NOT_REPEAT_GROUP_MARK);
+
+	var OFFSET2INDEX = (function()
+		{
+			var i = EACH_GROUP_FILE_NUM;
+			var arr = [];
+			while(i--)
+			{
+				arr[i] = 1 << i;
+			}
+
+			return arr;
+		})();
+
+
+	var MARK_Z_GROUPS = (function()
+		{
+			var arr = [];
+			var str = '';
+			for(var i = 1; i < MAX_NOT_REPEAT_GROUP_MARK; i++)
+			{
+				arr[i] = (str += 'Z');
+			}
+
+			return arr;
+		})();
+
+
+	function indexs2groups(indexs, groups)
+	{
+		groups || (groups = []);
+
+		for(var i = indexs.length; i--;)
+		{
+			var index = indexs[i];
+			var groupIndex = index/EACH_GROUP_FILE_NUM | 0;
+			var lowOffset = index%EACH_GROUP_FILE_NUM;
+			var indexVal = OFFSET2INDEX[lowOffset];
+
+			// console.log('index:%d groupIndex:%d indexVal:%d lowOffset:%d file:%s', index, groupIndex, indexVal, lowOffset);
+			groups[groupIndex] = (groups[groupIndex] || 0) | indexVal;
 		}
-		return module;
+
+		return groups;
 	}
+
+
+	// 生成urlkey，高位→低位
+	// 除了32位的字符，转换后有如下特殊字符
+	// Z  分组无任何数据，占位使用
+	// Y  分组转成字符串之后，长度不足MAX_GROUP_KEY_LENGTH，补位
+	// /  数据可能超过文件名长度限制，用来分割
+	// W...X  当有很多Z的时候，为了美化，进行repeat处理; ...表示重复的次数
+	function stringify(indexs)
+	{
+		return groups2str(indexs2groups(indexs));
+	}
+
+
+	function groups2str(groups)
+	{
+		var str = '';
+		var continuousEmptyGroups = 0;
+
+		function ZXHandler()
+		{
+			if (continuousEmptyGroups)
+			{
+				if (MARK_Z_GROUPS[continuousEmptyGroups])
+					str += MARK_Z_GROUPS[continuousEmptyGroups];
+				else
+					str += 'W'+continuousEmptyGroups+'X';
+
+				continuousEmptyGroups = 0;
+			}
+		}
+
+		for(var i = groups.length; i--;)
+		{
+			if (groups[i])
+			{
+				ZXHandler();
+				var tmp = groups[i].toString(32);
+				if (tmp.length < 7) tmp = 'Y'+tmp;
+				str += tmp;
+			}
+			else
+			{
+				continuousEmptyGroups++;
+			}
+
+			if (i && !(i%MAX_GROUP_URI))
+			{
+				ZXHandler();
+				str += '/';
+			}
+		}
+
+
+		ZXHandler();
+		// console.log('groups len:%d, %o, url:%s', groups.length, groups, str);
+
+		return str;
+	}
+
+
+
+	function mergeGroups()
+	{
+		var args = arguments;
+		var argsLength = args.length;
+		var newGroups = [];
+		var lengths = [];
+		var maxLength = 0;
+
+		// group的最大长度
+		for(var i = argsLength, item; i--;)
+		{
+			item = args[i].length;
+			if (item > maxLength) maxLength = item;
+		}
+
+		for(var index = 0; index < maxLength; index++)
+		{
+			var groupResult = 0;
+
+			for(var i = argsLength, item; i--;)
+			{
+				item = args[i][index];
+				if (item) groupResult |= item;
+			}
+
+			newGroups[index] = groupResult;
+		}
+
+		return newGroups;
+	}
+
+
+	exports = module.exports = stringify;
+	exports.indexs2groups = indexs2groups;
+	exports.groups2str = groups2str;
+	exports.mergeGroups = mergeGroups;
 
 
 /***/ },
 /* 3 */
 /***/ function(module, exports) {
 
-	module.exports = function() { throw new Error("define cannot be used indirect"); };
+	var EACH_GROUP_FILE_NUM = exports.EACH_GROUP_FILE_NUM = 31;
+	var MAX_GROUP_KEY_LENGTH = exports.MAX_GROUP_KEY_LENGTH = Math.pow(2, EACH_GROUP_FILE_NUM).toString(32).length;
+	// 受到文件夹长度限制
+	// http://stackoverflow.com/questions/14500893/is-the-255-char-limit-for-filenames-on-windows-and-unix-the-whole-path-or-part
+	exports.MAX_GROUP_URI = 250/MAX_GROUP_KEY_LENGTH | 0;
 
 
 /***/ },
 /* 4 */
+/***/ function(module, exports) {
+
+	module.exports = indexs2hash;
+
+	function indexs2hash(indexs)
+	{
+	  var result = [];
+	  var str = [];
+	  var len = 0;
+
+	  for(var i = indexs.length; i--;)
+	  {
+	    var newStr = ''+indexs[i];
+	    len+=newStr.length+1;
+	    if (len > 250)
+	    {
+	      len = newStr.length;
+	      result.push(str.join(','));
+	      str = [];
+	    }
+
+	    str.push(newStr);
+	  }
+
+	  if (str.length)
+	  {
+	    result.push(str.join(','));
+	  }
+
+	  return result.join('/');
+	}
+
+
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	module.exports = function(needComboUris)
+	{
+	  return paths2hash(uris2paths(needComboUris));
+	}
+
+	var comboHash = {};
+	var comboSyntax = ["??", ","]
+	var comboMaxLength = 2000
+	var comboExcludes
+	var comboSuffix
+
+
+	// Helpers
+
+	function uris2paths(uris) {
+	  return meta2paths(uris2meta(uris))
+	}
+
+	// [
+	//   "http://example.com/p/a.js",
+	//   "https://example2.com/b.js",
+	//   "http://example.com/p/c/d.js",
+	//   "http://example.com/p/c/e.js"
+	// ]
+	// ==>
+	// {
+	//   "http__example.com": {
+	//                          "p": {
+	//                                 "a.js": { __KEYS: [] },
+	//                                 "c": {
+	//                                        "d.js": { __KEYS: [] },
+	//                                        "e.js": { __KEYS: [] },
+	//                                        __KEYS: ["d.js", "e.js"]
+	//                                 },
+	//                                 __KEYS: ["a.js", "c"]
+	//                               },
+	//                          __KEYS: ["p"]
+	//                        },
+	//   "https__example2.com": {
+	//                            "b.js": { __KEYS: [] },
+	//                            _KEYS: ["b.js"]
+	//                          },
+	//   __KEYS: ["http__example.com", "https__example2.com"]
+	// }
+
+	function uris2meta(uris) {
+	  var meta = {
+	    __KEYS: []
+	  }
+
+	  for (var i = 0, len = uris.length; i < len; i++) {
+	    var parts = uris[i].replace("://", "__").split("/")
+	    var m = meta
+
+	    for (var j = 0, l = parts.length; j < l; j++) {
+	      var part = parts[j]
+
+	      if (!m[part]) {
+	        m[part] = {
+	          __KEYS: []
+	        }
+	        m.__KEYS.push(part)
+	      }
+	      m = m[part]
+	    }
+	  }
+
+	  return meta
+	}
+
+	// {
+	//   "http__example.com": {
+	//                          "p": {
+	//                                 "a.js": { __KEYS: [] },
+	//                                 "c": {
+	//                                        "d.js": { __KEYS: [] },
+	//                                        "e.js": { __KEYS: [] },
+	//                                        __KEYS: ["d.js", "e.js"]
+	//                                 },
+	//                                 __KEYS: ["a.js", "c"]
+	//                               },
+	//                          __KEYS: ["p"]
+	//                        },
+	//   "https__example2.com": {
+	//                            "b.js": { __KEYS: [] },
+	//                            _KEYS: ["b.js"]
+	//                          },
+	//   __KEYS: ["http__example.com", "https__example2.com"]
+	// }
+	// ==>
+	// [
+	//   ["http://example.com/p", ["a.js", "c/d.js", "c/e.js"]]
+	// ]
+
+	function meta2paths(meta) {
+	  var paths = []
+	  var __KEYS = meta.__KEYS
+
+	  for (var i = 0, len = __KEYS.length; i < len; i++) {
+	    var part = __KEYS[i]
+	    var root = part
+	    var m = meta[part]
+	    var KEYS = m.__KEYS
+
+	    while (KEYS.length === 1) {
+	      root += "/" + KEYS[0]
+	      m = m[KEYS[0]]
+	      KEYS = m.__KEYS
+	    }
+
+	    if (KEYS.length) {
+	      paths.push([root.replace("__", "://"), meta2arr(m)])
+	    }
+	  }
+
+	  return paths
+	}
+
+	// {
+	//   "a.js": { __KEYS: [] },
+	//   "c": {
+	//          "d.js": { __KEYS: [] },
+	//          "e.js": { __KEYS: [] },
+	//          __KEYS: ["d.js", "e.js"]
+	//        },
+	//   __KEYS: ["a.js", "c"]
+	// }
+	// ==>
+	// [
+	//   "a.js", "c/d.js", "c/e.js"
+	// ]
+
+	function meta2arr(meta) {
+	  var arr = []
+	  var __KEYS = meta.__KEYS
+
+	  for (var i = 0, len = __KEYS.length; i < len; i++) {
+	    var key = __KEYS[i]
+	    var r = meta2arr(meta[key])
+
+	    // key = "c"
+	    // r = ["d.js", "e.js"]
+	    var m = r.length
+	    if (m) {
+	      for (var j = 0; j < m; j++) {
+	        arr.push(key + "/" + r[j])
+	      }
+	    } else {
+	      arr.push(key)
+	    }
+	  }
+
+	  return arr
+	}
+
+	// [
+	//   [ "http://example.com/p", ["a.js", "c/d.js", "c/e.js", "a.css", "b.css"] ]
+	// ]
+	// ==>
+	//
+	// a hash cache
+	//
+	// "http://example.com/p/a.js"  ==> "http://example.com/p/??a.js,c/d.js,c/e.js"
+	// "http://example.com/p/c/d.js"  ==> "http://example.com/p/??a.js,c/d.js,c/e.js"
+	// "http://example.com/p/c/e.js"  ==> "http://example.com/p/??a.js,c/d.js,c/e.js"
+	// "http://example.com/p/a.css"  ==> "http://example.com/p/??a.css,b.css"
+	// "http://example.com/p/b.css"  ==> "http://example.com/p/??a.css,b.css"
+	//
+
+	function paths2hash(paths) {
+	  for (var i = 0, len = paths.length; i < len; i++) {
+	    var path = paths[i]
+	    var root = path[0] + "/"
+
+	    // 考虑到benchmark 注释掉分组逻辑
+	    // var group = files2group(path[1])
+
+	    // for (var j = 0, m = group.length; j < m; j++) {
+	    //   setHash(root, group[j])
+	    // }
+	    setHash(root, path[1]);
+	  }
+
+	  return comboHash
+	}
+
+	function setHash(root, files) {
+	  var copy = []
+	  for (var i = 0, len = files.length; i < len; i++) {
+	    copy[i] = files[i].replace(/\?.*$/, '')
+	  }
+	  var comboPath = root + comboSyntax[0] + copy.join(comboSyntax[1])
+	  if(comboSuffix) {
+	    comboPath += comboSuffix
+	  }
+	  var exceedMax = comboPath.length > comboMaxLength
+
+	  // http://stackoverflow.com/questions/417142/what-is-the-maximum-length-of-a-url
+	  if (files.length > 1 && exceedMax) {
+	    var parts = splitFiles(files,
+	      comboMaxLength - (root + comboSyntax[0]).length)
+
+	    setHash(root, parts[0])
+	    setHash(root, parts[1])
+	  } else {
+	    if (exceedMax) {
+	      throw new Error("The combo url is too long: " + comboPath)
+	    }
+
+	    for (var i = 0, len = files.length; i < len; i++) {
+	      comboHash[root + files[i]] = comboPath
+	    }
+	  }
+	}
+
+	function splitFiles(files, filesMaxLength) {
+	  var sep = comboSyntax[1]
+	  var s = files[0]
+
+	  for (var i = 1, len = files.length; i < len; i++) {
+	    s += sep + files[i]
+	    if (s.length > filesMaxLength) {
+	      return [files.splice(0, i), files]
+	    }
+	  }
+	}
+
+	//
+	//  ["a.js", "c/d.js", "c/e.js", "a.css", "b.css", "z"]
+	// ==>
+	//  [ ["a.js", "c/d.js", "c/e.js"], ["a.css", "b.css"] ]
+	//
+
+	// function files2group(files) {
+	//   var group = []
+	//   var hash = {}
+
+	//   for (var i = 0, len = files.length; i < len; i++) {
+	//     var file = files[i]
+	//     var ext = getExt(file)
+	//     if (ext) {
+	//       (hash[ext] || (hash[ext] = [])).push(file)
+	//     }
+	//   }
+
+	//   for (var k in hash) {
+	//     if (hash.hasOwnProperty(k)) {
+	//       group.push(hash[k])
+	//     }
+	//   }
+
+	//   return group
+	// }
+
+	// function getExt(file) {
+	//   var p = file.lastIndexOf(".")
+	//   return p >= 0 ? file.substring(p) : ""
+	// }
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+	module.exports = uniq_objmap;
+
+	function uniq_objmap(arr)
+	{
+		var map = {};
+		var newArr = [];
+
+		for(var i = arr.length; i--;)
+		{
+			if (!map[arr[i]])
+			{
+				map[arr[i]] = true;
+				newArr.push(arr[i]);
+			}
+		}
+
+		return newArr;
+	}
+
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	module.exports = uniq_arrmap;
+
+	function uniq_arrmap(arr)
+	{
+		var result = [];
+		for(var i = arr.length; i--;)
+		{
+			result[arr[i]] = true;
+		}
+
+		var result2 = [];
+		for(var i = result.length; i--;)
+		{
+			if (result[i])
+			{
+				result2.push(i);
+			}
+		}
+	}
+
+
+/***/ },
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, module) {/**
@@ -20233,49 +20732,26 @@
 	  }
 	}.call(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(2)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(9)(module)))
 
 /***/ },
-/* 5 */
+/* 9 */
 /***/ function(module, exports) {
 
-	module.exports = null;
-
-/***/ },
-/* 6 */
-/***/ function(module, exports) {
-
-	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
-
-	/* WEBPACK VAR INJECTION */}.call(exports, {}))
-
-/***/ },
-/* 7 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var map = {
-		"./benchmark": 1,
-		"./benchmark.js": 1
-	};
-	function webpackContext(req) {
-		return __webpack_require__(webpackContextResolve(req));
-	};
-	function webpackContextResolve(req) {
-		return map[req] || (function() { throw new Error("Cannot find module '" + req + "'.") }());
-	};
-	webpackContext.keys = function webpackContextKeys() {
-		return Object.keys(map);
-	};
-	webpackContext.resolve = webpackContextResolve;
-	module.exports = webpackContext;
-	webpackContext.id = 7;
+	module.exports = function(module) {
+		if(!module.webpackPolyfill) {
+			module.deprecate = function() {};
+			module.paths = [];
+			// module.parent = undefined by default
+			module.children = [];
+			module.webpackPolyfill = 1;
+		}
+		return module;
+	}
 
 
 /***/ },
-/* 8 */,
-/* 9 */,
-/* 10 */,
-/* 11 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/*!
@@ -21433,521 +21909,7 @@
 	  }
 	}.call(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module), (function() { return this; }())))
-
-/***/ },
-/* 12 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var DEF = __webpack_require__(13);
-	var EACH_GROUP_FILE_NUM = DEF.EACH_GROUP_FILE_NUM;
-	var MAX_GROUP_KEY_LENGTH = DEF.MAX_GROUP_KEY_LENGTH;
-	var MAX_GROUP_URI = DEF.MAX_GROUP_URI;
-	var MAX_NOT_REPEAT_GROUP_MARK = 4;
-
-	// console.log('DEFIND,%d,%d,%d,%d', EACH_GROUP_FILE_NUM, MAX_GROUP_KEY_LENGTH, MAX_GROUP_URI, MAX_NOT_REPEAT_GROUP_MARK);
-
-	var OFFSET2INDEX = (function()
-		{
-			var i = EACH_GROUP_FILE_NUM;
-			var arr = [];
-			while(i--)
-			{
-				arr[i] = 1 << i;
-			}
-
-			return arr;
-		})();
-
-
-	var MARK_Z_GROUPS = (function()
-		{
-			var arr = [];
-			var str = '';
-			for(var i = 1; i < MAX_NOT_REPEAT_GROUP_MARK; i++)
-			{
-				arr[i] = (str += 'Z');
-			}
-
-			return arr;
-		})();
-
-
-	function indexs2groups(indexs, groups)
-	{
-		groups || (groups = []);
-
-		for(var i = indexs.length; i--;)
-		{
-			var index = indexs[i];
-			var groupIndex = index/EACH_GROUP_FILE_NUM | 0;
-			var lowOffset = index%EACH_GROUP_FILE_NUM;
-			var indexVal = OFFSET2INDEX[lowOffset];
-
-			// console.log('index:%d groupIndex:%d indexVal:%d lowOffset:%d file:%s', index, groupIndex, indexVal, lowOffset);
-			groups[groupIndex] = (groups[groupIndex] || 0) | indexVal;
-		}
-
-		return groups;
-	}
-
-
-	// 生成urlkey，高位→低位
-	// 除了32位的字符，转换后有如下特殊字符
-	// Z  分组无任何数据，占位使用
-	// Y  分组转成字符串之后，长度不足MAX_GROUP_KEY_LENGTH，补位
-	// /  数据可能超过文件名长度限制，用来分割
-	// W...X  当有很多Z的时候，为了美化，进行repeat处理; ...表示重复的次数
-	function stringify(indexs)
-	{
-		return groups2str(indexs2groups(indexs));
-	}
-
-
-	function groups2str(groups)
-	{
-		var str = '';
-		var continuousEmptyGroups = 0;
-
-		function ZXHandler()
-		{
-			if (continuousEmptyGroups)
-			{
-				if (MARK_Z_GROUPS[continuousEmptyGroups])
-					str += MARK_Z_GROUPS[continuousEmptyGroups];
-				else
-					str += 'W'+continuousEmptyGroups+'X';
-
-				continuousEmptyGroups = 0;
-			}
-		}
-
-		for(var i = groups.length; i--;)
-		{
-			if (groups[i])
-			{
-				ZXHandler();
-				var tmp = groups[i].toString(32);
-				if (tmp.length < 7) tmp = 'Y'+tmp;
-				str += tmp;
-			}
-			else
-			{
-				continuousEmptyGroups++;
-			}
-
-			if (i && !(i%MAX_GROUP_URI))
-			{
-				ZXHandler();
-				str += '/';
-			}
-		}
-
-
-		ZXHandler();
-		// console.log('groups len:%d, %o, url:%s', groups.length, groups, str);
-
-		return str;
-	}
-
-
-
-	function mergeGroups()
-	{
-		var args = arguments;
-		var argsLength = args.length;
-		var newGroups = [];
-		var lengths = [];
-		var maxLength = 0;
-
-		// group的最大长度
-		for(var i = argsLength, item; i--;)
-		{
-			item = args[i].length;
-			if (item > maxLength) maxLength = item;
-		}
-
-		for(var index = 0; index < maxLength; index++)
-		{
-			var groupResult = 0;
-
-			for(var i = argsLength, item; i--;)
-			{
-				item = args[i][index];
-				if (item) groupResult |= item;
-			}
-
-			newGroups[index] = groupResult;
-		}
-
-		return newGroups;
-	}
-
-
-	exports = module.exports = stringify;
-	exports.indexs2groups = indexs2groups;
-	exports.groups2str = groups2str;
-	exports.mergeGroups = mergeGroups;
-
-
-/***/ },
-/* 13 */
-/***/ function(module, exports) {
-
-	var EACH_GROUP_FILE_NUM = exports.EACH_GROUP_FILE_NUM = 31;
-	var MAX_GROUP_KEY_LENGTH = exports.MAX_GROUP_KEY_LENGTH = Math.pow(2, EACH_GROUP_FILE_NUM).toString(32).length;
-	// 受到文件夹长度限制
-	// http://stackoverflow.com/questions/14500893/is-the-255-char-limit-for-filenames-on-windows-and-unix-the-whole-path-or-part
-	exports.MAX_GROUP_URI = 250/MAX_GROUP_KEY_LENGTH | 0;
-
-
-/***/ },
-/* 14 */
-/***/ function(module, exports) {
-
-	module.exports = indexs2hash;
-
-	function indexs2hash(indexs)
-	{
-	  var result = [];
-	  var str = [];
-	  var len = 0;
-
-	  for(var i = indexs.length; i--;)
-	  {
-	    var newStr = ''+indexs[i];
-	    len+=newStr.length+1;
-	    if (len > 250)
-	    {
-	      len = newStr.length;
-	      result.push(str.join(','));
-	      str = [];
-	    }
-
-	    str.push(newStr);
-	  }
-
-	  if (str.length)
-	  {
-	    result.push(str.join(','));
-	  }
-
-	  return result.join('/');
-	}
-
-
-
-/***/ },
-/* 15 */
-/***/ function(module, exports) {
-
-	module.exports = function(needComboUris)
-	{
-	  return paths2hash(uris2paths(needComboUris));
-	}
-
-	var comboHash = {};
-	var comboSyntax = ["??", ","]
-	var comboMaxLength = 2000
-	var comboExcludes
-	var comboSuffix
-
-
-	// Helpers
-
-	function uris2paths(uris) {
-	  return meta2paths(uris2meta(uris))
-	}
-
-	// [
-	//   "http://example.com/p/a.js",
-	//   "https://example2.com/b.js",
-	//   "http://example.com/p/c/d.js",
-	//   "http://example.com/p/c/e.js"
-	// ]
-	// ==>
-	// {
-	//   "http__example.com": {
-	//                          "p": {
-	//                                 "a.js": { __KEYS: [] },
-	//                                 "c": {
-	//                                        "d.js": { __KEYS: [] },
-	//                                        "e.js": { __KEYS: [] },
-	//                                        __KEYS: ["d.js", "e.js"]
-	//                                 },
-	//                                 __KEYS: ["a.js", "c"]
-	//                               },
-	//                          __KEYS: ["p"]
-	//                        },
-	//   "https__example2.com": {
-	//                            "b.js": { __KEYS: [] },
-	//                            _KEYS: ["b.js"]
-	//                          },
-	//   __KEYS: ["http__example.com", "https__example2.com"]
-	// }
-
-	function uris2meta(uris) {
-	  var meta = {
-	    __KEYS: []
-	  }
-
-	  for (var i = 0, len = uris.length; i < len; i++) {
-	    var parts = uris[i].replace("://", "__").split("/")
-	    var m = meta
-
-	    for (var j = 0, l = parts.length; j < l; j++) {
-	      var part = parts[j]
-
-	      if (!m[part]) {
-	        m[part] = {
-	          __KEYS: []
-	        }
-	        m.__KEYS.push(part)
-	      }
-	      m = m[part]
-	    }
-	  }
-
-	  return meta
-	}
-
-	// {
-	//   "http__example.com": {
-	//                          "p": {
-	//                                 "a.js": { __KEYS: [] },
-	//                                 "c": {
-	//                                        "d.js": { __KEYS: [] },
-	//                                        "e.js": { __KEYS: [] },
-	//                                        __KEYS: ["d.js", "e.js"]
-	//                                 },
-	//                                 __KEYS: ["a.js", "c"]
-	//                               },
-	//                          __KEYS: ["p"]
-	//                        },
-	//   "https__example2.com": {
-	//                            "b.js": { __KEYS: [] },
-	//                            _KEYS: ["b.js"]
-	//                          },
-	//   __KEYS: ["http__example.com", "https__example2.com"]
-	// }
-	// ==>
-	// [
-	//   ["http://example.com/p", ["a.js", "c/d.js", "c/e.js"]]
-	// ]
-
-	function meta2paths(meta) {
-	  var paths = []
-	  var __KEYS = meta.__KEYS
-
-	  for (var i = 0, len = __KEYS.length; i < len; i++) {
-	    var part = __KEYS[i]
-	    var root = part
-	    var m = meta[part]
-	    var KEYS = m.__KEYS
-
-	    while (KEYS.length === 1) {
-	      root += "/" + KEYS[0]
-	      m = m[KEYS[0]]
-	      KEYS = m.__KEYS
-	    }
-
-	    if (KEYS.length) {
-	      paths.push([root.replace("__", "://"), meta2arr(m)])
-	    }
-	  }
-
-	  return paths
-	}
-
-	// {
-	//   "a.js": { __KEYS: [] },
-	//   "c": {
-	//          "d.js": { __KEYS: [] },
-	//          "e.js": { __KEYS: [] },
-	//          __KEYS: ["d.js", "e.js"]
-	//        },
-	//   __KEYS: ["a.js", "c"]
-	// }
-	// ==>
-	// [
-	//   "a.js", "c/d.js", "c/e.js"
-	// ]
-
-	function meta2arr(meta) {
-	  var arr = []
-	  var __KEYS = meta.__KEYS
-
-	  for (var i = 0, len = __KEYS.length; i < len; i++) {
-	    var key = __KEYS[i]
-	    var r = meta2arr(meta[key])
-
-	    // key = "c"
-	    // r = ["d.js", "e.js"]
-	    var m = r.length
-	    if (m) {
-	      for (var j = 0; j < m; j++) {
-	        arr.push(key + "/" + r[j])
-	      }
-	    } else {
-	      arr.push(key)
-	    }
-	  }
-
-	  return arr
-	}
-
-	// [
-	//   [ "http://example.com/p", ["a.js", "c/d.js", "c/e.js", "a.css", "b.css"] ]
-	// ]
-	// ==>
-	//
-	// a hash cache
-	//
-	// "http://example.com/p/a.js"  ==> "http://example.com/p/??a.js,c/d.js,c/e.js"
-	// "http://example.com/p/c/d.js"  ==> "http://example.com/p/??a.js,c/d.js,c/e.js"
-	// "http://example.com/p/c/e.js"  ==> "http://example.com/p/??a.js,c/d.js,c/e.js"
-	// "http://example.com/p/a.css"  ==> "http://example.com/p/??a.css,b.css"
-	// "http://example.com/p/b.css"  ==> "http://example.com/p/??a.css,b.css"
-	//
-
-	function paths2hash(paths) {
-	  for (var i = 0, len = paths.length; i < len; i++) {
-	    var path = paths[i]
-	    var root = path[0] + "/"
-
-	    // 考虑到benchmark 注释掉分组逻辑
-	    // var group = files2group(path[1])
-
-	    // for (var j = 0, m = group.length; j < m; j++) {
-	    //   setHash(root, group[j])
-	    // }
-	    setHash(root, path[1]);
-	  }
-
-	  return comboHash
-	}
-
-	function setHash(root, files) {
-	  var copy = []
-	  for (var i = 0, len = files.length; i < len; i++) {
-	    copy[i] = files[i].replace(/\?.*$/, '')
-	  }
-	  var comboPath = root + comboSyntax[0] + copy.join(comboSyntax[1])
-	  if(comboSuffix) {
-	    comboPath += comboSuffix
-	  }
-	  var exceedMax = comboPath.length > comboMaxLength
-
-	  // http://stackoverflow.com/questions/417142/what-is-the-maximum-length-of-a-url
-	  if (files.length > 1 && exceedMax) {
-	    var parts = splitFiles(files,
-	      comboMaxLength - (root + comboSyntax[0]).length)
-
-	    setHash(root, parts[0])
-	    setHash(root, parts[1])
-	  } else {
-	    if (exceedMax) {
-	      throw new Error("The combo url is too long: " + comboPath)
-	    }
-
-	    for (var i = 0, len = files.length; i < len; i++) {
-	      comboHash[root + files[i]] = comboPath
-	    }
-	  }
-	}
-
-	function splitFiles(files, filesMaxLength) {
-	  var sep = comboSyntax[1]
-	  var s = files[0]
-
-	  for (var i = 1, len = files.length; i < len; i++) {
-	    s += sep + files[i]
-	    if (s.length > filesMaxLength) {
-	      return [files.splice(0, i), files]
-	    }
-	  }
-	}
-
-	//
-	//  ["a.js", "c/d.js", "c/e.js", "a.css", "b.css", "z"]
-	// ==>
-	//  [ ["a.js", "c/d.js", "c/e.js"], ["a.css", "b.css"] ]
-	//
-
-	// function files2group(files) {
-	//   var group = []
-	//   var hash = {}
-
-	//   for (var i = 0, len = files.length; i < len; i++) {
-	//     var file = files[i]
-	//     var ext = getExt(file)
-	//     if (ext) {
-	//       (hash[ext] || (hash[ext] = [])).push(file)
-	//     }
-	//   }
-
-	//   for (var k in hash) {
-	//     if (hash.hasOwnProperty(k)) {
-	//       group.push(hash[k])
-	//     }
-	//   }
-
-	//   return group
-	// }
-
-	// function getExt(file) {
-	//   var p = file.lastIndexOf(".")
-	//   return p >= 0 ? file.substring(p) : ""
-	// }
-
-/***/ },
-/* 16 */
-/***/ function(module, exports) {
-
-	module.exports = uniq_objmap;
-
-	function uniq_objmap(arr)
-	{
-		var map = {};
-		var newArr = [];
-
-		for(var i = arr.length; i--;)
-		{
-			if (!map[arr[i]])
-			{
-				map[arr[i]] = true;
-				newArr.push(arr[i]);
-			}
-		}
-
-		return newArr;
-	}
-
-
-/***/ },
-/* 17 */
-/***/ function(module, exports) {
-
-	module.exports = uniq_arrmap;
-
-	function uniq_arrmap(arr)
-	{
-		var result = [];
-		for(var i = arr.length; i--;)
-		{
-			result[arr[i]] = true;
-		}
-
-		var result2 = [];
-		for(var i = result.length; i--;)
-		{
-			if (result[i])
-			{
-				result2.push(i);
-			}
-		}
-	}
-
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)(module), (function() { return this; }())))
 
 /***/ }
 /******/ ]);

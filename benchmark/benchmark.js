@@ -1,10 +1,21 @@
-var Benchmark = require('benchmark');
 var stringify = require('../lib/stringify');
 var indexs2path = require('./indexs2path');
 var seajsCombo = require('./seajs-combo-sethash');
 var uniq_objmap = require('./uniq_objmap');
 var uniq_arrmap = require('./uniq_arrmap');
 var DEF = require('../lib/def');
+
+// Suppress warnings and errors logged by benchmark.js when bundled using webpack.
+// https://github.com/bestiejs/benchmark.js/issues/106
+var Benchmark = require('benchmark').runInContext(
+	{
+		'_': require('lodash'),
+		'platform': require('platform')
+	});
+
+// 修正karma中运行，需要window下的全局Benchmark
+if (typeof window == 'object') window.Benchmark = Benchmark;
+
 
 var list51 = [12, 33, 200, 800, 10000];
 var list52 = [

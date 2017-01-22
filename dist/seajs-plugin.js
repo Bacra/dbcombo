@@ -44,25 +44,15 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(18);
+	module.exports = __webpack_require__(11);
 
 
 /***/ },
 /* 1 */,
-/* 2 */,
-/* 3 */,
-/* 4 */,
-/* 5 */,
-/* 6 */,
-/* 7 */,
-/* 8 */,
-/* 9 */,
-/* 10 */,
-/* 11 */,
-/* 12 */
+/* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var DEF = __webpack_require__(13);
+	var DEF = __webpack_require__(3);
 	var EACH_GROUP_FILE_NUM = DEF.EACH_GROUP_FILE_NUM;
 	var MAX_GROUP_KEY_LENGTH = DEF.MAX_GROUP_KEY_LENGTH;
 	var MAX_GROUP_URI = DEF.MAX_GROUP_URI;
@@ -214,7 +204,7 @@
 
 
 /***/ },
-/* 13 */
+/* 3 */
 /***/ function(module, exports) {
 
 	var EACH_GROUP_FILE_NUM = exports.EACH_GROUP_FILE_NUM = 31;
@@ -225,23 +215,26 @@
 
 
 /***/ },
-/* 14 */,
-/* 15 */,
-/* 16 */,
-/* 17 */,
-/* 18 */
+/* 4 */,
+/* 5 */,
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */,
+/* 10 */,
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(19);
-	__webpack_require__(23);
+	__webpack_require__(12);
+	__webpack_require__(16);
 
 
 /***/ },
-/* 19 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var DBComboClient = __webpack_require__(20);
-	var Config = __webpack_require__(22);
+	var DBComboClient = __webpack_require__(13);
+	var Config = __webpack_require__(15);
 
 	var data = seajs.data;
 	var Module = seajs.Module;
@@ -516,20 +509,20 @@
 
 
 /***/ },
-/* 20 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = {
-		stringify: __webpack_require__(12),
-		parse: __webpack_require__(21)
+		stringify: __webpack_require__(2),
+		parse: __webpack_require__(14)
 	};
 
 
 /***/ },
-/* 21 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var DEF = __webpack_require__(13);
+	var DEF = __webpack_require__(3);
 	var EACH_GROUP_FILE_NUM = DEF.EACH_GROUP_FILE_NUM;
 	var MAX_GROUP_KEY_LENGTH = DEF.MAX_GROUP_KEY_LENGTH;
 	var MATH_LOGE2 = Math.log(2);
@@ -638,7 +631,7 @@
 
 
 /***/ },
-/* 22 */
+/* 15 */
 /***/ function(module, exports) {
 
 	var Module = seajs.Module;
@@ -697,11 +690,11 @@
 
 
 /***/ },
-/* 23 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var DBComboClient = __webpack_require__(20);
-	var ComboPlugin = __webpack_require__(19);
+	var DBComboClient = __webpack_require__(13);
+	var ComboPlugin = __webpack_require__(12);
 	var delayUriMap = {};
 	var data = seajs.data;
 	var Module = seajs.Module;

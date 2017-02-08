@@ -6,10 +6,16 @@ describe('#stringify', function()
 {
 	it('#base', function()
 	{
-		expect(stringify([0])).to.be('Y1');
-		expect(stringify([1])).to.be('Y2');
+		var vals = ["Y1", "Y2", "Y4", "Y8", "Yg", "Y10", "Y20", "Y40", "Y80", "Yg0", "Y100", "Y200", "Y400", "Y800", "Yg00", "Y1000", "Y2000", "Y4000", "Y8000", "Yg000", "Y10000", "Y20000", "Y40000", "Y80000", "Yg0000", "Y100000", "Y200000", "Y400000", "Y800000", "Yg00000", "1000000", "Y1Z", "Y2Z"];
+
+		for(var i = DEF.EACH_GROUP_FILE_NUM + 2; i--;)
+		{
+			expect(stringify([i])).to.be(vals[i]);
+		}
+
 		expect(stringify([0,1])).to.be('Y3');
 		expect(stringify([0, 30])).to.be('1000001');
+		expect(stringify([31, 30])).to.be('Y11000000');
 		expect(stringify([0, 31])).to.be('Y1Y1');
 		expect(stringify([0, 31, 31])).to.be('Y1Y1');
 		expect(stringify([0, 31, 92, 93, 94])).to.be('Y31000000Y1Y1');

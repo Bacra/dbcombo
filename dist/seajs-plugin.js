@@ -48,15 +48,15 @@
 
 
 /***/ },
-/* 1 */,
-/* 2 */
+/* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var DEF = __webpack_require__(3);
+	var DEF = __webpack_require__(2);
 	var EACH_GROUP_FILE_NUM = DEF.EACH_GROUP_FILE_NUM;
 	var MAX_GROUP_KEY_LENGTH = DEF.MAX_GROUP_KEY_LENGTH;
 	var MAX_GROUP_URI = DEF.MAX_GROUP_URI;
 	var MAX_NOT_REPEAT_GROUP_MARK = 4;
+	var MIN_FULL_GROUP_KEY_LENGTH = DEF.MIN_FULL_GROUP_KEY_LENGTH;
 
 	// console.log('DEFIND,%d,%d,%d,%d', EACH_GROUP_FILE_NUM, MAX_GROUP_KEY_LENGTH, MAX_GROUP_URI, MAX_NOT_REPEAT_GROUP_MARK);
 
@@ -135,14 +135,17 @@
 			}
 		}
 
-		for(var i = groups.length; i--;)
+		for(var i = groups.length, val; i--;)
 		{
 			if (groups[i])
 			{
 				ZXHandler();
-				var tmp = groups[i].toString(32);
-				if (tmp.length < 7) tmp = 'Y'+tmp;
-				str += tmp;
+
+				val = groups[i];
+				if (val < MIN_FULL_GROUP_KEY_LENGTH)
+					str += 'Y'+val.toString(32);
+				else
+					str += val.toString(32);
 			}
 			else
 			{
@@ -204,17 +207,27 @@
 
 
 /***/ },
-/* 3 */
+/* 2 */
 /***/ function(module, exports) {
 
-	var EACH_GROUP_FILE_NUM = exports.EACH_GROUP_FILE_NUM = 31;
-	var MAX_GROUP_KEY_LENGTH = exports.MAX_GROUP_KEY_LENGTH = Math.pow(2, EACH_GROUP_FILE_NUM).toString(32).length;
+	var HEX = 32;
+	var EACH_GROUP_FILE_NUM = exports.EACH_GROUP_FILE_NUM = HEX-1;
+
+
+	var MAX_GROUP_KEY_LENGTH = exports.MAX_GROUP_KEY_LENGTH = Math.pow(2, EACH_GROUP_FILE_NUM).toString(HEX).length;
+
+	// 只有>= 这个key，才能达到MAX_GROUP_KEY_LENGTH表示长度
+	var MAX_ONE_KEY = (HEX-1).toString(HEX);
+	var MIN_FULL_GROUP_KEY = new Array(MAX_GROUP_KEY_LENGTH).join(MAX_ONE_KEY);
+	exports.MIN_FULL_GROUP_KEY_LENGTH = parseInt(MIN_FULL_GROUP_KEY, HEX)+1;
+
 	// 受到文件夹长度限制
 	// http://stackoverflow.com/questions/14500893/is-the-255-char-limit-for-filenames-on-windows-and-unix-the-whole-path-or-part
 	exports.MAX_GROUP_URI = 250/MAX_GROUP_KEY_LENGTH | 0;
 
 
 /***/ },
+/* 3 */,
 /* 4 */,
 /* 5 */,
 /* 6 */,
@@ -513,7 +526,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = {
-		stringify: __webpack_require__(2),
+		stringify: __webpack_require__(1),
 		parse: __webpack_require__(14)
 	};
 
@@ -522,7 +535,7 @@
 /* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var DEF = __webpack_require__(3);
+	var DEF = __webpack_require__(2);
 	var EACH_GROUP_FILE_NUM = DEF.EACH_GROUP_FILE_NUM;
 	var MAX_GROUP_KEY_LENGTH = DEF.MAX_GROUP_KEY_LENGTH;
 	var MATH_LOGE2 = Math.log(2);

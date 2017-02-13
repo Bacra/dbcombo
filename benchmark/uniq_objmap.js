@@ -3,16 +3,17 @@ module.exports = uniq_objmap;
 function uniq_objmap(arr)
 {
 	var map = {};
-	var newArr = [];
+	var result = [];
 
-	for(var i = arr.length; i--;)
+	for(var i = arr.length, item; i--;)
 	{
-		if (!map[arr[i]])
+		item = arr[i];
+		if (!map[item])
 		{
-			map[arr[i]] = true;
-			newArr.push(arr[i]);
+			map[item] = true;
+			result.push(item);
 		}
 	}
 
-	return newArr;
+	return result;
 }

@@ -12,7 +12,7 @@ module.exports = function(config)
 
 		// frameworks to use
 		// available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-		frameworks: ['mocha'],
+		frameworks: ['mocha', 'browserify'],
 
 
 		// list of files / patterns to load in the browser
@@ -33,8 +33,13 @@ module.exports = function(config)
 		// available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
 		preprocessors:
 		{
-			'**/test_*.js': ['webpack'],
-			'browser/init-seajs.js': ['webpack'],
+			'**/test_*.js': ['browserify'],
+			'browser/init-seajs.js': ['browserify'],
+		},
+
+		browserify:
+		{
+			debug: true,
 		},
 
 

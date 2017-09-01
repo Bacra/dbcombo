@@ -90,9 +90,9 @@ var browsers =
 var groups =
 {
 	ie: [
-		'sl_ie6',
-		'sl_ie7',
-		'sl_ie8',
+		// 'sl_ie6',
+		// 'sl_ie7',
+		// 'sl_ie8',
 		'sl_ie9',
 		'sl_ie11'
 	],

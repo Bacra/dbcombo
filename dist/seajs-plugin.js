@@ -718,14 +718,14 @@
 
 	function saveRequestData(emitData)
 	{
-		var item = !emitData.requested
+		var delayItem = !emitData.requested
 				&& data.DBComboDelayRequest
 				&& delayUriMap[emitData.requestUri];
 
-		if (item)
+		if (delayItem)
 		{
 			emitData.requested	= true;
-			item.emitData		= emitData;
+			delayItem.emitData		= emitData;
 		}
 	}
 
@@ -751,14 +751,15 @@
 
 		var type = emitData.DBComboRequestData.type;
 		var list = delays[type] || (delays[type] = []);
-		var emitData =
+		var delayItem =
 			{
 				requestUri: emitData.requestUri,
-				groups: emitData.DBComboRequestData.groups
+				groups: emitData.DBComboRequestData.groups,
+				emitData: emitData
 			};
 
-		list.push(emitData);
-		delayUriMap[emitData.requestUri] = emitData;
+		list.push(delayItem);
+		delayUriMap[emitData.requestUri] = delayItem;
 
 		if (!delayWait) delayWait = setTimeout(requestAll);
 	}
@@ -785,16 +786,16 @@
 
 		for(var i = list.length; i--;)
 		{
-			var item = list[i];
-			if (item.groups)
+			var delayItem = list[i];
+			if (delayItem.groups)
 			{
-				charset || (charset = item.emitData.charset);
-				groups.push(item.groups);
-				callbacks.push(item.emitData.onRequest);
+				charset || (charset = delayItem.emitData.charset);
+				groups.push(delayItem.groups);
+				callbacks.push(delayItem.emitData.onRequest);
 			}
 			else
 			{
-				seajs.request(item.requestUri, item.emitData.onRequest, item.emitData.charset);
+				seajs.request(delayItem.requestUri, delayItem.emitData.onRequest, delayItem.emitData.charset);
 			}
 		}
 

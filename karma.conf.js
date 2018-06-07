@@ -27,16 +27,19 @@ module.exports = function(config)
 	{
 		custom.basePath = 'benchmark/';
 		custom.files = ['benchmark.js'];
-		custom.frameworks = [];
+		custom.frameworks = ['browserify'];
 		// 不要并发，减少浏览器之间的相互影响
 		custom.concurrency = 1;
 
 		// custom.frameworks = ['benchmark'];
 		// custom.reporters = ['benchmark'];
-		custom.webpack = require('./test/build/webpack.base.conf.js');
 		custom.preprocessors =
 		{
-			'benchmark.js': ['webpack']
+			'benchmark.js': ['browserify']
+		};
+		custom.browserify =
+		{
+			debug: true,
 		};
 	}
 

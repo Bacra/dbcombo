@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = indexs2hash;
 
 function indexs2hash(indexs)
@@ -27,4 +29,3 @@ function indexs2hash(indexs)
 
   return result.join('/');
 }
-

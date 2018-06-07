@@ -1,3 +1,5 @@
+'use strict';
+
 var expect		= require('expect.js');
 var stringify	= require('../').stringify;
 var DEF			= require('../lib/def');

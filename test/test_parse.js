@@ -1,3 +1,5 @@
+'use strict';
+
 var expect	= require('expect.js');
 var parse	= require('../').parse;
 var DEF		= require('../lib/def');

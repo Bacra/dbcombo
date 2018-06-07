@@ -1,3 +1,5 @@
+'use strict';
+
 // Browsers to run on Sauce Labs
 // Check out https://saucelabs.com/platforms for all browser/OS combos
 var browsers =

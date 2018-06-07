@@ -1,3 +1,5 @@
+'use strict';
+
 var Module = seajs.Module;
 var DBComboIndex2uriData = exports.DBComboIndex2uriData = seajs.data.DBComboIndex2uriData = {};
 exports.DBComboIndexHandler = DBComboIndexHandlerDefault;
@@ -50,4 +52,3 @@ function setConfig(options)
 			exports.DBComboFile = null;
 	}
 }
-

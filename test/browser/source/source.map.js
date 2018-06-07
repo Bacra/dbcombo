@@ -1,3 +1,5 @@
+'use strict';
+
 var depsArr = [
 	null,		// 0, [0]
 	[0],		// 1, [0, 1]

@@ -1,3 +1,5 @@
+'use strict';
+
 var sea = require('seajs/dist/sea-debug.js');
 var seajs = module.exports = window.seajs = sea.seajs;
 window.define = sea.define;

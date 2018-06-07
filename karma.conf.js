@@ -1,3 +1,5 @@
+'use strict';
+
 // Karma configuration
 var extend = require('extend');
 var baseConfig = require('./test/build/karma.base.conf.js');

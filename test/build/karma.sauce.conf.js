@@ -1,3 +1,5 @@
+'use strict';
+
 var pkg = require('../../package.json');
 var browsers = require('./sl_browsers.js');
 

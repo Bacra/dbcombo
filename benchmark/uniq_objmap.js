@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = uniq_objmap;
 
 function uniq_objmap(arr)

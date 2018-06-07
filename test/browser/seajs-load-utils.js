@@ -1,3 +1,5 @@
+'use strict';
+
 var Promise = require('bluebird');
 
 exports.initAndClearSeajsModuleCache = function initAndClearSeajsModuleCache(name, subtitle)
@@ -8,7 +10,7 @@ exports.initAndClearSeajsModuleCache = function initAndClearSeajsModuleCache(nam
 
 	// 清理数据
 	seajs.DBComboIgnoreExtDepsIndexs.splice(0, seajs.DBComboIgnoreExtDepsIndexs.length);
-	
+
 	// 构建新的db目录
 	var dirname;
 	if (name)

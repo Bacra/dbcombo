@@ -1,3 +1,5 @@
+'use strict';
+
 var expect = require('expect.js');
 var loadUtils = require('./seajs-load-utils');
 
@@ -53,4 +55,3 @@ describe('#deps', function()
 			});
 	});
 });
-

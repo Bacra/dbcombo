@@ -1,5 +1,7 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
+'use strict';
+
 var stringify = require('../lib/stringify');
 var indexs2path = require('./indexs2path');
 var seajsCombo = require('./seajs-combo-sethash');
@@ -257,6 +259,8 @@ else
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"../lib/def":6,"../lib/stringify":7,"./indexs2path":2,"./seajs-combo-sethash":3,"./uniq_arrmap":4,"./uniq_objmap":5,"benchmark":8,"lodash":9,"platform":10}],2:[function(require,module,exports){
+'use strict';
+
 module.exports = indexs2hash;
 
 function indexs2hash(indexs)
@@ -287,8 +291,9 @@ function indexs2hash(indexs)
   return result.join('/');
 }
 
-
 },{}],3:[function(require,module,exports){
+'use strict';
+
 module.exports = function(needComboUris)
 {
   return paths2hash(uris2paths(needComboUris));
@@ -547,7 +552,10 @@ function splitFiles(files, filesMaxLength) {
 //   var p = file.lastIndexOf(".")
 //   return p >= 0 ? file.substring(p) : ""
 // }
+
 },{}],4:[function(require,module,exports){
+'use strict';
+
 module.exports = uniq_arrmap;
 
 function uniq_arrmap(arr)
@@ -569,6 +577,8 @@ function uniq_arrmap(arr)
 }
 
 },{}],5:[function(require,module,exports){
+'use strict';
+
 module.exports = uniq_objmap;
 
 function uniq_objmap(arr)
@@ -590,6 +600,8 @@ function uniq_objmap(arr)
 }
 
 },{}],6:[function(require,module,exports){
+'use strict';
+
 var HEX = 32;
 var EACH_GROUP_FILE_NUM = exports.EACH_GROUP_FILE_NUM = HEX-1;
 
@@ -606,6 +618,8 @@ exports.MIN_FULL_GROUP_KEY_LENGTH = parseInt(MIN_FULL_GROUP_KEY, HEX)+1;
 exports.MAX_GROUP_URI = 250/MAX_GROUP_KEY_LENGTH | 0;
 
 },{}],7:[function(require,module,exports){
+'use strict';
+
 var DEF = require('./def.js');
 var EACH_GROUP_FILE_NUM = DEF.EACH_GROUP_FILE_NUM;
 var MAX_GROUP_KEY_LENGTH = DEF.MAX_GROUP_KEY_LENGTH;

@@ -1,3 +1,5 @@
+'use strict';
+
 var DBComboClient = require('../');
 var ComboPlugin = require('./seajs-plugin-combo');
 var delayUriMap = {};

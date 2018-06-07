@@ -1,3 +1,5 @@
+'use strict';
+
 var DBComboClient = require('../');
 var Config = require('./seajs-plugin-base');
 

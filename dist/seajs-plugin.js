@@ -1,10 +1,15 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-module.exports = {
+'use strict';
+
+module.exports =
+{
 	stringify: require('./lib/stringify'),
 	parse: require('./lib/parse')
 };
 
 },{"./lib/parse":3,"./lib/stringify":4}],2:[function(require,module,exports){
+'use strict';
+
 var HEX = 32;
 var EACH_GROUP_FILE_NUM = exports.EACH_GROUP_FILE_NUM = HEX-1;
 
@@ -21,6 +26,8 @@ exports.MIN_FULL_GROUP_KEY_LENGTH = parseInt(MIN_FULL_GROUP_KEY, HEX)+1;
 exports.MAX_GROUP_URI = 250/MAX_GROUP_KEY_LENGTH | 0;
 
 },{}],3:[function(require,module,exports){
+'use strict';
+
 var DEF = require('./def');
 var EACH_GROUP_FILE_NUM = DEF.EACH_GROUP_FILE_NUM;
 var MAX_GROUP_KEY_LENGTH = DEF.MAX_GROUP_KEY_LENGTH;
@@ -129,6 +136,8 @@ exports.groups2indexs = groups2indexs;
 exports.maxIndexInGroup = maxIndexInGroup;
 
 },{"./def":2}],4:[function(require,module,exports){
+'use strict';
+
 var DEF = require('./def.js');
 var EACH_GROUP_FILE_NUM = DEF.EACH_GROUP_FILE_NUM;
 var MAX_GROUP_KEY_LENGTH = DEF.MAX_GROUP_KEY_LENGTH;
@@ -284,6 +293,8 @@ exports.groups2str = groups2str;
 exports.mergeGroups = mergeGroups;
 
 },{"./def.js":2}],5:[function(require,module,exports){
+'use strict';
+
 var Module = seajs.Module;
 var DBComboIndex2uriData = exports.DBComboIndex2uriData = seajs.data.DBComboIndex2uriData = {};
 exports.DBComboIndexHandler = DBComboIndexHandlerDefault;
@@ -337,8 +348,9 @@ function setConfig(options)
 	}
 }
 
-
 },{}],6:[function(require,module,exports){
+'use strict';
+
 var DBComboClient = require('../');
 var Config = require('./seajs-plugin-base');
 
@@ -614,6 +626,8 @@ function isComboUri(uri)
 }
 
 },{"../":1,"./seajs-plugin-base":5}],7:[function(require,module,exports){
+'use strict';
+
 var DBComboClient = require('../');
 var ComboPlugin = require('./seajs-plugin-combo');
 var delayUriMap = {};
@@ -750,6 +764,8 @@ Module.use = function(ids, callbacks, uri)
 };
 
 },{"../":1,"./seajs-plugin-combo":6}],8:[function(require,module,exports){
+'use strict';
+
 require('./seajs-plugin-combo');
 require('./seajs-plugin-delay');
 

@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = uniq_arrmap;
 
 function uniq_arrmap(arr)

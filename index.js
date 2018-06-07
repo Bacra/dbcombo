@@ -1,4 +1,7 @@
-module.exports = {
+'use strict';
+
+module.exports =
+{
 	stringify: require('./lib/stringify'),
 	parse: require('./lib/parse')
 };

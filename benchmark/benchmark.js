@@ -1,3 +1,5 @@
+'use strict';
+
 var stringify = require('../lib/stringify');
 var indexs2path = require('./indexs2path');
 var seajsCombo = require('./seajs-combo-sethash');

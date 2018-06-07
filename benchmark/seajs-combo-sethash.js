@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = function(needComboUris)
 {
   return paths2hash(uris2paths(needComboUris));

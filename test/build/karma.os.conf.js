@@ -2,7 +2,7 @@
 
 var os = require('os');
 
-module.exports = function(config)
+module.exports = function()
 {
 	var browsers = ['Chrome', 'Firefox'];
 	var platform = os.platform();

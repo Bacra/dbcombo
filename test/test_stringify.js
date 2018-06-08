@@ -1,3 +1,5 @@
+/* global describe it */
+
 'use strict';
 
 var expect		= require('expect.js');
@@ -59,12 +61,14 @@ describe('#stringify', function()
 
 	it('#indexs2groups', function()
 	{
+		/* eslint no-sparse-arrays: off */
 		expect(stringify.indexs2groups([0])).to.eql([1]);
 		expect(stringify.indexs2groups([0, 3, 93, 94])).to.eql([9, , , 3]);
 	});
 
 	it('#mergeGroups', function()
 	{
+		/* eslint no-sparse-arrays: off */
 		expect(stringify.mergeGroups([])).to.eql([]);
 		expect(stringify.mergeGroups()).to.eql([]);
 		expect(stringify.mergeGroups([1])).to.eql([1]);

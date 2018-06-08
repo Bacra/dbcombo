@@ -8,7 +8,6 @@ var Module = seajs.Module;
 var STATUS = Module.STATUS;
 var DBComboRequestUriMap = data.DBComboRequestUriMap = {};
 var DBComboIgnoreExtDepsIndexs = seajs.DBComboIgnoreExtDepsIndexs = [];
-var push = Array.prototype.push;
 var isLoadInRequest = false;
 
 seajs.on('load', comboLoadhandler);
@@ -250,7 +249,7 @@ function typeGroup(files)
 	return types;
 }
 
-var extReg = /\.[^\.\s]+$/;
+var extReg = /\.[^.\s]+$/;
 function getExt(file)
 {
 	var m = file.match(extReg);

@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 'use strict';
 
 module.exports =
@@ -140,7 +140,6 @@ exports.maxIndexInGroup = maxIndexInGroup;
 
 var DEF = require('./def.js');
 var EACH_GROUP_FILE_NUM = DEF.EACH_GROUP_FILE_NUM;
-var MAX_GROUP_KEY_LENGTH = DEF.MAX_GROUP_KEY_LENGTH;
 var MAX_GROUP_URI = DEF.MAX_GROUP_URI;
 var MAX_NOT_REPEAT_GROUP_MARK = 4;
 var MIN_FULL_GROUP_KEY_LENGTH = DEF.MIN_FULL_GROUP_KEY_LENGTH;
@@ -260,7 +259,6 @@ function mergeGroups()
 	var args = arguments;
 	var argsLength = args.length;
 	var newGroups = [];
-	var lengths = [];
 	var maxLength = 0;
 
 	// group的最大长度
@@ -274,10 +272,10 @@ function mergeGroups()
 	{
 		var groupResult = 0;
 
-		for(var i = argsLength, item; i--;)
+		for(var i2 = argsLength, item2; i2--;)
 		{
-			item = args[i][index];
-			if (item) groupResult |= item;
+			item2 = args[i2][index];
+			if (item2) groupResult |= item2;
 		}
 
 		newGroups[index] = groupResult;
@@ -359,7 +357,6 @@ var Module = seajs.Module;
 var STATUS = Module.STATUS;
 var DBComboRequestUriMap = data.DBComboRequestUriMap = {};
 var DBComboIgnoreExtDepsIndexs = seajs.DBComboIgnoreExtDepsIndexs = [];
-var push = Array.prototype.push;
 var isLoadInRequest = false;
 
 seajs.on('load', comboLoadhandler);
@@ -601,7 +598,7 @@ function typeGroup(files)
 	return types;
 }
 
-var extReg = /\.[^\.\s]+$/;
+var extReg = /\.[^.\s]+$/;
 function getExt(file)
 {
 	var m = file.match(extReg);

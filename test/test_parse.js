@@ -1,3 +1,5 @@
+/* global describe it */
+
 'use strict';
 
 var expect	= require('expect.js');
@@ -10,6 +12,7 @@ describe('#parse', function()
 	{
 		it('#normal', function()
 		{
+			/* eslint no-sparse-arrays: off */
 			assertGroups('1', [1]);
 			assertGroups('Y1', [1]);
 			assertGroups('YY1', [1]);

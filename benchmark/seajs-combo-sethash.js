@@ -6,10 +6,9 @@ module.exports = function(needComboUris)
 }
 
 var comboHash = {};
-var comboSyntax = ["??", ","]
-var comboMaxLength = 2000
-var comboExcludes
-var comboSuffix
+var comboSyntax = ["??", ","];
+var comboMaxLength = 2000;
+var comboSuffix;
 
 
 // Helpers
@@ -209,8 +208,8 @@ function setHash(root, files) {
       throw new Error("The combo url is too long: " + comboPath)
     }
 
-    for (var i = 0, len = files.length; i < len; i++) {
-      comboHash[root + files[i]] = comboPath
+    for (var i2 = 0, len2 = files.length; i2 < len2; i2++) {
+      comboHash[root + files[i2]] = comboPath;
     }
   }
 }

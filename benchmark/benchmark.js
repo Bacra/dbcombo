@@ -30,7 +30,6 @@ var list52 = [
 
 var indexMap = {};
 var indexArr = [];
-var i = 31;
 for(var i = DEF.EACH_GROUP_FILE_NUM; i--;)
 {
 	indexMap[i] = indexArr[i] = 1 << i;

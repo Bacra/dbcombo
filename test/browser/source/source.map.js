@@ -1,5 +1,6 @@
 'use strict';
 
+/* eslint no-sparse-arrays: off */
 var depsArr = [
 	null,		// 0, [0]
 	[0],		// 1, [0, 1]

@@ -6,48 +6,56 @@ var browsers =
 {
 	sl_chrome:
 	{
+		base		: 'SauceLabs',
 		browserName	: 'chrome',
 		platform	: 'Windows 10',
 		version		: 'beta'
 	},
 	sl_firefox:
 	{
+		base		: 'SauceLabs',
 		browserName	: 'firefox',
 		platform	: 'Windows 10',
 		version		: 'beta'
 	},
 	sl_safari:
 	{
+		base		: 'SauceLabs',
 		browserName	: 'safari',
 		platform	: 'macOS 10.13',
 		version		: '11.1'
 	},
 	sl_ie8:
 	{
+		base		: 'SauceLabs',
 		browserName	: 'internet explorer',
 		platform	: 'Windows 7',
 		version		: '8'
 	},
 	sl_ie9:
 	{
+		base		: 'SauceLabs',
 		browserName	: 'internet explorer',
 		platform	: 'Windows 7',
 		version		: '9'
 	},
 	sl_ie11:
 	{
+		base		: 'SauceLabs',
 		browserName	: 'internet explorer',
 		platform	: 'Windows 10',
 		version		: '11'
 	},
 	sl_edge:
 	{
+		base		: 'SauceLabs',
 		browserName	: 'MicrosoftEdge',
 		platform	: 'Windows 10',
 		version		: '16'
 	},
 	sl_ios_safari:
 	{
+		base				: 'SauceLabs',
 		browserName			: 'Safari',
 		deviceName			: 'iPhone Simulator',
 		deviceOrientation	: 'portrait',
@@ -55,6 +63,7 @@ var browsers =
 	},
 	sl_android:
 	{
+		base				: 'SauceLabs',
 		browserName			: 'Android Emulator',
 		deviceOrientation	: 'portrait',
 	}

@@ -19,7 +19,7 @@ npm install dbcombo-client --save
 
 ### In NodeJS
 
-```
+```javascript
 var DBComboClient = require('dbcombo-client');
 console.log(DBComboClient.stringify([0, 31, 93, 92, 94]));
 console.log(DBComboClient.parse('Y31000000Y1Y1'));
@@ -30,31 +30,31 @@ console.log(DBComboClient.parse('Y31000000Y1Y1'));
 
 ### Browser for Seajs
 
-```
+```html
 <script src="node_modules/dbcombo-client/dist/seajs-plugin.js"></script>
 ```
 
 Seajs Config
 
-```
+```javascript
 seajs.config(
 {
-	DBComboFileIndex: {},								// uri => {index, deps, file}
-	DBComboFile: 'http://www.example.com/db.js_db',		// dbfile uri, append merge key width it
-	DBComboFileExtname: '_db',							// ext dbfile uri, default "_db", set false to ignore 
-														//   Append extname for `db.js`.
-														//   Do not use `db.js` directly for combo uri.
-														//   A file can not be an folder and file simultaneously.
+    DBComboFileIndex: {},    // uri => {index, deps, file}
+    DBComboFile: 'http://www.example.com/db.js_db',    // dbfile uri, append merge key width it
+    DBComboFileExtname: '_db',    // ext dbfile uri, default "_db", set false to ignore
+                        // Append extname for `db.js`.
+                        // Do not use `db.js` directly for combo uri.
+                        // A file can not be an folder and file simultaneously.
 
-	DBComboExcludes: function(uri){return false},		// RegExp / Function
-	DBComboDelayRequest: true							// delay request for merge more deps
-	DBComboDelayRequestMaxUri: 30						// not merge when over max length
+    DBComboExcludes: function(uri){return false},    // RegExp / Function
+    DBComboDelayRequest: true,    // delay request for merge more deps
+    DBComboDelayRequestMaxUri: 30,    // not merge when over max length
 });
 ```
 
 Combo Uri Exapmle
 
-```
+```url
 http://www.example.com/db.js_db/Yg0W21X/W35X/W35X/W35X/W35X/V.js
 ```
 

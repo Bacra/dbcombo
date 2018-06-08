@@ -6,84 +6,57 @@ var browsers =
 {
 	sl_chrome:
 	{
-		base		: 'SauceLabs',
 		browserName	: 'chrome',
 		platform	: 'Windows 10',
-		version		: '35'
+		version		: 'beta'
 	},
 	sl_firefox:
 	{
-		base		: 'SauceLabs',
 		browserName	: 'firefox',
 		platform	: 'Windows 10',
-		version		: '35'
+		version		: 'beta'
 	},
 	sl_safari:
 	{
-		base		: 'SauceLabs',
 		browserName	: 'safari',
-		platform	: 'OS X 10.11',
-		version		: '10'
-	},
-	sl_ie6:
-	{
-		base		: 'SauceLabs',
-		browserName	: 'internet explorer',
-		platform	: 'Windows XP',
-		version		: '6'
-	},
-	sl_ie7:
-	{
-		base		: 'SauceLabs',
-		browserName	: 'internet explorer',
-		platform	: 'Windows XP',
-		version		: '7'
+		platform	: 'macOS 10.13',
+		version		: '11.1'
 	},
 	sl_ie8:
 	{
-		base		: 'SauceLabs',
 		browserName	: 'internet explorer',
-		platform	: 'Windows XP',
+		platform	: 'Windows 7',
 		version		: '8'
 	},
 	sl_ie9:
 	{
-		base		: 'SauceLabs',
 		browserName	: 'internet explorer',
 		platform	: 'Windows 7',
 		version		: '9'
 	},
 	sl_ie11:
 	{
-		base		: 'SauceLabs',
 		browserName	: 'internet explorer',
-		platform	: 'Windows 8.1',
+		platform	: 'Windows 10',
 		version		: '11'
 	},
 	sl_edge:
 	{
-		base		: 'SauceLabs',
 		browserName	: 'MicrosoftEdge',
 		platform	: 'Windows 10',
-		version		: '14'
+		version		: '16'
 	},
-	sl_ios_safari8:
+	sl_ios_safari:
 	{
-		base		: 'SauceLabs',
-		browserName	: 'iphone',
-		version		: '8.4'
+		browserName			: 'Safari',
+		deviceName			: 'iPhone Simulator',
+		deviceOrientation	: 'portrait',
+		platformName		: 'iOS'
 	},
-	sl_ios_safari9:
+	sl_android:
 	{
-		base		: 'SauceLabs',
-		browserName	: 'iphone',
-		version		: '9.3'
-	},
-	sl_android51:
-	{
-		base		: 'SauceLabs',
-		browserName	: 'android',
-		version		: '5.1'
+		browserName			: 'Android Emulator',
+		deviceOrientation	: 'portrait',
 	}
 };
 
@@ -92,9 +65,6 @@ var browsers =
 var groups =
 {
 	ie: [
-		// 'sl_ie6',
-		// 'sl_ie7',
-		// 'sl_ie8',
 		'sl_ie9',
 		'sl_ie11'
 	],
@@ -105,9 +75,8 @@ var groups =
 	],
 	mac: ['sl_safari'],
 	mobile: [
-		'sl_ios_safari8',
-		'sl_ios_safari9',
-		'sl_android51'
+		'sl_ios_safari',
+		'sl_android'
 	],
 	sauce: Object.keys(browsers)
 };

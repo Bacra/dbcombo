@@ -40,7 +40,7 @@ Seajs Config
 seajs.config(
 {
     DBComboFileIndex: {},    // uri => {index, deps, file}
-    DBComboFile: 'http://www.example.com/db.js_db',    // dbfile uri, append merge key width it
+    DBComboFile: 'http://www.example.com/db.js',    // dbfile uri, append merge key width it
     DBComboFileExtname: '_db',    // ext dbfile uri, default "_db", set false to ignore
                         // Append extname for `db.js`.
                         // Do not use `db.js` directly for combo uri.

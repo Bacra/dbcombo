@@ -83,25 +83,31 @@ var browsers =
 
 var groups =
 {
-	ie: [
+	sl_ie:
+	[
 		'sl_ie8',
 		'sl_ie9',
 		'sl_ie11'
 	],
-	pc: [
+	sl_dev: ['sl_chrome'],
+
+
+	sl_pc:
+	[
 		'sl_chrome',
 		'sl_firefox',
 		'sl_edge',
 		'sl_ie'
 	],
-	mac: ['sl_safari'],
-	mobile: [
+	sl_mac: ['sl_safari'],
+	sl_mobile:
+	[
 		'sl_ios_safari',
 		'sl_android'
 	],
 };
 
-groups.sauce = [].concat(groups.pc, groups.mac, groups.mobile);
+groups.sauce = [].concat(groups.sl_pc, groups.sl_mac, groups.sl_mobile);
 
 module.exports =
 {

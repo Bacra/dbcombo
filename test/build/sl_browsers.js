@@ -9,21 +9,19 @@ var browsers =
 		base		: 'SauceLabs',
 		browserName	: 'chrome',
 		platform	: 'Windows 10',
-		version		: 'beta'
 	},
 	sl_firefox:
 	{
 		base		: 'SauceLabs',
 		browserName	: 'firefox',
 		platform	: 'Windows 10',
-		version		: 'beta'
 	},
 	sl_safari:
 	{
 		base		: 'SauceLabs',
 		browserName	: 'safari',
-		platform	: 'macOS 10.13',
-		version		: '11.1'
+		// platform	: 'macOS',
+		platform	: 'OS X 10.10',
 	},
 	sl_ie8:
 	{
@@ -46,26 +44,38 @@ var browsers =
 		platform	: 'Windows 10',
 		version		: '11'
 	},
+	sl_ie:
+	{
+		base		: 'SauceLabs',
+		browserName	: 'internet explorer',
+		platform	: 'Windows 10',
+	},
 	sl_edge:
 	{
 		base		: 'SauceLabs',
 		browserName	: 'MicrosoftEdge',
 		platform	: 'Windows 10',
-		version		: '16'
 	},
 	sl_ios_safari:
 	{
-		base				: 'SauceLabs',
-		browserName			: 'Safari',
-		deviceName			: 'iPhone Simulator',
-		deviceOrientation	: 'portrait',
-		platformName		: 'iOS'
+		// base				: 'SauceLabs',
+		// browserName			: 'Safari',
+		// deviceName			: 'iPhone Simulator',
+		// deviceOrientation	: 'portrait',
+		// platformName		: 'iOS'
+
+		base		: 'SauceLabs',
+		browserName	: 'iphone',
+		version		: '10.3'
 	},
 	sl_android:
 	{
-		base				: 'SauceLabs',
-		browserName			: 'Android Emulator',
-		deviceOrientation	: 'portrait',
+		// base				: 'SauceLabs',
+		// browserName			: 'Android Emulator',
+		// deviceOrientation	: 'portrait',
+		base		: 'SauceLabs',
+		browserName	: 'android',
+		version		: '6.0'
 	}
 };
 
@@ -74,21 +84,24 @@ var browsers =
 var groups =
 {
 	ie: [
+		'sl_ie8',
 		'sl_ie9',
 		'sl_ie11'
 	],
 	pc: [
 		'sl_chrome',
 		'sl_firefox',
-		'sl_edge'
+		'sl_edge',
+		'sl_ie'
 	],
 	mac: ['sl_safari'],
 	mobile: [
 		'sl_ios_safari',
 		'sl_android'
 	],
-	sauce: Object.keys(browsers)
 };
+
+groups.sauce = [].concat(groups.pc, groups.mac, groups.mobile);
 
 module.exports =
 {

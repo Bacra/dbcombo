@@ -47,8 +47,8 @@ module.exports = function(config, browserGroup)
 		captureTimeout	: timeout,
 		browserNoActivityTimeout: timeout,
 		reporters: process.env.CI
-			? ['dots', 'saucelabs'] // avoid spamming CI output
-			: ['progress', 'saucelabs'],
+			? ['mocha', 'dots', 'saucelabs'] // avoid spamming CI output
+			: ['mocha', 'progress', 'saucelabs'],
 
 		sauceLabs:
 		{

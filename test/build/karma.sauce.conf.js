@@ -55,7 +55,30 @@ module.exports = function(config, browserGroup)
 			build				: browserGroup+'_'+buildId,
 			public				: 'public',
 			testName			: pkg.name,
+			tunnelIdentifier	: pkg.name+'_'+pkg.version,
+
+			// commandTimeout		: 300,
+			// idleTimeout			: 90,
+			// maxDuration			: 1800,
+
 			recordScreenshots	: false,
+			recordVideo			: false,
+
+			// @see https://wiki.saucelabs.com/display/DOCS/Test+Configuration+Options
+			options:
+			{
+				// recordScreenshots	: true,
+				// recordVideo			: true,
+				videoUploadOnPass	: false,
+				recordLogs			: true,
+				captureHtml			: false,
+				// priority			: 0,
+				extendedDebugging	: true,
+				// webdriverRemoteQuietExceptions: false,
+			},
+
+
+			// customData: {},
 			connectOptions:
 			{
 				// port: 5757,

@@ -1,6 +1,7 @@
 'use strict';
 
 // Karma configuration
+var debug = require('debug')('dbcombo-client:karma.conf');
 var extend = require('extend');
 var baseConfig = require('./test/build/karma.base.conf.js');
 var osConfig = require('./test/build/karma.os.conf.js');
@@ -13,6 +14,8 @@ module.exports = function(config)
 	var key = process.argv[4];
 	var base = baseConfig(config);
 	var custom;
+
+	debug('karma key:%s', key);
 
 	if (key == 'dev')
 		custom = devConfig(config);

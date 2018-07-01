@@ -1,3 +1,5 @@
+/* global window */
+
 'use strict';
 
 var stringify = require('../lib/stringify');

@@ -58,8 +58,16 @@ module.exports = function(config, browserGroup)
 			recordScreenshots	: false,
 			connectOptions:
 			{
-				port	: 5757,
-				logfile	: 'sauce_connect.log'
+				// port: 5757,
+				// logfile: 'sauce_connect.log',
+				'no-ssl-bump-domains': 'all',
+
+				// Log output from the `sc` process to stdout?
+				verbose: true,
+				// Enable verbose debugging (optional)
+				verboseDebugging: true,
+				// Together with verbose debugging will output HTTP headers as well (optional)
+				vv: true,
 			},
 		}
 	};

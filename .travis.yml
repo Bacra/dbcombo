@@ -38,7 +38,7 @@ matrix:
       addons:
         chrome: stable
       script:
-        - npm run test-e2e ChromeHeadless,ChromeCanaryHeadless
+        - npm run test-e2e Chrome_travis_ci
       after_script: # 删除之前配置
 
   fast_finish: true

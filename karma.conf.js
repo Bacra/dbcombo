@@ -17,10 +17,14 @@ module.exports = function(config)
 
 	debug('karma key:%s', key);
 
+	if (key == 'travis')
+	{
+		key = process.env.TRAVIS_BRANCH == 'master'
+			&& process.env.TRAVIS_EVENT_TYPE != 'cron' ? 'sl_chrome' : 'sauce';
+	}
+
 	if (key == 'dev')
 		custom = devConfig(config);
-	else if (key == 'travis')
-		custom = sauceConfig(config, key);
 	else if (browsers.groups[key])
 		custom = sauceConfig(config, key);
 	else

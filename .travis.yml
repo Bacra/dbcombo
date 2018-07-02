@@ -27,4 +27,4 @@ matrix:
     - node_js: stable
       addons:
         sauce_connect: true
-      script: npm run test-travis
+      script: npm run test-sauce-travis

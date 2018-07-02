@@ -5,13 +5,6 @@ var browsers = require('./sl_browsers.js');
 
 module.exports = function(config, browserGroup)
 {
-	// 如果
-	if (browserGroup == 'travis')
-	{
-		browserGroup = process.env.TRAVIS_BRANCH == 'master'
-			&& process.env.TRAVIS_EVENT_TYPE != 'cron' ? 'sl_chrome' : 'sauce';
-	}
-
 	// master 也运行
 	// if (process.env.TRAVIS_BRANCH && process.env.TRAVIS_BRANCH != 'sauce-runner')
 	// {

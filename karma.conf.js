@@ -20,7 +20,7 @@ module.exports = function(config)
 	if (key == 'travis')
 	{
 		key = process.env.TRAVIS_BRANCH == 'master'
-			&& process.env.TRAVIS_EVENT_TYPE != 'cron' ? 'sl_chrome' : 'sauce';
+			&& process.env.TRAVIS_EVENT_TYPE != 'cron' ? 'sl_dev' : 'sauce';
 	}
 
 	if (key == 'dev')

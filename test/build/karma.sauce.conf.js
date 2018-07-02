@@ -5,11 +5,19 @@ var browsers = require('./sl_browsers.js');
 
 module.exports = function(config, browserGroup)
 {
-	if (process.env.TRAVIS_BRANCH && process.env.TRAVIS_BRANCH != 'sauce-runner')
+	// 如果
+	if (browserGroup == 'travis')
 	{
-		console.log('Run sauce only sauce-runner branch.');
-		process.exit();
+		browserGroup = process.env.TRAVIS_BRANCH == 'master'
+			&& process.env.TRAVIS_EVENT_TYPE != 'cron' ? 'sl_chrome' : 'sauce';
 	}
+
+	// master 也运行
+	// if (process.env.TRAVIS_BRANCH && process.env.TRAVIS_BRANCH != 'sauce-runner')
+	// {
+	// 	console.log('Run sauce only sauce-runner branch.');
+	// 	process.exit();
+	// }
 
 	if (!process.env.SAUCE_USERNAME || !process.env.SAUCE_ACCESS_KEY)
 	{

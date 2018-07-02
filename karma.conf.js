@@ -19,6 +19,8 @@ module.exports = function(config)
 
 	if (key == 'dev')
 		custom = devConfig(config);
+	else if (key == 'travis')
+		custom = sauceConfig(config, key);
 	else if (browsers.groups[key])
 		custom = sauceConfig(config, key);
 	else

@@ -60,6 +60,13 @@ module.exports = function(config)
 
 		// Concurrency level
 		// how many browser should be started simultaneous
-		concurrency: Infinity
+		concurrency: Infinity,
+
+		// enable / disable watching file and executing tests whenever any file changes
+		autoWatch: false,
+
+		// Continuous Integration mode
+		// if true, Karma captures browsers, runs the tests and exits
+		singleRun: true,
 	};
 };

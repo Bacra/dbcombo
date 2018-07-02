@@ -13,18 +13,6 @@ module.exports = function()
 		browsers.push('Safari');
 
 	return {
-		// enable / disable watching file and executing tests whenever any file changes
-		autoWatch: false,
-
-
-		// start these browsers
-		// available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-		// browsers: ['Chrome'],
 		browsers: browsers,
-
-
-		// Continuous Integration mode
-		// if true, Karma captures browsers, runs the tests and exits
-		singleRun: true,
 	};
 };

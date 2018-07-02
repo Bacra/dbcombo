@@ -11,13 +11,9 @@
     "lint": "eslint .",
     "test": "cross-env DEBUG=dbcombo-client* mocha test/test_*.js",
     "test-cov": "istanbul cover _mocha -- test/test_* --reporter dot",
-    "test-e2e": "karma start",
-    "test-e2e-dev": "cross-env DEBUG=dbcombo-client* karma start -- dev",
+    "test-e2e": "karma start --",
+    "test-e2e-dev": "cross-env DEBUG=dbcombo-client* karma start --auto-watch --no-single-run --browsers=Chrome",
     "test-sauce": "karma start -- sauce",
-    "test-sauce-travis": "karma start -- travis",
-    "test-sauce-dev": "cross-env DEBUG=dbcombo-client* karma start -- sl_dev",
-    "test-sauce-ie": "cross-env DEBUG=dbcombo-client* karma start -- sl_ie",
-    "test-sauce-pc": "cross-env DEBUG=dbcombo-client* karma start -- sl_pc",
     "test-travis": "istanbul cover _mocha --report lcovonly -- test/test_* --reporter dot"
   },
   "keywords": [

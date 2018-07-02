@@ -3,7 +3,7 @@
 var pkg = require('../../package.json');
 var browsers = require('./sl_browsers.js');
 
-module.exports = function(config, browserGroup)
+module.exports = function(config, browserArr)
 {
 	// master 也运行
 	// if (process.env.TRAVIS_BRANCH && process.env.TRAVIS_BRANCH != 'sauce-runner')
@@ -18,32 +18,15 @@ module.exports = function(config, browserGroup)
 		process.exit(1);
 	}
 
-
-	var browserArr = browsers.groups[browserGroup];
-	if (!browserArr || !browserArr.length)
-	{
-		var browserKey = 'sl_'+browserGroup;
-		if (browsers.browsers[browserKey])
-		{
-			browserArr = [browserKey];
-		}
-		else
-		{
-			console.log('undefined browser group, %s', browserGroup);
-			process.exit(1);
-		}
-	}
-
-	var timeout = browserGroup == 'mobile' || browserGroup == 'sauce' ? 300000 : 120000;
+	var timeout = 300000;
 	var buildId = process.env.TRAVIS_JOB_NUMBER || process.env.SAUCE_BUILD_ID || Date.now();
 
 	return {
 		// port			: 4445,
 		browsers		: browserArr,
-		singleRun		: true,
 		retryLimit		: 2,
 		concurrency		: 5,
-		customLaunchers	: browsers.browsers,
+		customLaunchers	: browsers.list,
 		// Increase timeout in case connection in CI is slow
 		captureTimeout	: timeout,
 		browserNoActivityTimeout: timeout,
@@ -53,7 +36,7 @@ module.exports = function(config, browserGroup)
 
 		sauceLabs:
 		{
-			build				: browserGroup+'_'+buildId,
+			build				: buildId,
 			public				: 'public',
 			testName			: pkg.name,
 			tunnelIdentifier	: pkg.name+'_'+pkg.version,

@@ -89,7 +89,6 @@ var groups =
 		'sl_ie9',
 		'sl_ie11'
 	],
-	sl_dev: ['sl_chrome'],
 
 
 	sl_pc:
@@ -111,6 +110,6 @@ groups.sauce = [].concat(groups.sl_pc, groups.sl_mac, groups.sl_mobile);
 
 module.exports =
 {
-	browsers: browsers,
+	list: browsers,
 	groups: groups,
 };

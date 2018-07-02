@@ -21,6 +21,7 @@ env:
 
 addons:
   sauce_connect: false
+  chrome: false
 
 matrix:
   include:
@@ -29,7 +30,15 @@ matrix:
       addons:
         sauce_connect: true
       script:
-        - npm run test-sauce-travis
+        - npm run test-e2e travis
+      after_script: # 删除之前配置
+
+    - node_js: stable
+      dist: trusty
+      addons:
+        chrome: stable
+      script:
+        - npm run test-e2e ChromeHeadless,ChromeCanaryHeadless
       after_script: # 删除之前配置
 
   fast_finish: true

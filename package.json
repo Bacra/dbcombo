@@ -13,7 +13,7 @@
     "test-cov": "istanbul cover _mocha -- test/test_* --reporter dot",
     "test-e2e": "karma start --",
     "test-e2e-dev": "cross-env DEBUG=dbcombo-client* karma start --auto-watch --no-single-run --browsers=Chrome",
-    "test-sauce": "karma start -- sauce",
+    "test-e2e-sauce": "karma start -- sauce",
     "test-travis": "istanbul cover _mocha --report lcovonly -- test/test_* --reporter dot"
   },
   "keywords": [

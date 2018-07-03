@@ -99,7 +99,7 @@ var browsers =
 
 var groups =
 {
-	sl_ie:
+	sl_oldie:
 	[
 		'sl_ie9',
 		'sl_ie10',
@@ -128,7 +128,7 @@ var groups =
 };
 
 groups.sauce = [].concat(
-	// groups.sl_ie,
+	// groups.sl_oldie,
 	groups.sl_pc,
 	groups.sl_mac,
 	groups.sl_mobile

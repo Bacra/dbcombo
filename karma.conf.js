@@ -6,7 +6,6 @@
 
 // Karma configuration
 var debug = require('debug')('dbcombo-client:karma.conf');
-var extend = require('extend');
 var baseConfig = require('./test/build/karma.base.conf.js');
 var osConfig = require('./test/build/karma.os.conf.js');
 var sauceConfig = require('./test/build/karma.sauce.conf.js');
@@ -24,6 +23,18 @@ module.exports = function(config)
 	{
 		key = process.env.TRAVIS_BRANCH == 'master'
 			&& process.env.TRAVIS_EVENT_TYPE != 'cron' ? 'sl_chrome' : 'sauce';
+	}
+	else if (key == 'travis-oldie')
+	{
+		if (process.env.TRAVIS_BRANCH == 'master'
+			&& process.env.TRAVIS_EVENT_TYPE != 'cron')
+		{
+			process.exit();
+		}
+		else
+		{
+			key = 'sl_oldie';
+		}
 	}
 
 	if (browsers.groups[key])

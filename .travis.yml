@@ -31,6 +31,7 @@ matrix:
         sauce_connect: true
       script:
         - npm run test-e2e travis
+        - npm run test-e2e travis-oldie
       after_script: # 删除之前配置
 
     - node_js: stable

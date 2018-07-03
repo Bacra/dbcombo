@@ -6,9 +6,10 @@ DBComboClient
 [![NPM Downloads][downloads-image]][npm-url]
 [![Build Status][travis-image]][travis-url]
 [![Appveyor Status][appveyor-image]][appveyor-url]
-[![Saucelabs Status][saucelabs-image]][saucelabs-url]
 [![Coveralls][coveralls-image]][coveralls-url]
 [![NPM License][license-image]][npm-url]
+
+[![Saucelabs Status][saucelabs-image]][saucelabs-url]
 
 # Install
 ```
@@ -72,4 +73,4 @@ Url parse server power by [DBCombo](https://github.com/Bacra/node-dbcombo)
 [coveralls-url]: https://coveralls.io/github/Bacra/node-dbcombo-client
 [license-image]: http://img.shields.io/npm/l/dbcombo-client.svg
 [saucelabs-url]: https://saucelabs.com/u/Bacra
-[saucelabs-image]: https://saucelabs.com/buildstatus/Bacra
+[saucelabs-image]: https://saucelabs.com/browser-matrix/Bacra.svg

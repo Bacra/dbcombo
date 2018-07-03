@@ -20,12 +20,15 @@ module.exports = function(config, browserArr)
 
 	var timeout = 300000;
 	var buildId = process.env.TRAVIS_JOB_NUMBER || process.env.SAUCE_BUILD_ID || Date.now();
+	var taskName = pkg.name+'_'+pkg.version;
 
 	return {
 		// port			: 4445,
 		browsers		: browserArr,
 		retryLimit		: 2,
 		concurrency		: 5,
+		// https://github.com/karma-runner/karma-sauce-launcher/issues/73
+		startConnect	: false,
 		customLaunchers	: browsers.list,
 		// Increase timeout in case connection in CI is slow
 		captureTimeout	: timeout,
@@ -36,10 +39,11 @@ module.exports = function(config, browserArr)
 
 		sauceLabs:
 		{
-			build				: buildId,
+			build				: taskName+'_'+buildId,
 			public				: 'public',
-			testName			: pkg.name,
-			tunnelIdentifier	: pkg.name+'_'+pkg.version,
+			testName			: taskName,
+			// https://github.com/karma-runner/karma-sauce-launcher/issues/73
+			tunnelIdentifier	: process.env.TRAVIS_JOB_NUMBER || taskName+'_'+buildId,
 
 			// commandTimeout		: 300,
 			// idleTimeout			: 90,

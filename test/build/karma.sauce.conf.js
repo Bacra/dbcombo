@@ -84,7 +84,7 @@ module.exports = function(config, browserArr)
 	// https://github.com/karma-runner/karma-sauce-launcher/issues/73
 	if (process.env.TRAVIS_JOB_NUMBER)
 	{
-		data.sauceLabs.tunnelIdentifier = process.env.TRAVIS_JOB_NUMBER;
+		delete data.sauceLabs.tunnelIdentifier;
 		data.startConnect = false;
 	}
 

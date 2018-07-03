@@ -74,7 +74,7 @@ module.exports = function(config)
 			Chrome_travis_ci:
 			{
 				base: 'Chrome',
-				flags: ['--headless', '--disable-gpu', '--remote-debugging-port=9222']
+				flags: ['--no-sandbox', '--headless', '--disable-gpu', '--remote-debugging-port=9222']
 			}
 		},
 	};

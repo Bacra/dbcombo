@@ -29,7 +29,7 @@ module.exports = function(config)
 	if (browsers.groups[key])
 		custom = sauceConfig(config, browsers.groups[key]);
 	else if (browsers.list[key])
-		custom = sauceConfig(config, [browsers.browsers[key]]);
+		custom = sauceConfig(config, [browsers.list[key]]);
 	else if (!key)
 		custom = osConfig(config);
 	else

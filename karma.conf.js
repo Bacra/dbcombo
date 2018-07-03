@@ -15,7 +15,7 @@ var browsers = require('./test/build/sl_browsers.js');
 module.exports = function(config)
 {
 	var key = process.argv[4];
-	var base = baseConfig(config);
+	baseConfig(config);
 	var custom = {};
 
 	debug('karma key:%s', key);
@@ -27,15 +27,13 @@ module.exports = function(config)
 	}
 
 	if (browsers.groups[key])
-		custom = sauceConfig(config, browsers.groups[key]);
+		sauceConfig(config, browsers.groups[key]);
 	else if (browsers.list[key])
-		custom = sauceConfig(config, [key]);
+		sauceConfig(config, [key]);
 	else if (!key)
-		custom = osConfig(config);
+		osConfig(config);
 	else
 		custom.browsers = key.split(',');
-
-	custom = extend({}, base, custom);
 
 	if (process.argv[5] == 'benchmark')
 	{

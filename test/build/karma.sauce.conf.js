@@ -2,6 +2,7 @@
 
 var pkg = require('../../package.json');
 var browsers = require('./sl_browsers.js');
+var oldieConfig = require('./karma.oldie.conf.js');
 
 module.exports = function(config, browserArr)
 {
@@ -22,7 +23,7 @@ module.exports = function(config, browserArr)
 	var buildId = process.env.TRAVIS_JOB_NUMBER || process.env.SAUCE_BUILD_ID || Date.now();
 	var taskName = pkg.name+'_'+pkg.version;
 
-	var data =
+	var customConfig =
 	{
 		// port			: 4445,
 		browsers		: browserArr,
@@ -84,9 +85,18 @@ module.exports = function(config, browserArr)
 	// https://github.com/karma-runner/karma-sauce-launcher/issues/73
 	if (process.env.TRAVIS_JOB_NUMBER)
 	{
-		data.sauceLabs.tunnelIdentifier = process.env.TRAVIS_JOB_NUMBER;
-		data.sauceLabs.startConnect = false;
+		customConfig.sauceLabs.tunnelIdentifier = process.env.TRAVIS_JOB_NUMBER;
+		customConfig.sauceLabs.startConnect = false;
 	}
 
-	return data;
+	config.set(customConfig);
+
+	// 老版本ie
+	if (browserArr.some(function(name)
+		{
+			return name == 'sl_ie9' || name == 'sl_ie10';
+		}))
+	{
+		oldieConfig(config);
+	}
 };

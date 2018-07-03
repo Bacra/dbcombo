@@ -22,7 +22,7 @@ seajs.config(
 		{
 			var key = file && file.replace(/^.*\//, '');
 			var info = souceInfo.map[key];
-			console.debug('inde file key, %s => %s, info:%o', file, key, info);
+			console.log('inde file key, %s => %s, info:%o', file, key, info);
 			return info;
 		}
 		else

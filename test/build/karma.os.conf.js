@@ -2,7 +2,7 @@
 
 var os = require('os');
 
-module.exports = function()
+module.exports = function(config)
 {
 	var browsers = ['Chrome', 'Firefox'];
 	var platform = os.platform();
@@ -12,7 +12,5 @@ module.exports = function()
 	else if (platform == 'darwin')
 		browsers.push('Safari');
 
-	return {
-		browsers: browsers,
-	};
+	config.set({browsers: browsers});
 };

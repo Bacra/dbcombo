@@ -2,7 +2,8 @@
 
 module.exports = function(config)
 {
-	return {
+	var customConfig =
+	{
 		// level of logging
 		// possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
 		logLevel: config.LOG_INFO,
@@ -79,4 +80,6 @@ module.exports = function(config)
 			}
 		},
 	};
+
+	config.set(customConfig);
 };

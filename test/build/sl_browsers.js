@@ -1,5 +1,7 @@
 'use strict';
 
+var _ = require('lodash');
+
 // Browsers to run on Sauce Labs
 // Check out https://saucelabs.com/platforms for all browser/OS combos
 var browsers =
@@ -9,6 +11,20 @@ var browsers =
 		base		: 'SauceLabs',
 		browserName	: 'chrome',
 		platform	: 'Windows 10',
+	},
+	sl_chrome46:
+	{
+		base		: 'SauceLabs',
+		browserName	: 'chrome',
+		platform	: 'Windows 7',
+		version		: '46',
+	},
+	sl_chrome_mac:
+	{
+		base		: 'SauceLabs',
+		browserName	: 'chrome',
+		// platform	: 'macOS',
+		platform	: 'OS X 10.10',
 	},
 	sl_firefox:
 	{
@@ -23,19 +39,19 @@ var browsers =
 		// platform	: 'macOS',
 		platform	: 'OS X 10.10',
 	},
-	sl_ie8:
-	{
-		base		: 'SauceLabs',
-		browserName	: 'internet explorer',
-		platform	: 'Windows 7',
-		version		: '8'
-	},
 	sl_ie9:
 	{
 		base		: 'SauceLabs',
 		browserName	: 'internet explorer',
 		platform	: 'Windows 7',
 		version		: '9'
+	},
+	sl_ie10:
+	{
+		base		: 'SauceLabs',
+		browserName	: 'internet explorer',
+		platform	: 'Windows 8',
+		version		: '10'
 	},
 	sl_ie11:
 	{
@@ -85,8 +101,8 @@ var groups =
 {
 	sl_ie:
 	[
-		'sl_ie8',
 		'sl_ie9',
+		'sl_ie10',
 		'sl_ie11'
 	],
 
@@ -94,11 +110,16 @@ var groups =
 	sl_pc:
 	[
 		'sl_chrome',
+		'sl_chrome46',
 		'sl_firefox',
 		'sl_edge',
 		'sl_ie'
 	],
-	sl_mac: ['sl_safari'],
+	sl_mac:
+	[
+		'sl_safari',
+		'sl_chrome_mac'
+	],
 	sl_mobile:
 	[
 		'sl_ios_safari',
@@ -106,7 +127,14 @@ var groups =
 	],
 };
 
-groups.sauce = [].concat(groups.sl_pc, groups.sl_mac, groups.sl_mobile);
+groups.sauce = [].concat(
+	// groups.sl_ie,
+	groups.sl_pc,
+	groups.sl_mac,
+	groups.sl_mobile
+);
+
+groups.sauce = _.uniq(groups.sauce);
 
 module.exports =
 {

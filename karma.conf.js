@@ -1,70 +1,43 @@
-// npm run test-e2e Chrome
-// npm run test-e2e sl_dev
-// npm run test-e2e sl_pc
-
 'use strict';
 
-// Karma configuration
-var debug = require('debug')('dbcombo-client:karma.conf');
-var baseConfig = require('./test/build/karma.base.conf.js');
-var osConfig = require('./test/build/karma.os.conf.js');
-var sauceConfig = require('./test/build/karma.sauce.conf.js');
-var browsers = require('./test/build/sl_browsers.js');
+var commonConfig = require('karma-config-brcjs');
 
 module.exports = function(config)
 {
-	var key = process.argv[4];
-	baseConfig(config);
-	var custom = {};
-
-	debug('karma key:%s', key);
-
-	if (key == 'travis')
-	{
-		key = process.env.TRAVIS_BRANCH == 'master'
-			&& process.env.TRAVIS_EVENT_TYPE != 'cron' ? 'sl_chrome' : 'sauce';
-	}
-	else if (key == 'travis-oldie')
-	{
-		if (process.env.TRAVIS_BRANCH == 'master'
-			&& process.env.TRAVIS_EVENT_TYPE != 'cron')
-		{
-			process.exit();
-		}
-		else
-		{
-			key = 'sl_oldie';
-		}
-	}
-
-	if (browsers.groups[key])
-		sauceConfig(config, browsers.groups[key]);
-	else if (browsers.list[key])
-		sauceConfig(config, [key]);
-	else if (!key)
-		osConfig(config);
-	else
-		custom.browsers = key.split(',');
+	commonConfig(config);
 
 	if (process.argv[5] == 'benchmark')
 	{
-		custom.basePath = 'benchmark/';
-		custom.files = ['benchmark.js'];
-		custom.frameworks = ['browserify'];
-		// 不要并发，减少浏览器之间的相互影响
-		custom.concurrency = 1;
-
-		// custom.frameworks = ['benchmark'];
-		// custom.reporters = ['benchmark'];
-		custom.preprocessors =
+		config.set(
 		{
-			'benchmark.js': ['browserify']
-		};
-		custom.browserify =
-		{
-			debug: true,
-		};
+			basePath: 'benchmark/',
+			files: ['benchmark.js'],
+			frameworks: ['browserify'],
+			// 不要并发，减少浏览器之间的相互影响
+			concurrency: 1,
+			browserify: {debug: true},
+			preprocessors:
+			{
+				'benchmark.js': ['browserify']
+			},
+		});
 	}
-
-	config.set(custom);
+	else
+	{
+		config.set(
+		{
+			files:
+			[
+				'test_*.js',
+				'browser/init-seajs.js',
+				'browser/test_*.js',
+				{pattern: 'browser/source/**/*', included: false, served: true},
+			],
+			preprocessors:
+			{
+				'**/test_*.js': ['browserify'],
+				'browser/init-seajs.js': ['browserify'],
+			},
+		});
+	}
 };

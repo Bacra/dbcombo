@@ -39,11 +39,14 @@ matrix:
 
     - node_js: stable
       dist: trusty
+      env:
+        - MOZ_HEADLESS=1
       addons:
         chrome: stable
+        firefox: latest
       script:
-        - npm run test-e2e Chrome_travis_ci
-      after_script: # 删除之前配置
+        - npm run test-e2e ChromeHeadlessNoSandbox,FirefoxHeadless
+      after_script:
 
   fast_finish: true
   allow_failures:

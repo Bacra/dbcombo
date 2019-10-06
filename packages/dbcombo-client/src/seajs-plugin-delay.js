@@ -1,3 +1,5 @@
+/* global seajs */
+
 'use strict';
 
 var DBComboClient = require('../');

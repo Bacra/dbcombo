@@ -1,7 +1,10 @@
+/* global seajs */
+
 'use strict';
 
 var DBComboClient = require('../');
 var Config = require('./seajs-plugin-base');
+var hasOwnProperty = Object.prototype.hasOwnProperty;
 
 var data = seajs.data;
 var Module = seajs.Module;
@@ -133,7 +136,7 @@ function paths2hash(files)
 	var types = typeGroup(files);
 	for (var type in types)
 	{
-		if (types.hasOwnProperty(type))
+		if (hasOwnProperty.call(types, type))
 		{
 			setHash(types[type], type);
 		}

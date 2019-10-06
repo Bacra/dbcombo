@@ -24,7 +24,7 @@ expr().use(DBCombo({root: __dirname}));
 
 ### User in Browser
 
-Use by Seajs plugin, See [DBComboClient](https://github.com/Bacra/node-dbcombo-client)
+Use by Seajs plugin, See [DBComboClient](https://github.com/Bacra/dbcombo/tree/master/packages/dbcombo-client)
 
 
 # Options

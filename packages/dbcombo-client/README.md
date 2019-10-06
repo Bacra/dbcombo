@@ -55,7 +55,7 @@ Combo Uri Exapmle
 https://www.example.com/db.js_db/Yg0W21X/W35X/W35X/W35X/W35X/V.js
 ```
 
-Url parse server power by [DBCombo](https://github.com/Bacra/node-dbcombo)
+Url parse server power by [DBCombo](https://github.com/Bacra/dbcombo/tree/master/packages/dbcombo)
 
 
 [npm-image]: https://img.shields.io/npm/v/dbcombo-client.svg

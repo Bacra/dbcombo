@@ -24,12 +24,12 @@
   "author": "bacrawu <bacra.woo@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/Bacra/node-dbcombo-client.git"
+    "url": "git+ssh://git@github.com/Bacra/dbcombo.git"
   },
   "bugs": {
-    "url": "https://github.com/Bacra/node-dbcombo-client/issues"
+    "url": "https://github.com/Bacra/dbcombo/issues"
   },
-  "homepage": "https://github.com/Bacra/node-dbcombo-client#readme",
+  "homepage": "https://github.com/Bacra/dbcombo#readme",
   "license": "MIT",
   "devDependencies": {
     "benchmark": "^2.1.4",

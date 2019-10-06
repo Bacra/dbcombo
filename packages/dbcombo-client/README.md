@@ -41,7 +41,7 @@ Seajs Config
 seajs.config(
 {
     DBComboFileIndex: {},    // uri => {index, deps, file}
-    DBComboFile: 'http://www.example.com/db.js',    // dbfile uri, append merge key width it
+    DBComboFile: 'https://www.example.com/db.js',    // dbfile uri, append merge key width it
     DBComboFileExtname: '_db',    // ext dbfile uri, default "_db", set false to ignore
                         // Append extname for `db.js`.
                         // Do not use `db.js` directly for combo uri.
@@ -56,21 +56,21 @@ seajs.config(
 Combo Uri Exapmle
 
 ```url
-http://www.example.com/db.js_db/Yg0W21X/W35X/W35X/W35X/W35X/V.js
+https://www.example.com/db.js_db/Yg0W21X/W35X/W35X/W35X/W35X/V.js
 ```
 
 Url parse server power by [DBCombo](https://github.com/Bacra/node-dbcombo)
 
 
-[npm-image]: http://img.shields.io/npm/v/dbcombo-client.svg
-[downloads-image]: http://img.shields.io/npm/dm/dbcombo-client.svg
+[npm-image]: https://img.shields.io/npm/v/dbcombo-client.svg
+[downloads-image]: https://img.shields.io/npm/dm/dbcombo-client.svg
 [npm-url]: https://www.npmjs.org/package/dbcombo-client
-[travis-image]: http://img.shields.io/travis/Bacra/node-dbcombo-client/master.svg?label=linux
+[travis-image]: https://img.shields.io/travis/Bacra/node-dbcombo-client/master.svg?label=linux
 [travis-url]: https://travis-ci.org/Bacra/node-dbcombo-client
 [appveyor-image]: https://img.shields.io/appveyor/ci/Bacra/node-dbcombo-client/master.svg?label=windows
 [appveyor-url]: https://ci.appveyor.com/project/Bacra/node-dbcombo-client
 [coveralls-image]: https://img.shields.io/coveralls/Bacra/node-dbcombo-client.svg
 [coveralls-url]: https://coveralls.io/github/Bacra/node-dbcombo-client
-[license-image]: http://img.shields.io/npm/l/dbcombo-client.svg
+[license-image]: https://img.shields.io/npm/l/dbcombo-client.svg
 [saucelabs-url]: https://saucelabs.com/u/Bacra
 [saucelabs-image]: https://saucelabs.com/browser-matrix/Bacra.svg

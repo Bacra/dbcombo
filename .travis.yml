@@ -32,6 +32,7 @@ matrix:
       addons:
         sauce_connect: true
       script:
+        - npm run bootstrap
         - npm run test-e2e travis
         - npm run test-e2e travis-oldie
       after_script: # 删除之前配置
@@ -44,6 +45,7 @@ matrix:
         chrome: stable
         firefox: latest
       script:
+        - npm run bootstrap
         - npm run test-e2e ChromeHeadlessNoSandbox,FirefoxHeadless
       after_script:
 

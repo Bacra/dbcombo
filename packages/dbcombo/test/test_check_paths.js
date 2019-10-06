@@ -3,7 +3,7 @@
 var assert = require('assert');
 var Checker = require('../lib/check_paths').Checker;
 
-describe('chekPaths', function()
+describe('#chekPaths', function()
 {
 	it('limitFiles', function()
 		{

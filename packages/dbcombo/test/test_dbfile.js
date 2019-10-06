@@ -6,7 +6,7 @@ var DBFile		= require('../lib/dbfile').DBFile;
 var ClientKey	= require('dbcombo-client');
 var toLinuxPath	= require('../lib/utils').toLinuxPath;
 
-describe('dbfile', function()
+describe('#dbfile', function()
 {
 	it('overflow#1ZZY1Y1', function()
 	{

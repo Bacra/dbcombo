@@ -4,7 +4,7 @@ var assert = require('assert');
 var FileReader = require('../lib/file_reader');
 var LRU = require('lru-cache');
 
-describe('fileReader', function()
+describe('#fileReader', function()
 {
 	var cache = new LRU();
 	function readByBuffer(done)

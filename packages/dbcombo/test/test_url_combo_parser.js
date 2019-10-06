@@ -3,7 +3,7 @@
 var assert = require('assert');
 var urlCombo = require('../lib/url_combo_parser');
 
-describe('UrlComboParser', function()
+describe('#UrlComboParser', function()
 {
 	it('MultiFiles', function()
 	{

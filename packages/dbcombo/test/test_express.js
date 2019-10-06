@@ -12,7 +12,7 @@ var PORT	= 4495;
 var HOST	= 'http://127.0.0.1:'+PORT+'/static/';
 var toLinuxPath = require('../lib/utils').toLinuxPath;
 
-describe('expressHandler', function()
+describe('#express', function()
 {
 	var svr;
 	before(function(done)
@@ -20,7 +20,7 @@ describe('expressHandler', function()
 		var app = expr();
 		app.use('/static', handler(
 			{
-				root: __dirname+'/',
+				root: __dirname + '/',
 				enabledDBParser: true,
 				enabledMultiParser: true
 			}));
@@ -99,7 +99,7 @@ function assertRequestBody(uri, content)
 				request.get(url, function(err, response, body)
 				{
 					if (err) return reject(err);
-					if (response.statusCode != 200) return reject('not 200,'+response.statusCode);
+					if (response.statusCode != 200) return reject('not 200,' + response.statusCode);
 					assert.equal(body, content);
 					resolve();
 				});

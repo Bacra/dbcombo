@@ -12,7 +12,7 @@ DBComboClient
 npm install dbcombo-client --save
 ```
 
-# Useage
+# Usage
 
 ### In NodeJS
 

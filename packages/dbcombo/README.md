@@ -12,7 +12,7 @@ DBCombo
 npm install dbcombo --save
 ```
 
-# Useage
+# Usage
 
 ### Server in NodeJS
 

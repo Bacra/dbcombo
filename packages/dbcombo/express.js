@@ -172,10 +172,9 @@ function setResHeader(req, res, stats, options)
 
 		if (!res.getHeader('Content-Type'))
 		{
-			var type = mime.lookup(req.url);
-			var charset = mime.charsets.lookup(type);
+			var type = mime.getType(req.url);
 			debug('content-type %s', type);
-			res.setHeader('Content-Type', type + (charset ? '; charset=' + charset : ''));
+			res.setHeader('Content-Type', type);
 		}
 
 		if (!res.getHeader('Cache-Control'))
